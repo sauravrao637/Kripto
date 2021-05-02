@@ -1,16 +1,14 @@
 package com.camo.kripto.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.renderscript.ScriptGroup
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.camo.kripto.R
 import com.camo.kripto.data.api.CGApiHelper
 import com.camo.kripto.data.api.RetrofitBuilder
 import com.camo.kripto.data.model.Coin
@@ -32,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         setupViewModel()
         setupUI()
         setupObservers()
+
     }
 
 
@@ -56,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.adapter = adapter
     }
     private fun setupObservers() {
-        viewModel.getCoins().observe(this, Observer {
+        viewModel.getCoins().observe(this, {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
