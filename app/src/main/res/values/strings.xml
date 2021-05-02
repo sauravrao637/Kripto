@@ -10,4 +10,14 @@
     <string name="action_refresh">Refresh</string>
     <string name="retry">Retry</string>
     <string name="no_results">No Results</string>
+
+    <string-array name="order_by_array">
+        <item>market_cap_desc</item>
+        <item>gecko_desc</item>
+        <item>gecko_asc</item>
+        <item>market_cap_asc</item>
+        <item>market_cap_desc</item>
+        <item>volume_asc</item>
+        <item>volume_desc</item>
+    </string-array>
 </resources>

@@ -17,14 +17,15 @@ class MarketCapVM : ViewModel() {
     private val TAG = MarketCapVM::class.simpleName
 
     var prefCurrency: MutableLiveData<String> = MutableLiveData()
+    var orderby: MutableLiveData<Int> = MutableLiveData()
 
-    fun getMarketCap(s: String?): Flow<PagingData<CoinMarket.CoinMarketItem>> {
+    fun getMarketCap(s: String?, order: Int): Flow<PagingData<CoinMarket.CoinMarketItem>> {
         return Pager(
             // Configure how data is loaded by passing additional properties to
             // PagingConfig, such as prefetchDistance.
             PagingConfig(pageSize = 25)
         ) {
-            MarketCapPS(CGApiHelper(RetrofitBuilder.CG_SERVICE), s?:"inr")
+            MarketCapPS(CGApiHelper(RetrofitBuilder.CG_SERVICE), s?:"inr",order)
         }.flow.cachedIn(viewModelScope)
     }
 }

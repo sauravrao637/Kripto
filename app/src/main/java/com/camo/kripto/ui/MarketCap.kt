@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -69,13 +71,36 @@ class MarketCap : AppCompatActivity() {
         )
 
         binding.retryButton.setOnClickListener { adapter.retry() }
-        initAdapter()
+        initAdapters()
         binding.rvMarketCap.adapter =
             adapter.withLoadStateFooter(footer = MCLoadStateAdapter { adapter.retry() })
 
+        binding.ddOrderBy.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                //TODO changes
+                viewModel.orderby.postValue(0)
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                viewModel.orderby.postValue(position)
+            }
+
+        }
+
     }
 
-    private fun initAdapter() {
+    private fun initAdapters() {
+
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.order_by_array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            binding.ddOrderBy.adapter = adapter
+        }
 
         adapter.addLoadStateListener { loadState ->
             // show empty list
@@ -119,17 +144,23 @@ class MarketCap : AppCompatActivity() {
     private fun setupObservers() {
         viewModel.prefCurrency.observe(this) {
             if (it != null) {
-                getNewData(it);
-                adapter.curr = it;
+                getNewData(it,viewModel.orderby.value?:0);
+                adapter.curr = it
             }
         }
+        viewModel.orderby.observe(this){
+            if(it!=null){
+                getNewData(viewModel.prefCurrency.value,it)
+            }
+        }
+
     }
 
     private var capDataJob: Job? = null
-    private fun getNewData(it: String?) {
+    private fun getNewData(it: String?, order: Int) {
         capDataJob?.cancel()
         capDataJob = lifecycleScope.launch {
-            viewModel.getMarketCap(it).collectLatest { pagingData ->
+            viewModel.getMarketCap(it,order).collectLatest { pagingData ->
                 adapter.submitData(pagingData)
             }
 //            adapter.loadStateFlow.collectLatest { loadStates ->

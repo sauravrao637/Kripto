@@ -41,7 +41,7 @@ class MCLoadStateAdapter(private val retry: () -> Unit) :
         fun bind(loadState: LoadState) {
             if (loadState is LoadState.Error) {
                 binding.errorMsg.text = "some error"
-                Log.d(TAG,loadState.error.localizedMessage)
+                Log.d(TAG,loadState.error.localizedMessage?:"error")
             }
             binding.progressBar.isVisible = loadState is LoadState.Loading
             binding.retryButton.isVisible = loadState is LoadState.Error
