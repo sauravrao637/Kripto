@@ -34,7 +34,6 @@ class MarketCap : AppCompatActivity() {
     private lateinit var viewModel: MarketCapVM
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMarketCapBinding.inflate(LayoutInflater.from(this))
@@ -48,15 +47,18 @@ class MarketCap : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
+        val arr = this.resources.getStringArray(R.array.market_duration)
         viewModel = ViewModelProviders.of(
             this
         ).get(MarketCapVM::class.java)
 
+        viewModel.durationArr(arr)
         //must post currency as soon as vm setup
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         var curr = sharedPreferences.getString("pref_currency", "inr")
         if (curr == null) curr = "inr"
         viewModel.prefCurrency.postValue(curr)
+        viewModel.duration.postValue(0)
     }
 
     private fun setupUI() {
@@ -75,18 +77,28 @@ class MarketCap : AppCompatActivity() {
         binding.rvMarketCap.adapter =
             adapter.withLoadStateFooter(footer = MCLoadStateAdapter { adapter.retry() })
 
-        binding.ddOrderBy.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+        binding.ddOrderBy.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 //TODO changes
                 viewModel.orderby.postValue(0)
             }
 
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 viewModel.orderby.postValue(position)
             }
 
         }
-
+        binding.tvDuration.setOnClickListener {
+            var i = viewModel.duration.value
+            if (i == null) i = 0;
+            i = (i + 1) % 6
+            viewModel.duration.postValue(i)
+        }
     }
 
     private fun initAdapters() {
@@ -125,7 +137,7 @@ class MarketCap : AppCompatActivity() {
                     "\uD83D\uDE28 Wooops",
                     Toast.LENGTH_LONG
                 ).show()
-                Log.d(TAG,it.toString())
+                Log.d(TAG, it.toString())
             }
         }
     }
@@ -143,31 +155,35 @@ class MarketCap : AppCompatActivity() {
 
     private fun setupObservers() {
         viewModel.prefCurrency.observe(this) {
-            if (it != null) {
-                getNewData(it,viewModel.orderby.value?:0);
-                adapter.curr = it
-            }
+
+            getNewData(it, viewModel.orderby.value ?: 0, viewModel.duration.value ?: 0)
+            adapter.curr = it
+
         }
-        viewModel.orderby.observe(this){
-            if(it!=null){
-                getNewData(viewModel.prefCurrency.value,it)
-            }
+        viewModel.orderby.observe(this) {
+
+            getNewData(viewModel.prefCurrency.value, it, viewModel.duration.value ?: 0)
+
         }
+        viewModel.duration.observe(this) {
+
+
+            binding.tvDuration.text = viewModel.arr[it ?: 0]
+            getNewData(viewModel.prefCurrency.value, viewModel.orderby.value ?: 0, it)
+
+
+        }
+
 
     }
 
     private var capDataJob: Job? = null
-    private fun getNewData(it: String?, order: Int) {
+    private fun getNewData(it: String?, order: Int, dur: Int) {
         capDataJob?.cancel()
         capDataJob = lifecycleScope.launch {
-            viewModel.getMarketCap(it,order).collectLatest { pagingData ->
+            viewModel.getMarketCap(it, order, dur).collectLatest { pagingData ->
                 adapter.submitData(pagingData)
             }
-//            adapter.loadStateFlow.collectLatest { loadStates ->
-//                binding.progressBar.isVisible = loadStates.refresh is LoadState.Loading
-////                retry.isVisible = loadState.refresh !is LoadState.Loading
-//                binding.errorMsg.isVisible = loadStates.refresh is LoadState.Error
-//            }
         }
     }
 

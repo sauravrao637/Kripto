@@ -1,5 +1,7 @@
 package com.camo.kripto.data.model
 
+import com.google.gson.annotations.SerializedName
+
 class CoinMarket : ArrayList<CoinMarket.CoinMarketItem>() {
     data class CoinMarketItem(
         val id: String,
@@ -27,9 +29,20 @@ class CoinMarket : ArrayList<CoinMarket.CoinMarketItem>() {
         val atl_change_percentage: Double,
         val atl_date: String,
         val roi: Roi,
-        val last_updated: String
-    )
-     {
+        val last_updated: String,
+        @SerializedName(
+            value = "price_change_percentage_1h_in_currency",
+            alternate = ["price_change_percentage_24h_in_currency",
+                "price_change_percentage_7d_in_currency",
+                "price_change_percentage_14d_in_currency",
+                "price_change_percentage_30d_in_currency",
+                "price_change_percentage_300d_in_currency",
+                "price_change_percentage_1y_in_currency"]
+        )
+        val market_cap_change: Double
+    ) {
+
+
         data class Roi(
             val times: Double,
             val currency: String,

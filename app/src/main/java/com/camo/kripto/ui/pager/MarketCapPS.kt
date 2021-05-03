@@ -9,7 +9,8 @@ import com.camo.kripto.data.model.CoinMarket
 class MarketCapPS(
     private val backend: CGApiHelper,
     private val curr: String,
-    private val order: Int
+    private val order: Int,
+    private val duration: Int
 ) :
     PagingSource<Int, CoinMarket.CoinMarketItem>() {
     private val TAG = MarketCapPS::class.simpleName
@@ -17,7 +18,7 @@ class MarketCapPS(
         try {
             // Start refresh at page 1 if undefined.
             val nextPageNumber = params.key ?: 1
-            val response = backend.getMarketCap(curr, nextPageNumber, order)
+            val response = backend.getMarketCap(curr, nextPageNumber, order,duration)
             return LoadResult.Page(
                 data = response,
                 prevKey = params.key,

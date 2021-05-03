@@ -17,6 +17,7 @@ interface CGService {
         @Query("vs_currency") currency: String,
         @Query("per_page") perPage: Int,
         @Query("page") page: Int,
-        @Query("order")order: String
+        @Query("order") order: String,
+        @Query("price_change_percentage")d: String
     ): List<CoinMarket.CoinMarketItem>
 }

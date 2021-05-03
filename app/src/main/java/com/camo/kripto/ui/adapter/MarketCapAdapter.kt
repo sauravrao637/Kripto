@@ -30,8 +30,9 @@ class MarketCapAdapter(var curr: String,
                 .into(holder.coinIv)
         };
         holder.coinName.text = coinMarketItem?.name
-        holder.currPrice.text = String.format(Locale.getDefault(), coinMarketItem?.current_price.toString()+" "+curr)
-
+        holder.currPrice.text = String.format("%,8.3f%n%s",coinMarketItem?.current_price,curr)
+        holder.marketCap.text = String.format("%,8.0f%n%s", coinMarketItem?.market_cap,curr)
+        holder.priceChangePercentage.text = String.format("%.3f",coinMarketItem?.market_cap_change)
     }
 
 
@@ -41,6 +42,8 @@ class MarketCapAdapter(var curr: String,
         val coinIv = marketCapItemBinding.ivCoin
         val coinName = marketCapItemBinding.tvCoinName
         val currPrice = marketCapItemBinding.tvCurrentPrice
+        val marketCap = marketCapItemBinding.tvMarketCap
+        val priceChangePercentage = marketCapItemBinding.tvDur
     }
 
 

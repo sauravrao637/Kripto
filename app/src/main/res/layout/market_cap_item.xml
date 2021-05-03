@@ -29,14 +29,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textAlignment="center" />
+            android:textAlignment="viewStart" />
 
         <TextView
             android:id="@+id/tv_current_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textAlignment="center" />
+            android:textAlignment="viewEnd" />
+
+        <TextView
+            android:id="@+id/tv_dur"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="viewEnd" />
+
+        <TextView
+            android:id="@+id/tv_market_cap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="viewEnd" />
+
     </LinearLayout>
 
 </RelativeLayout>

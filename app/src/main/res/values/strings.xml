@@ -10,6 +10,9 @@
     <string name="action_refresh">Refresh</string>
     <string name="retry">Retry</string>
     <string name="no_results">No Results</string>
+    <string name="coin">Coin</string>
+    <string name="currency">Currency</string>
+    <string name="market_cap">Market Cap</string>
 
     <string-array name="order_by_array">
         <item>market_cap_desc</item>
@@ -19,5 +22,15 @@
         <item>market_cap_desc</item>
         <item>volume_asc</item>
         <item>volume_desc</item>
+    </string-array>
+
+    <string-array name="market_duration">
+        <item>1h</item>
+        <item>24h</item>
+        <item>7d</item>
+        <item>14d</item>
+        <item>30d</item>
+        <item>200d</item>
+        <item>1y</item>
     </string-array>
 </resources>
