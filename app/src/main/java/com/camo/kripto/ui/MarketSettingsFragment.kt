@@ -43,7 +43,6 @@ class MarketSettingsFragment : PreferenceFragmentCompat() {
     }
 
     private fun setCurr(currencies: ArrayList<String>) {
-        Log.d(TAG,currencies.toString())
         var array = arrayOf(String())
         array = currencies.toArray(array)
         currPreference?.entries = array
@@ -51,7 +50,7 @@ class MarketSettingsFragment : PreferenceFragmentCompat() {
 
     }
 
-    private fun getSupportedCurr() = liveData(Dispatchers.IO) {
+    fun getSupportedCurr() = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         try {
             emit(Resource.success(data = CGApiHelper(RetrofitBuilder.CG_SERVICE).getSupportedCurr()))

@@ -1,6 +1,7 @@
 package com.camo.kripto.ui
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -32,15 +33,19 @@ class MarketCap : AppCompatActivity() {
     private lateinit var adapter: MarketCapAdapter
     private lateinit var binding: ActivityMarketCapBinding
     private lateinit var viewModel: MarketCapVM
-
+    private lateinit var sharedPreferences : SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMarketCapBinding.inflate(LayoutInflater.from(this))
+        binding = ActivityMarketCapBinding.inflate(LayoutInflater.from(this@MarketCap))
         setContentView(binding.root)
 
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this@MarketCap)
+
         setupViewModel()
+
         setupUI()
+
         setupObservers()
 
 
@@ -54,7 +59,7 @@ class MarketCap : AppCompatActivity() {
 
         viewModel.durationArr(arr)
         //must post currency as soon as vm setup
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+
         var curr = sharedPreferences.getString("pref_currency", "inr")
         if (curr == null) curr = "inr"
         viewModel.prefCurrency.postValue(curr)
@@ -62,7 +67,7 @@ class MarketCap : AppCompatActivity() {
     }
 
     private fun setupUI() {
-        binding.rvMarketCap.layoutManager = LinearLayoutManager(this)
+        binding.rvMarketCap.layoutManager = LinearLayoutManager(this@MarketCap)
         adapter =
             MarketCapAdapter(viewModel.prefCurrency.value ?: "inr", MarketCapAdapter.Comparator)
         binding.rvMarketCap.addItemDecoration(
@@ -96,15 +101,14 @@ class MarketCap : AppCompatActivity() {
         binding.tvDuration.setOnClickListener {
             var i = viewModel.duration.value
             if (i == null) i = 0;
-            i = (i + 1) % 6
+            i = (i + 1) % 7
             viewModel.duration.postValue(i)
         }
     }
 
     private fun initAdapters() {
-
         ArrayAdapter.createFromResource(
-            this,
+            this@MarketCap,
             R.array.order_by_array,
             android.R.layout.simple_spinner_item
         ).also { adapter ->
@@ -133,13 +137,14 @@ class MarketCap : AppCompatActivity() {
                 ?: loadState.prepend as? LoadState.Error
             errorState?.let {
                 Toast.makeText(
-                    this,
+                    this@MarketCap,
                     "\uD83D\uDE28 Wooops",
                     Toast.LENGTH_LONG
                 ).show()
                 Log.d(TAG, it.toString())
             }
         }
+
     }
 
     private fun showEmptyList(show: Boolean) {
@@ -154,20 +159,18 @@ class MarketCap : AppCompatActivity() {
 
 
     private fun setupObservers() {
-        viewModel.prefCurrency.observe(this) {
+        viewModel.prefCurrency.observe(this@MarketCap) {
 
             getNewData(it, viewModel.orderby.value ?: 0, viewModel.duration.value ?: 0)
             adapter.curr = it
 
         }
-        viewModel.orderby.observe(this) {
+        viewModel.orderby.observe(this@MarketCap) {
 
             getNewData(viewModel.prefCurrency.value, it, viewModel.duration.value ?: 0)
 
         }
-        viewModel.duration.observe(this) {
-
-
+        viewModel.duration.observe(this@MarketCap) {
             binding.tvDuration.text = viewModel.arr[it ?: 0]
             getNewData(viewModel.prefCurrency.value, viewModel.orderby.value ?: 0, it)
 
@@ -197,7 +200,7 @@ class MarketCap : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_settings -> {
             // User chose the "Settings" item, show the app settings UI...
-            val intent = Intent(this, SettingsActivity::class.java)
+            val intent = Intent(this@MarketCap, SettingsActivity::class.java)
             startActivity(intent)
             true
         }

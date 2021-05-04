@@ -5,5 +5,6 @@ import com.camo.kripto.data.api.CGApiHelper
 class CGRepo(private val cgApiHelper: CGApiHelper) {
 
     suspend fun getCoins() = cgApiHelper.getCoins()
-    suspend fun getSupportedCoins() = cgApiHelper.getSupportedCurr()
+    suspend fun getCurrentData(id: String) = cgApiHelper.getCurrentData(id)
+    suspend fun getSupportedCurr() = cgApiHelper.getSupportedCurr()
 }

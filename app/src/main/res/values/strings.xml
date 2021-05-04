@@ -13,6 +13,26 @@
     <string name="coin">Coin</string>
     <string name="currency">Currency</string>
     <string name="market_cap">Market Cap</string>
+    <string name="currentprice">Current Price</string>
+    <string name="_24h">24H</string>
+    <string name="trading_volume">TRADING VOLUME</string>
+    <string name="_24h_high">24H HIGH</string>
+    <string name="fully_diluted_valuation">FULLY DILUTED VALUATION</string>
+    <string name="_7d">7D</string>
+    <string name="_2w">2W</string>
+    <string name="_1m">1M</string>
+    <string name="_2m">2M</string>
+    <string name="_200d">200D</string>
+    <string name="market_cap_rank">MARKET CAP RANK</string>
+    <string name="market_total_cap">MARKET CAP</string>
+    <string name="_24h_low">24H LOW</string>
+    <string name="available_supply">AVAILABLE SUPPLY</string>
+    <string name="total_supply">TOTAL SUPPLY</string>
+    <string name="all_time_high">ALL TIME HIGH</string>
+    <string name="all_time_hight_on">ALL TIME HIGHT ON</string>
+    <string name="all_time_low">ALL TIME LOW</string>
+    <string name="all_time_low_on">ALL TIME LOW ON</string>
+    <string name="todo">TODO</string>
 
     <string-array name="order_by_array">
         <item>market_cap_desc</item>

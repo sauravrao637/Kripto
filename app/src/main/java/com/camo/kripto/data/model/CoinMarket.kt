@@ -36,7 +36,7 @@ class CoinMarket : ArrayList<CoinMarket.CoinMarketItem>() {
                 "price_change_percentage_7d_in_currency",
                 "price_change_percentage_14d_in_currency",
                 "price_change_percentage_30d_in_currency",
-                "price_change_percentage_300d_in_currency",
+                "price_change_percentage_200d_in_currency",
                 "price_change_percentage_1y_in_currency"]
         )
         val market_cap_change: Double

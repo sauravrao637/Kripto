@@ -1,5 +1,6 @@
 package com.camo.kripto.data.api
 
+import com.camo.kripto.data.model.CoinCD
 import com.camo.kripto.data.model.CoinMarket
 
 class CGApiHelper(private val cgService: CGService) {
@@ -34,6 +35,13 @@ class CGApiHelper(private val cgService: CGService) {
             5 -> d = "200d"
             6 -> d = "1y"
         }
-        return cgService.getMarketCap(curr, 100, page, o,d)
+        return cgService.getMarketCap(curr, 100, page, o, d)
+    }
+
+    suspend fun getCurrentData(id: String): CoinCD {
+        return cgService.getCoinCD(
+            id, "true", false, true, false,
+            false
+        )
     }
 }

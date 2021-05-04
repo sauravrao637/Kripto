@@ -13,6 +13,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/btn_star_big_on" />
 
+    <TextView
+        android:id="@+id/tv_coin_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/iv_coin"
+        android:layout_marginTop="0dp"
+        android:singleLine="true"
+        android:textAlignment="viewStart"
+        android:textSize="12sp" />
+
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -25,32 +35,28 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tv_coin_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAlignment="viewStart" />
-
-        <TextView
             android:id="@+id/tv_current_price"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAlignment="viewEnd" />
+            android:layout_weight="2"
+            android:padding="8dp"
+            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/tv_dur"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textAlignment="viewEnd" />
+            android:padding="8dp"
+            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/tv_market_cap"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAlignment="viewEnd" />
+            android:layout_weight="3"
+            android:padding="8dp"
+            android:textAlignment="center" />
 
     </LinearLayout>
 
