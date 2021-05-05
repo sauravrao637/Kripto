@@ -33,6 +33,7 @@
     <string name="all_time_low">ALL TIME LOW</string>
     <string name="all_time_low_on">ALL TIME LOW ON</string>
     <string name="todo">TODO</string>
+    <string name="homepage">HomePage</string>
 
     <string-array name="order_by_array">
         <item>market_cap_desc</item>

@@ -1,12 +1,10 @@
 package com.camo.kripto.ui
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
+import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
@@ -31,6 +29,7 @@ class CoinActivity : AppCompatActivity() {
     private val TAG = CoinActivity::class.simpleName
     private lateinit var binding: ActivityCoinBinding
     private lateinit var viewModel: CoinActivityVM
+    private var id : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +42,7 @@ class CoinActivity : AppCompatActivity() {
 //        val v: View = CustomActionBarBinding.inflate(inflater).root
 //        actionBar?.customView = v
 
-        val id = intent.getStringExtra("coinId")
+        id = intent.getStringExtra("coinId")
         val curr = intent.getStringExtra("curr")
 
 
@@ -65,7 +64,7 @@ class CoinActivity : AppCompatActivity() {
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             when (position) {
                 0 -> tab.text = "Price Chart"
-                1 -> tab.text = "Cricket"
+                1 -> tab.text = "Info"
                 2 -> tab.text = "NBA"
             }
         }.attach()
@@ -78,7 +77,7 @@ class CoinActivity : AppCompatActivity() {
         })
     }
 
-    private var getCurrJob: Job?=null
+    private var getCurrJob: Job? = null
     private fun setCurrencies() {
         getCurrJob?.cancel()
         capDataJob = lifecycleScope.launch {
@@ -86,14 +85,25 @@ class CoinActivity : AppCompatActivity() {
                 it.let { result ->
                     when (result.status) {
                         Status.SUCCESS -> {
+                            binding.viewPager.visibility = View.VISIBLE
+                            binding.pbCoinLoad.visibility = View.GONE
                             result.data?.let { CD ->
                                 viewModel.allCurr.postValue(CD)
                             }
                         }
                         Status.ERROR -> {
+                            binding.viewPager.visibility = View.GONE
+                            binding.pbCoinLoad.visibility = View.GONE
+                            Toast.makeText(
+                                this@CoinActivity,
+                                "\uD83D\uDE28 Wooops" + it.message,
+                                Toast.LENGTH_LONG
+                            ).show()
                             Log.d(TAG, "error")
                         }
                         Status.LOADING -> {
+                            binding.viewPager.visibility = View.GONE
+                            binding.pbCoinLoad.visibility = View.VISIBLE
                         }
                     }
                 }
@@ -104,21 +114,11 @@ class CoinActivity : AppCompatActivity() {
     private var capDataJob: Job? = null
     private fun getNewData(id: String?) {
         capDataJob?.cancel()
+        Log.d(TAG, "launching capDataJob")
         capDataJob = lifecycleScope.launch {
             viewModel.getCurrentData(id ?: "bitcoin").collect {
                 it.let { result ->
-                    when (result.status) {
-                        Status.SUCCESS -> {
-                            result.data?.let { CD ->
-                                viewModel.CD.postValue(CD)
-                            }
-                        }
-                        Status.ERROR -> {
-                            Log.d(TAG, "error")
-                        }
-                        Status.LOADING -> {
-                        }
-                    }
+                    viewModel.currentCoinData.postValue(result)
                 }
             }
         }
@@ -140,7 +140,7 @@ class CoinActivity : AppCompatActivity() {
 
         R.id.action_refresh -> {
 //            TODO(lazy) improve
-            getNewData(viewModel.CD.value?.id)
+            getNewData(id)
             true
         }
 

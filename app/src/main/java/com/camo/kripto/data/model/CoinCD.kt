@@ -1,7 +1,5 @@
 package com.camo.kripto.data.model
 
-import com.google.gson.annotations.SerializedName
-
 data class CoinCD(
     val id: String,
     val symbol: String,
@@ -13,7 +11,7 @@ data class CoinCD(
 //    val public_notice: Any,
 //    val additional_notices: List<Any>,
     val description: Map<String, String>,
-//    val links: Links,
+    val links: Links,
     val image: Image,
     val country_origin: String,
     val genesis_date: String,
@@ -33,26 +31,21 @@ data class CoinCD(
     val last_updated: String
 ) {
 
-//  TODO add
 
-//    data class Links(
-//        val homepage: List<String>,
-//        val blockchain_site: List<String>,
-//        val official_forum_url: List<String>,
-//        val chat_url: List<String>,
-//        val announcement_url: List<String>,
-//        val twitter_screen_name: String,
-//        val facebook_username: String,
-//        val bitcointalk_thread_identifier: Any,
-//        val telegram_channel_identifier: String,
-//        val subreddit_url: String,
-//        val repos_url: ReposUrl
-//    ) {
-//        data class ReposUrl(
-//            val github: List<String>,
-//            val bitbucket: List<Any>
-//        )
-//    }
+    data class Links(
+        val homepage: List<String>,
+        val blockchain_site: List<String>,
+        val official_forum_url: List<String>,
+        val chat_url: List<String>,
+        val announcement_url: List<String>,
+        val twitter_screen_name: String,
+        val facebook_username: String,
+        val bitcointalk_thread_identifier: Any,
+        val telegram_channel_identifier: String,
+        val subreddit_url: String,
+        val repos_url: Map<String,List<String>>
+    )
+
 
     data class Image(
         val thumb: String,

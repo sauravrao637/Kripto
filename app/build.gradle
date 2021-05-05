@@ -77,6 +77,9 @@ dependencies {
     //tab adapter
     implementation "com.google.android.material:material:1.4.0-alpha02"
 
+    //graphing
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
 
 
 

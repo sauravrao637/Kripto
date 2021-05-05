@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.PriceChart">
+    tools:context=".ui.PriceChartFrag">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/pb"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,89 +55,109 @@
             android:padding="8dp">
 
             <LinearLayout
-                android:id="@+id/ll_duration"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/frame_lyt"
-                android:layout_marginTop="0dp"
-                android:orientation="horizontal"
-                android:padding="4dp">
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tv_24h"
+                <ProgressBar
+                    android:id="@+id/pb_chart"
+                    style="?android:attr/progressBarStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="2dp"
-                    android:layout_weight="1"
-                    android:padding="2dp"
-                    android:text="@string/_24h"
-                    android:textAlignment="center" />
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="0dp" />
 
-                <TextView
-                    android:id="@+id/tv_7d"
+                <Button
+                    android:id="@+id/btn_refreshGraph"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="2dp"
-                    android:layout_weight="1"
-                    android:padding="2dp"
-                    android:text="@string/_7d"
-                    android:textAlignment="center" />
-
-                <TextView
-                    android:id="@+id/tv_2w"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="2dp"
-                    android:layout_weight="1"
-                    android:padding="2dp"
-                    android:text="@string/_2w"
-                    android:textAlignment="center" />
-
-                <TextView
-                    android:id="@+id/tv_1m"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="2dp"
-                    android:layout_weight="1"
-                    android:padding="2dp"
-                    android:text="@string/_1m"
-                    android:textAlignment="center" />
-
-                <TextView
-                    android:id="@+id/tv_2m"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="2dp"
-                    android:layout_weight="1"
-                    android:padding="2dp"
-                    android:text="@string/_2m"
-                    android:textAlignment="center" />
-
-                <TextView
-                    android:id="@+id/tv_200d"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="2dp"
-                    android:layout_weight="1"
-                    android:padding="2dp"
-                    android:text="@string/_200d"
-                    android:textAlignment="center" />
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/action_refresh" />
             </LinearLayout>
 
-            <FrameLayout
-                android:id="@+id/frame_lyt"
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chart"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="240dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginBottom="2dp">
 
-                <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="match_parent"
-                    android:layout_height="240dp"
-                    tools:src="@tools:sample/avatars"
-                    android:contentDescription="@string/todo" />
-            </FrameLayout>
+            </com.github.mikephil.charting.charts.LineChart>
 
         </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_duration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="2dp"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <TextView
+                android:id="@+id/tv_24h"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="2dp"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:text="@string/_24h"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/tv_7d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="2dp"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:text="@string/_7d"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/tv_2w"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="2dp"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:text="@string/_2w"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/tv_1m"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="2dp"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:text="@string/_1m"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/tv_2m"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="2dp"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:text="@string/_2m"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/tv_200d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="2dp"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:text="@string/_200d"
+                android:textAlignment="center" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -2,6 +2,7 @@ package com.camo.kripto.data.api
 
 import com.camo.kripto.data.model.CoinCD
 import com.camo.kripto.data.model.CoinMarket
+import com.camo.kripto.data.model.MarketChart
 
 class CGApiHelper(private val cgService: CGService) {
 
@@ -43,5 +44,9 @@ class CGApiHelper(private val cgService: CGService) {
             id, "true", false, true, false,
             false
         )
+    }
+
+    suspend fun getMarketChart(id: String,curr: String,days: String): MarketChart{
+        return cgService.getCoinMarketChart(id,curr,days)
     }
 }
