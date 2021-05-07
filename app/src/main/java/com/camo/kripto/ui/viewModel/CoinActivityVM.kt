@@ -12,12 +12,12 @@ import kotlinx.coroutines.flow.flow
 
 class CoinActivityVM(private val cgRepo: CGRepo) : ViewModel() {
     private val TAG= CoinActivityVM::class.simpleName
-    val currentCoinData = MutableLiveData<Resource<CoinCD>>()
+    val currentCoinData = MutableLiveData<CoinCD>()
     var title =  MutableLiveData<String>()
     var duration = MutableLiveData<String>()
     var currency = MutableLiveData<String>()
     var allCurr = MutableLiveData<List<String>>()
-    var chart = MutableLiveData<Resource<MarketChart>>()
+
 
 
     init {

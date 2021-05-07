@@ -10,6 +10,10 @@
         android:icon="@drawable/ic_refresh"
         android:title="@string/action_refresh"
         app:showAsAction="ifRoom" />
-
+    <item
+        android:id="@+id/action_fav"
+        android:icon="@drawable/ic_star"
+        android:title="Add to fav"
+        app:showAsAction="always"/>
 
 </menu>

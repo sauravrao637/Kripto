@@ -34,6 +34,10 @@
     <string name="all_time_low_on">ALL TIME LOW ON</string>
     <string name="todo">TODO</string>
     <string name="homepage">HomePage</string>
+    <string name="na">NA</string>
+    <string name="official_forum">Official Forum</string>
+    <string name="blockchain">Blockchain</string>
+    <string name="others">Others</string>
 
     <string-array name="order_by_array">
         <item>market_cap_desc</item>

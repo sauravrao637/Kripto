@@ -19,6 +19,8 @@ import com.camo.kripto.data.model.MarketChart
 import com.camo.kripto.databinding.FragPriceChartBinding
 import com.camo.kripto.ui.base.VMFactory
 import com.camo.kripto.ui.viewModel.CoinActivityVM
+import com.camo.kripto.utils.ChartMarker
+import com.camo.kripto.utils.Formatter
 import com.camo.kripto.utils.Graph
 import com.camo.kripto.utils.Status
 import com.github.mikephil.charting.components.Legend
@@ -104,23 +106,9 @@ class PriceChartFrag : Fragment() {
     private fun setupObservers() {
         //observing coin
         viewModel.currentCoinData.observe(viewLifecycleOwner, {
-            if (it != null) {
-                when (it.status) {
-                    Status.LOADING -> {
-                        binding.pb.visibility = View.VISIBLE
-                    }
-                    Status.ERROR -> {
-                        Log.d(TAG, it.message?:"error")//TODO
-                        binding.pb.visibility = View.GONE
-                    }
-                    Status.SUCCESS -> {
-                        if (it.data != null) coinChanged(it.data)
-                        else Log.d(TAG, "coinData null")
-                        binding.pb.visibility = View.GONE
-                        updateChart()
-                    }
-                }
-            }
+            if (it != null) coinChanged(it)
+            else Log.d(TAG, "coinData null")
+            updateChart()
         })
         //observing duration selected
         viewModel.duration.observe(viewLifecycleOwner, {
@@ -130,7 +118,7 @@ class PriceChartFrag : Fragment() {
 
         //observing currency selected
         viewModel.currency.observe(viewLifecycleOwner, {
-            val cd = viewModel.currentCoinData.value?.data
+            val cd = viewModel.currentCoinData.value
             if (cd != null) {
                 updateUI(cd, it)
                 setPerChange(viewModel.duration.value)
@@ -156,7 +144,7 @@ class PriceChartFrag : Fragment() {
     private fun updateChart() {
         chartJob?.cancel()
         Log.d(TAG, "launching chartJob")
-        val id = viewModel.currentCoinData.value?.data?.id
+        val id = viewModel.currentCoinData.value?.id
         val curr = viewModel.currency.value
         val dur = viewModel.duration.value
         chartJob = lifecycleScope.launch {
@@ -198,23 +186,12 @@ class PriceChartFrag : Fragment() {
         val color = Color.WHITE
         (data.getDataSetByIndex(0) as LineDataSet).circleHoleColor = color
 
-        // no description text
-
-        // no description text
         binding.chart.description.isEnabled = false
 
-        // chart.setDrawHorizontalGrid(false);
-        //
-        // enable / disable grid background
-
-        // chart.setDrawHorizontalGrid(false);
-        //
         // enable / disable grid background
 //        binding.chart.setDrawGridBackground(true)
-//        chart.getRenderer().getGridPaint().setGridColor(Color.WHITE & 0x70FFFFFF);
-
-        // enable touch gestures
-        //        chart.getRenderer().getGridPaint().setGridColor(Color.WHITE & 0x70FFFFFF);
+//
+//        binding.chart.setGridBackgroundColor(Color.WHITE)
 
         // enable touch gestures
         binding.chart.setTouchEnabled(true)
@@ -229,13 +206,14 @@ class PriceChartFrag : Fragment() {
 
         // if disabled, scaling can be done on x- and y-axis separately
         binding.chart.setPinchZoom(false)
+        binding.chart.isDoubleTapToZoomEnabled = false
 
-//        binding.chart.setBackgroundColor(Color.BLACK)
+        binding.chart.setBackgroundColor(Color.BLACK)
 
         // set custom chart offsets (automatic offset calculation is hereby disabled)
 
         // set custom chart offsets (automatic offset calculation is hereby disabled)
-        binding.chart.setViewPortOffsets(10f, 0f, 10f, 0f)
+//        binding.chart.setViewPortOffsets(150f, 0f, 25f, 0f)
 
         // add data
 
@@ -248,19 +226,27 @@ class PriceChartFrag : Fragment() {
         val l: Legend = binding.chart.legend
         l.isEnabled = false
 
-//        binding.chart.axisLeft.isEnabled = true
-//        binding.chart.axisLeft.spaceTop = 40f
-//        binding.chart.axisLeft.spaceBottom = 40f
-//        binding.chart.axisRight.isEnabled = false
+        binding.chart.axisLeft.isEnabled = true
+        binding.chart.axisLeft.spaceTop = 40f
+        binding.chart.axisLeft.spaceBottom = 40f
+        binding.chart.axisRight.isEnabled = false
 
-        binding.chart.xAxis.position = XAxis.XAxisPosition.BOTTOM_INSIDE
+//        binding.chart.xAxis.position = XAxis.XAxisPosition.BOTTOM_INSIDE
 
         binding.chart.xAxis.isEnabled = true
+        binding.chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+//        binding.chart.xAxis.labelRotationAngle = 315f
 
-        // animate calls invalidate()...
+        binding.chart.xAxis.labelCount = 3
+        binding.chart.xAxis.setCenterAxisLabels(true)
+        binding.chart.xAxis.enableGridDashedLine(10f,10f,50f)
 
-        // animate calls invalidate()...
-        binding.chart.animateX(1000)
+        binding.chart.xAxis.textColor = Color.WHITE
+        binding.chart.axisLeft.textColor = Color.WHITE
+
+        binding.chart.animateX(500)
+        binding.chart.xAxis.valueFormatter = Formatter()
+        binding.chart.marker = ChartMarker(context,R.layout.marker_view)
 
     }
 
@@ -280,7 +266,7 @@ class PriceChartFrag : Fragment() {
     }
 
     private fun setPerChange(it: String?) {
-        val coinCD = viewModel.currentCoinData.value?.data
+        val coinCD = viewModel.currentCoinData.value
         val curr = viewModel.currency.value ?: "inr"
         var change: Double? = null
         if (coinCD != null) {
@@ -325,7 +311,7 @@ class PriceChartFrag : Fragment() {
                 }
                 binding.tvPerChange.text = change.toString()
             } else {
-                binding.tvPerChange.text = "NA"
+                binding.tvPerChange.text = R.string.na.toString()
 
             }
         }

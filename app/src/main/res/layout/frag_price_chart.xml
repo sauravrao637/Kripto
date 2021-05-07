@@ -10,13 +10,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <ProgressBar
-            android:id="@+id/pb"
-            style="@style/Widget.AppCompat.ProgressBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -82,7 +75,8 @@
                 android:layout_height="240dp"
                 android:layout_marginStart="2dp"
                 android:layout_marginEnd="2dp"
-                android:layout_marginBottom="2dp">
+                android:layout_marginBottom="2dp"
+                android:outlineProvider="bounds">
 
             </com.github.mikephil.charting.charts.LineChart>
 

@@ -39,33 +39,33 @@ class CoinInfoFrag : Fragment() {
     }
 
     private fun setupObservers() {
-        viewModel.currentCoinData.observe(viewLifecycleOwner,{
+        viewModel.currentCoinData.observe(viewLifecycleOwner, {
             if (it != null) {
-                when (it.status) {
-                    Status.LOADING -> {
-                        binding.pb.visibility = View.VISIBLE
-                    }
-                    Status.ERROR -> {
-                        Log.d(TAG, "error")//TODO
-                        binding.pb.visibility = View.GONE
-                    }
-                    Status.SUCCESS -> {
-                        if (it.data != null) coinChanged(it.data)
-                        else Log.d(TAG, "coinData null")
-                        binding.pb.visibility = View.GONE
-                    }
-                }
-            }
+                coinChanged(it)
+
+            } else Log.d(TAG, "coinData null")
         })
     }
 
     private fun coinChanged(coinCD: CoinCD) {
+
         binding.rvHomepageUrls.adapter = UrlAdapter(coinCD.links.homepage)
         binding.rvHomepageUrls.setHasFixedSize(true)
+        binding.rvOfficialForumUrls.adapter = UrlAdapter(coinCD.links.blockchain_site)
+        binding.rvOfficialForumUrls.setHasFixedSize(true)
+        binding.rvBlockchainUrls.adapter = UrlAdapter(coinCD.links.official_forum_url)
+        binding.rvBlockchainUrls.setHasFixedSize(true)
+        val l = coinCD.links.chat_url.plus(coinCD.links.announcement_url)
+        binding.rvOtherUrls.adapter = UrlAdapter(l)
+        binding.rvOtherUrls.setHasFixedSize(true)
+
     }
 
     private fun setupUI() {
         binding.rvHomepageUrls.layoutManager = LinearLayoutManager(context)
+        binding.rvBlockchainUrls.layoutManager = LinearLayoutManager(context)
+        binding.rvOfficialForumUrls.layoutManager = LinearLayoutManager(context)
+        binding.rvOtherUrls.layoutManager = LinearLayoutManager(context)
 
     }
 
@@ -75,7 +75,6 @@ class CoinInfoFrag : Fragment() {
             VMFactory(CGApiHelper(RetrofitBuilder.CG_SERVICE))
         ).get(CoinActivityVM::class.java)
     }
-
 
 
 }

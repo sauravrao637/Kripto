@@ -6,6 +6,8 @@ import com.camo.kripto.data.model.MarketChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +27,7 @@ public class Graph {
         // set1.setFillAlpha(110);
         // set1.setFillColor(Color.RED);
 
-        set1.setLineWidth(2f);
+        set1.setLineWidth(0.5f);
         set1.setCircleRadius(2f);
         set1.setCircleHoleRadius(1f);
         set1.setColor(Color.WHITE);
@@ -37,7 +39,13 @@ public class Graph {
         return new LineData(set1);
     }
 
-    private static float dtf(Double d) {
+    public static float dtf(Double d) {
         return Float.parseFloat(String.valueOf(d));
     }
+
 }
+//if(Build.VERSION.SDK_INT >=Build.VERSION_CODES.O) {
+//        return Instant.ofEpochSecond(1510500494)
+//        .atZone(ZoneId.systemDefault())
+//        .toLocalDateTime()
+//        }
