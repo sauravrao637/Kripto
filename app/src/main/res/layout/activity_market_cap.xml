@@ -6,17 +6,6 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="64dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:text="@string/coin"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="0dp"
@@ -24,15 +13,28 @@
         android:layout_alignParentEnd="true"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0"
+            android:gravity="center_vertical"
+            android:text="@string/coin"
+            android:textAlignment="center"
+            android:textSize="18sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="2"
-            android:text="@string/currentprice"/>
+            android:text="@string/currentprice"
+            android:textAlignment="center"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tv_duration"
@@ -40,6 +42,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
+            android:textAlignment="center"
+            android:textSize="14sp"
             tools:text="1h" />
 
         <TextView
@@ -47,7 +51,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="3"
-            android:text="@string/market_cap" />
+            android:text="@string/market_cap"
+            android:textAlignment="center"
+            android:textSize="14sp" />
     </LinearLayout>
 
     <ProgressBar
@@ -66,6 +72,7 @@
         android:id="@+id/rv_market_cap"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -7,6 +7,6 @@ import androidx.room.PrimaryKey
 @Entity(indices = [Index("name"), Index("id")])
 data class FavCoin(
     @PrimaryKey
-    val id: String,
-    val name: String
-)
+    override val id: String,
+    override val name: String
+): CoinIdName

@@ -5,12 +5,15 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.camo.kripto.data.api.CGApiHelper
 import com.camo.kripto.data.model.CoinMarket
+import com.camo.kripto.data.repository.CGRepo
+import com.camo.kripto.database.model.CoinIdName
 
 class MarketCapPS(
-    private val backend: CGApiHelper,
+    private val backend: CGRepo,
     private val curr: String,
     private val order: Int,
-    private val duration: Int
+    private val duration: Int,
+    private val coins:List<CoinIdName>?
 ) :
     PagingSource<Int, CoinMarket.CoinMarketItem>() {
     private val TAG = MarketCapPS::class.simpleName
@@ -18,17 +21,19 @@ class MarketCapPS(
         try {
             // Start refresh at page 1 if undefined.
             val nextPageNumber = params.key ?: 1
-            val response = backend.getMarketCap(curr, nextPageNumber, order,duration)
+            val response = backend.getMarketCap(curr, nextPageNumber, order,duration,coins)
+            var nextKey :Int? = nextPageNumber+1
+            if(response.isEmpty()) nextKey = null
             return LoadResult.Page(
                 data = response,
                 prevKey = params.key,
-                nextKey = nextPageNumber + 1
+                nextKey = nextKey
             )
         } catch (e: Exception) {
             // Handle errors in this block and return LoadResult.Error if it is an
             // expected error (such as a network failure).
             Log.d(TAG, e.toString())
-            return LoadResult.Error(e);
+            return LoadResult.Error(e)
         }
     }
 

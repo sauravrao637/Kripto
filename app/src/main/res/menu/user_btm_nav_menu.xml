@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/menu_fav"
+        android:title="Favourites"
+        android:icon="@drawable/ic_star"
+        />
+
+    <item android:id="@+id/menu_market"
+        android:title="Watchlists"
+        android:icon="@drawable/ic_eye"
+        />
+
+    <item android:id="@+id/menu_profile"
+        android:title="Profile"
+        android:icon="@drawable/ic_profile"
+        />
+
+</menu>

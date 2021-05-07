@@ -1,73 +1,87 @@
 package com.camo.kripto.ui
 
-import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.camo.kripto.R
+import com.camo.kripto.database.AppDb
+import com.camo.kripto.database.model.CoinIdName
+import com.camo.kripto.database.repository.AppDbRepo
 import com.camo.kripto.databinding.ActivityMarketCapBinding
 import com.camo.kripto.ui.adapter.MCLoadStateAdapter
 import com.camo.kripto.ui.adapter.MarketCapAdapter
-import com.camo.kripto.ui.user.UserActivity
 import com.camo.kripto.ui.viewModel.MarketCapVM
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class MarketCap : AppCompatActivity() {
+class FragMarket : Fragment() {
 
-    private val TAG = MarketCap::class.simpleName
-
+    private val TAG = FragMarket::class.simpleName
+    private var repo: AppDbRepo? = null
     private lateinit var adapter: MarketCapAdapter
     private lateinit var binding: ActivityMarketCapBinding
     private lateinit var viewModel: MarketCapVM
-    private lateinit var sharedPreferences : SharedPreferences
+    private lateinit var key: String
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMarketCapBinding.inflate(LayoutInflater.from(this@MarketCap))
-        setContentView(binding.root)
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this@MarketCap)
-
-        setupViewModel()
-
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        key = arguments?.getString("key")?: KEY_ALL
+        binding = ActivityMarketCapBinding.inflate(LayoutInflater.from(context))
+        repo = context?.let { AppDb.getAppDb(it)?.let { AppDbRepo(it) } }
+        setupVM()
         setupUI()
-
         setupObservers()
 
-
+        return binding.root
     }
 
-    private fun setupViewModel() {
-        val arr = this.resources.getStringArray(R.array.market_duration)
+    private fun setupObservers() {
+        viewModel.prefCurrency.observe(requireActivity()) {
+
+            getNewData(it, viewModel.orderby.value ?: 0, viewModel.duration.value ?: 0)
+            adapter.curr = it
+
+        }
+        viewModel.orderby.observe(requireActivity()) {
+
+            getNewData(viewModel.prefCurrency.value, it, viewModel.duration.value ?: 0)
+
+        }
+        viewModel.duration.observe(requireActivity()) {
+            binding.tvDuration.text = viewModel.arr[it ?: 0]
+            getNewData(viewModel.prefCurrency.value, viewModel.orderby.value ?: 0, it)
+
+
+        }
+    }
+
+    private fun setupVM() {
         viewModel = ViewModelProviders.of(
-            this
+            requireActivity()
         ).get(MarketCapVM::class.java)
-
-        viewModel.durationArr(arr)
-        //must post currency as soon as vm setup
-
-        var curr = sharedPreferences.getString("pref_currency", "inr")
-        if (curr == null) curr = "inr"
-        viewModel.prefCurrency.postValue(curr)
-        viewModel.duration.postValue(0)
     }
 
     private fun setupUI() {
-        binding.rvMarketCap.layoutManager = LinearLayoutManager(this@MarketCap)
+        binding.rvMarketCap.layoutManager = LinearLayoutManager(requireActivity())
         adapter =
             MarketCapAdapter(viewModel.prefCurrency.value ?: "inr", MarketCapAdapter.Comparator)
         binding.rvMarketCap.addItemDecoration(
@@ -106,9 +120,19 @@ class MarketCap : AppCompatActivity() {
         }
     }
 
+    private fun showEmptyList(show: Boolean) {
+        if (show) {
+            binding.emptyList.visibility = View.VISIBLE
+            binding.rvMarketCap.visibility = View.GONE
+        } else {
+            binding.emptyList.visibility = View.GONE
+            binding.rvMarketCap.visibility = View.VISIBLE
+        }
+    }
+
     private fun initAdapters() {
         ArrayAdapter.createFromResource(
-            this@MarketCap,
+            requireActivity(),
             R.array.order_by_array,
             android.R.layout.simple_spinner_item
         ).also { adapter ->
@@ -137,84 +161,45 @@ class MarketCap : AppCompatActivity() {
                 ?: loadState.prepend as? LoadState.Error
             errorState?.let {
                 Toast.makeText(
-                    this@MarketCap,
+                    requireActivity(),
                     "\uD83D\uDE28 Wooops",
                     Toast.LENGTH_LONG
                 ).show()
                 Log.d(TAG, it.toString())
             }
         }
-
-    }
-
-    private fun showEmptyList(show: Boolean) {
-        if (show) {
-            binding.emptyList.visibility = View.VISIBLE
-            binding.rvMarketCap.visibility = View.GONE
-        } else {
-            binding.emptyList.visibility = View.GONE
-            binding.rvMarketCap.visibility = View.VISIBLE
-        }
     }
 
 
-    private fun setupObservers() {
-        viewModel.prefCurrency.observe(this@MarketCap) {
 
-            getNewData(it, viewModel.orderby.value ?: 0, viewModel.duration.value ?: 0)
-            adapter.curr = it
-
-        }
-        viewModel.orderby.observe(this@MarketCap) {
-
-            getNewData(viewModel.prefCurrency.value, it, viewModel.duration.value ?: 0)
-
-        }
-        viewModel.duration.observe(this@MarketCap) {
-            binding.tvDuration.text = viewModel.arr[it ?: 0]
-            getNewData(viewModel.prefCurrency.value, viewModel.orderby.value ?: 0, it)
-
-
-        }
-
-
-    }
-
-    private var capDataJob: Job? = null
-    private fun getNewData(it: String?, order: Int, dur: Int) {
+    var capDataJob: Job? = null
+    fun getNewData(it: String?, order: Int, dur: Int) {
         capDataJob?.cancel()
+        var coins: List<CoinIdName>? = null
         capDataJob = lifecycleScope.launch {
-            viewModel.getMarketCap(it, order, dur,null).collectLatest { pagingData ->
+            if (key.equals(KEY_FAV)) {
+                coins = withContext(Dispatchers.IO) { repo?.getFavCoins() }
+            }
+            viewModel.getMarketCap(it, order, dur, coins).collectLatest { pagingData ->
                 adapter.submitData(pagingData)
             }
         }
     }
 
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.market_cap, menu)
-        return true
-    }
+    companion object {
+        val KEY_ALL = "all"
+        val KEY_FAV = "fav"
 
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.action_settings -> {
-            // User chose the "Settings" item, show the app settings UI...
-            val intent = Intent(this@MarketCap, UserActivity::class.java)
-            startActivity(intent)
-            true
-        }
-
-        R.id.action_refresh -> {
-//            TODO(lazy) improve
-            adapter.retry()
-            true
-        }
-
-        else -> {
-            // If we got here, the user's action was not recognized.
-            // Invoke the superclass to handle it.
-            super.onOptionsItemSelected(item)
+        fun getInst(data: String): FragMarket {
+            Log.d(
+                "hi","hi"
+            )
+            val myFragment =FragMarket()
+            val args = Bundle()
+            args.putString("key", data)
+            myFragment.arguments = args
+            return myFragment
         }
     }
 }

@@ -3,6 +3,8 @@ package com.camo.kripto.data.api
 import com.camo.kripto.data.model.CoinCD
 import com.camo.kripto.data.model.CoinMarket
 import com.camo.kripto.data.model.MarketChart
+import com.camo.kripto.database.model.CoinIdName
+import com.camo.kripto.database.model.FavCoin
 
 class CGApiHelper(private val cgService: CGService) {
 
@@ -13,8 +15,10 @@ class CGApiHelper(private val cgService: CGService) {
         curr: String,
         page: Int,
         order: Int = 0,
-        duration: Int
+        duration: Int,
+        ids: List<CoinIdName>?
     ): List<CoinMarket.CoinMarketItem> {
+
         var o = "gecko_asc"
         when (order) {
             0 -> o = "market_cap_desc"
@@ -36,7 +40,13 @@ class CGApiHelper(private val cgService: CGService) {
             5 -> d = "200d"
             6 -> d = "1y"
         }
-        return cgService.getMarketCap(curr, 100, page, o, d)
+        var s: String = ""
+        if (ids!=null &&!ids.isEmpty()) {
+            for (i in ids) {
+                s+=i.id+","
+            }
+        }
+        return cgService.getMarketCap(curr, 100, page, o, d,s)
     }
 
     suspend fun getCurrentData(id: String): CoinCD {
@@ -46,7 +56,7 @@ class CGApiHelper(private val cgService: CGService) {
         )
     }
 
-    suspend fun getMarketChart(id: String,curr: String,days: String): MarketChart{
-        return cgService.getCoinMarketChart(id,curr,days)
+    suspend fun getMarketChart(id: String, curr: String, days: String): MarketChart {
+        return cgService.getCoinMarketChart(id, curr, days)
     }
 }

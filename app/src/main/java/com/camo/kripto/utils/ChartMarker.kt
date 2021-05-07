@@ -23,7 +23,6 @@ class ChartMarker(context: Context?, layoutResource: Int) : MarkerView(context, 
 
             val s = e.getY().toString()+"\n"+Formatter.getDateTime(e.x)
             tv.text = s
-            tv.setTextColor(Color.RED)
         }
         super.refreshContent(e, highlight)
     }

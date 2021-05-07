@@ -17,7 +17,7 @@ import com.camo.kripto.database.repository.AppDbRepo
 import com.camo.kripto.databinding.ActivityCoinBinding
 import com.camo.kripto.ui.adapter.CoinActivityTabAdapter
 import com.camo.kripto.ui.base.VMFactory
-import com.camo.kripto.ui.preferences.SettingsActivity
+import com.camo.kripto.ui.user.UserActivity
 import com.camo.kripto.ui.viewModel.CoinActivityVM
 import com.camo.kripto.utils.Status
 import com.google.android.material.tabs.TabLayout
@@ -31,7 +31,8 @@ class CoinActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCoinBinding
     private lateinit var viewModel: CoinActivityVM
     private var id: String? = null
-    private var repo : AppDbRepo? = null
+    private var repo: AppDbRepo? = null
+    private var toast: Toast? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -138,11 +139,16 @@ class CoinActivity : AppCompatActivity() {
                         Status.SUCCESS -> {
                             Log.d(TAG, "coin success")
                             binding.pb.visibility = View.GONE
-//                            binding.viewPager.visibility = View.VISIBLE
-//                            binding.tabLayout.visibility = View.VISIBLE
+                            binding.viewPager.visibility = View.VISIBLE
+                            binding.tabLayout.visibility = View.VISIBLE
                             viewModel.currentCoinData.postValue(result.data)
-                            if(it.data?.id?.let { it1 -> withContext(Dispatchers.IO){repo?.count(it1)} } !=0)setFavStatus(true)
-                            else setFavStatus(false)
+                            if (it.data?.id?.let { it1 ->
+                                    withContext(Dispatchers.IO) {
+                                        repo?.count(
+                                            it1
+                                        )
+                                    }
+                                } != 0) setFavStatus(true)
                         }
                     }
 
@@ -151,15 +157,23 @@ class CoinActivity : AppCompatActivity() {
         }
     }
 
-    private fun setFavStatus(boolean: Boolean) {
-        if(menu ==null) return
-        //TODO change
+    private fun setFavStatus(boolean: Boolean, show: Boolean = false) {
+        if (menu == null) return
         var icon = R.drawable.ic_star_solid
-        if(!boolean) icon = R.drawable.ic_star
+        var msg = "Added"
+        if (!boolean) {
+            icon = R.drawable.ic_star
+            msg = "Removed"
+        }
+        if (show) {
+            toast?.cancel()
+            toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT)
+            toast?.show()
+        }
         this.menu?.findItem(R.id.action_fav)?.setIcon(icon)
     }
 
-    private var menu: Menu? =null
+    private var menu: Menu? = null
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.coin_menu, menu)
@@ -170,21 +184,19 @@ class CoinActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_settings -> {
             // User chose the "Settings" item, show the app settings UI...
-            val intent = Intent(this@CoinActivity, SettingsActivity::class.java)
+            val intent = Intent(this@CoinActivity, UserActivity::class.java)
             startActivity(intent)
             true
         }
 
         R.id.action_refresh -> {
-//            TODO(lazy) improve
             getNewData(id)
             true
         }
 
         R.id.action_fav -> {
-            Toast.makeText(this,"nhi",Toast.LENGTH_LONG).show()
             val coinCd = viewModel.currentCoinData.value
-            if( coinCd!=null)toggleFav(coinCd.id,coinCd.name)
+            if (coinCd != null) toggleFav(coinCd.id, coinCd.name)
             true
         }
 
@@ -195,16 +207,16 @@ class CoinActivity : AppCompatActivity() {
         }
     }
 
-    private var toggleFavJob:Job?=null
-    private fun toggleFav(id: String,name: String) {
+    private var toggleFavJob: Job? = null
+    private fun toggleFav(id: String, name: String) {
         toggleFavJob?.cancel()
-        toggleFavJob =lifecycleScope.launch {
-            if(withContext(Dispatchers.IO){repo?.count(id)}==0){
-                withContext(Dispatchers.IO){repo?.addFavCoin(FavCoin(id,name))}
-                setFavStatus(true)
-            }else{
-                withContext(Dispatchers.IO){repo?.removeFavCoin(id)}
-                setFavStatus(false)
+        toggleFavJob = lifecycleScope.launch {
+            if (withContext(Dispatchers.IO) { repo?.count(id) } == 0) {
+                withContext(Dispatchers.IO) { repo?.addFavCoin(FavCoin(id, name)) }
+                setFavStatus(true, true)
+            } else {
+                withContext(Dispatchers.IO) { repo?.removeFavCoin(id) }
+                setFavStatus(false, true)
             }
         }
     }

@@ -22,7 +22,8 @@ interface CGService {
         @Query("per_page") perPage: Int,
         @Query("page") page: Int,
         @Query("order") order: String,
-        @Query("price_change_percentage")d: String
+        @Query("price_change_percentage")d: String,
+        @Query("ids") ids: String
     ): List<CoinMarket.CoinMarketItem>
 
     @GET("coins/{id}")
