@@ -25,13 +25,15 @@ class MarketCapVM(private val cgRepo: CGRepo) : ViewModel() {
     var orderby: MutableLiveData<Int> = MutableLiveData()
     var duration: MutableLiveData<Int> = MutableLiveData()
 
-    fun getMarketCap(s: String?, order: Int, duration: Int,coins: List<CoinIdName>?): Flow<PagingData<CoinMarket.CoinMarketItem>> {
+    fun getMarketCap(s: String?, order: Int?, duration: Int?, coins: List<CoinIdName>?): Flow<PagingData<CoinMarket.CoinMarketItem>> {
+
+
         return Pager(
             // Configure how data is loaded by passing additional properties to
             // PagingConfig, such as prefetchDistance.
-            PagingConfig(pageSize = 50)
+            PagingConfig(pageSize = 25)
         ) {
-            MarketCapPS(cgRepo, s ?: "inr", order, duration,coins)
+            MarketCapPS(cgRepo, s ?: "inr", order?:0, duration?:0,coins)
         }.flow.cachedIn(viewModelScope)
     }
 

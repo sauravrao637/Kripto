@@ -89,4 +89,6 @@ class MarketCapAdapter(
         }
     }
 
+
+
 }

@@ -46,7 +46,7 @@ class CGApiHelper(private val cgService: CGService) {
                 s+=i.id+","
             }
         }
-        return cgService.getMarketCap(curr, 100, page, o, d,s)
+        return cgService.getMarketCap(curr, 25, page, o, d,s)
     }
 
     suspend fun getCurrentData(id: String): CoinCD {

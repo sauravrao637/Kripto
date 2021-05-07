@@ -1,24 +1,20 @@
 package com.camo.kripto.ui.user
 
 import android.content.SharedPreferences
-import android.nfc.Tag
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.camo.kripto.R
 import com.camo.kripto.data.api.CGApiHelper
 import com.camo.kripto.data.api.RetrofitBuilder
 import com.camo.kripto.databinding.ActivityUserBinding
 import com.camo.kripto.ui.FragMarket
+import com.camo.kripto.ui.MarketSettingsFragment
 import com.camo.kripto.ui.base.VMFactory
 import com.camo.kripto.ui.viewModel.MarketCapVM
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 class UserActivity : AppCompatActivity() {
 
@@ -63,7 +59,6 @@ class UserActivity : AppCompatActivity() {
         binding.bottomNav.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.menu_fav -> {
-                    Log.d("hi", "fav")
                     supportFragmentManager.beginTransaction().apply {
                         replace(R.id.fl_frag_holder, FragMarket.getInst(FragMarket.KEY_FAV))
                         commit()
@@ -77,8 +72,11 @@ class UserActivity : AppCompatActivity() {
                     }
                     true
                 }
-                R.id.menu_profile -> {
-                    //TODO
+                R.id.menu_more -> {
+                    supportFragmentManager.beginTransaction().apply {
+                        replace(R.id.fl_frag_holder,MarketSettingsFragment())
+                        commit()
+                    }
                     true
                 }
 

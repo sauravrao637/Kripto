@@ -44,7 +44,7 @@ class FragMarket : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        key = arguments?.getString("key")?: KEY_ALL
+        key = arguments?.getString("key") ?: KEY_ALL
         binding = ActivityMarketCapBinding.inflate(LayoutInflater.from(context))
         repo = context?.let { AppDb.getAppDb(it)?.let { AppDbRepo(it) } }
         setupVM()
@@ -91,6 +91,11 @@ class FragMarket : Fragment() {
             )
         )
 
+        binding.root.setOnRefreshListener {
+            refresh()
+            binding.root.isRefreshing = false
+        }
+
         binding.retryButton.setOnClickListener { adapter.retry() }
         initAdapters()
         binding.rvMarketCap.adapter =
@@ -114,10 +119,14 @@ class FragMarket : Fragment() {
         }
         binding.tvDuration.setOnClickListener {
             var i = viewModel.duration.value
-            if (i == null) i = 0;
+            if (i == null) i = 0
             i = (i + 1) % 7
             viewModel.duration.postValue(i)
         }
+    }
+
+    private fun refresh() {
+        getNewData(viewModel.prefCurrency.value, viewModel.orderby.value, viewModel.duration.value)
     }
 
     private fun showEmptyList(show: Boolean) {
@@ -171,9 +180,8 @@ class FragMarket : Fragment() {
     }
 
 
-
     var capDataJob: Job? = null
-    fun getNewData(it: String?, order: Int, dur: Int) {
+    fun getNewData(it: String?, order: Int?, dur: Int?) {
         capDataJob?.cancel()
         var coins: List<CoinIdName>? = null
         capDataJob = lifecycleScope.launch {
@@ -193,9 +201,9 @@ class FragMarket : Fragment() {
 
         fun getInst(data: String): FragMarket {
             Log.d(
-                "hi","hi"
+                "hi", "hi"
             )
-            val myFragment =FragMarket()
+            val myFragment = FragMarket()
             val args = Bundle()
             args.putString("key", data)
             myFragment.arguments = args
