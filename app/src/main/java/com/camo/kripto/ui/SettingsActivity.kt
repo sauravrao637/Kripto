@@ -16,7 +16,7 @@ class SettingsActivity : AppCompatActivity() {
         //TODO tab adapter for different settings
 
 
-
+        supportActionBar?.title = "Kripto Settings"
         supportFragmentManager.beginTransaction()
             .replace(R.id.fl_setting_container, MarketSettingsFragment()).commit()
         setContentView(binding.root)

@@ -6,7 +6,12 @@
 <b>WARNING: THIS IS STILL IN DEVLOPMENT, THEREFORE YOU MAY ENCOUNTER BUGS. IF YOU DO, OPEN AN ISSUE VIA OUR GITHUB REPOSITORY.</b>
 
 ## Screenshots
-
+![SS1](assets/screenshots/ss_1)
+![SS2](assets/screenshots/ss_2)
+![SS3](assets/screenshots/ss_3)
+![SS4](assets/screenshots/ss_4)
+![SS5](assets/screenshots/ss_5)
+![SS6](assets/screenshots/ss_6)
 
 ## Description
 
@@ -17,10 +22,16 @@ Thanks to
 
 
 ### Features
-
 * Favourite a coin
 * to be added
 
+### Libraries and Dependencies
+* <a href= "https://square.github.io/retrofit/">Retrofit</a>
+* <a href="https://github.com/google/gson">Gson</a>
+* <a href="https://square.github.io/okhttp/">OkHttp</a>
+* <a href="https://github.com/bumptech/glide"> Glide</a>
+* <a href="https://github.com/PhilJay/MPAndroidChart">MPAndroidChart</a>
+* <a href ="https://heroicons.com/"> Heroicons</a> for icons 
 ### Development Setup
 
 Before you begin, you should already have the Android Studio SDK downloaded and set up correctly. You can find a guide on how to do this here: [Setting up Android Studio](http://developer.android.com/sdk/installing/index.html?pkg=studio)
