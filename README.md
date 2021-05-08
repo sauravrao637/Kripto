@@ -6,12 +6,12 @@
 <b>WARNING: THIS IS STILL IN DEVLOPMENT, THEREFORE YOU MAY ENCOUNTER BUGS. IF YOU DO, OPEN AN ISSUE VIA OUR GITHUB REPOSITORY.</b>
 
 ## Screenshots
-![SS1](assets/screenshots/ss_1)
-![SS2](assets/screenshots/ss_2)
-![SS3](assets/screenshots/ss_3)
-![SS4](assets/screenshots/ss_4)
-![SS5](assets/screenshots/ss_5)
-![SS6](assets/screenshots/ss_6)
+![SS1](assets/screenshots/ss_1.jpg)
+![SS2](assets/screenshots/ss_2.jpg)
+![SS3](assets/screenshots/ss_3.jpg)
+![SS4](assets/screenshots/ss_4.jpg)
+![SS5](assets/screenshots/ss_5.jpg)
+![SS6](assets/screenshots/ss_6.jpg)
 
 ## Description
 
