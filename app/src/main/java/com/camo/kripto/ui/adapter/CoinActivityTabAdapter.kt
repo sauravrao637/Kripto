@@ -3,7 +3,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.camo.kripto.ui.CoinInfoFrag
-import com.camo.kripto.ui.ExchangesFrag
 import com.camo.kripto.ui.PriceChartFrag
 
 class CoinActivityTabAdapter(fragmentActivity: FragmentActivity) :

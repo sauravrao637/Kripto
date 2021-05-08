@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="start_screens_array" >
+        <item>Favourites</item>
+        <item>Market</item>
+    </string-array>
+    <string-array name="start_screens_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="order_by_array">
+        <item>market_cap_desc</item>
+        <item>gecko_desc</item>
+        <item>gecko_asc</item>
+        <item>market_cap_asc</item>
+        <item>market_cap_desc</item>
+        <item>volume_asc</item>
+        <item>volume_desc</item>
+    </string-array>
+
+    <string-array name="market_duration">
+        <item>1h</item>
+        <item>24h</item>
+        <item>7d</item>
+        <item>14d</item>
+        <item>30d</item>
+        <item>200d</item>
+        <item>1y</item>
+    </string-array>
+</resources>

@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -19,7 +18,7 @@ import com.camo.kripto.R
 import com.camo.kripto.database.AppDb
 import com.camo.kripto.database.model.CoinIdName
 import com.camo.kripto.database.repository.AppDbRepo
-import com.camo.kripto.databinding.ActivityMarketCapBinding
+import com.camo.kripto.databinding.FragMarketBinding
 import com.camo.kripto.ui.adapter.MCLoadStateAdapter
 import com.camo.kripto.ui.adapter.MarketCapAdapter
 import com.camo.kripto.ui.viewModel.MarketCapVM
@@ -31,10 +30,10 @@ import kotlinx.coroutines.withContext
 
 class FragMarket : Fragment() {
 
-    private val TAG = FragMarket::class.simpleName
+
     private var repo: AppDbRepo? = null
     private lateinit var adapter: MarketCapAdapter
-    private lateinit var binding: ActivityMarketCapBinding
+    private lateinit var binding: FragMarketBinding
     private lateinit var viewModel: MarketCapVM
     private lateinit var key: String
 
@@ -45,8 +44,9 @@ class FragMarket : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         key = arguments?.getString("key") ?: KEY_ALL
-        binding = ActivityMarketCapBinding.inflate(LayoutInflater.from(context))
+        binding = FragMarketBinding.inflate(LayoutInflater.from(context))
         repo = context?.let { AppDb.getAppDb(it)?.let { AppDbRepo(it) } }
+
         setupVM()
         setupUI()
         setupObservers()
@@ -57,20 +57,18 @@ class FragMarket : Fragment() {
     private fun setupObservers() {
         viewModel.prefCurrency.observe(requireActivity()) {
 
-            getNewData(it, viewModel.orderby.value ?: 0, viewModel.duration.value ?: 0)
+            getNewData(it, viewModel.orderby.value, viewModel.duration.value)
             adapter.curr = it
 
         }
         viewModel.orderby.observe(requireActivity()) {
 
-            getNewData(viewModel.prefCurrency.value, it, viewModel.duration.value ?: 0)
+            getNewData(viewModel.prefCurrency.value, it, viewModel.duration.value)
 
         }
         viewModel.duration.observe(requireActivity()) {
-            binding.tvDuration.text = viewModel.arr[it ?: 0]
-            getNewData(viewModel.prefCurrency.value, viewModel.orderby.value ?: 0, it)
-
-
+            binding.tvDuration.text = it
+            getNewData(viewModel.prefCurrency.value, viewModel.orderby.value, it)
         }
     }
 
@@ -90,7 +88,6 @@ class FragMarket : Fragment() {
                 (binding.rvMarketCap.layoutManager as LinearLayoutManager).orientation
             )
         )
-
         binding.root.setOnRefreshListener {
             refresh()
             binding.root.isRefreshing = false
@@ -101,27 +98,26 @@ class FragMarket : Fragment() {
         binding.rvMarketCap.adapter =
             adapter.withLoadStateFooter(footer = MCLoadStateAdapter { adapter.retry() })
 
-        binding.ddOrderBy.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                //TODO changes
-                viewModel.orderby.postValue(0)
-            }
-
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                viewModel.orderby.postValue(position)
-            }
-
-        }
+//        binding.ddOrderBy.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//            override fun onNothingSelected(parent: AdapterView<*>?) {
+//                //TODO changes
+//                viewModel.orderby.postValue()
+//            }
+//
+//            override fun onItemSelected(
+//                parent: AdapterView<*>?,
+//                view: View?,
+//                position: Int,
+//                id: Long
+//            ) {
+//                viewModel.orderby.postValue(position)
+//            }
+//
+//        }
         binding.tvDuration.setOnClickListener {
-            var i = viewModel.duration.value
-            if (i == null) i = 0
+            var i = viewModel.arr.indexOf(viewModel.duration.value)
             i = (i + 1) % 7
-            viewModel.duration.postValue(i)
+            viewModel.duration.postValue(viewModel.arr[i])
         }
     }
 
@@ -181,7 +177,7 @@ class FragMarket : Fragment() {
 
 
     var capDataJob: Job? = null
-    fun getNewData(it: String?, order: Int?, dur: Int?) {
+    private fun getNewData(it: String?, order: String?, dur: String?) {
         capDataJob?.cancel()
         var coins: List<CoinIdName>? = null
         capDataJob = lifecycleScope.launch {
@@ -196,13 +192,11 @@ class FragMarket : Fragment() {
 
 
     companion object {
+        private val TAG = FragMarket::class.simpleName
         val KEY_ALL = "all"
         val KEY_FAV = "fav"
 
         fun getInst(data: String): FragMarket {
-            Log.d(
-                "hi", "hi"
-            )
             val myFragment = FragMarket()
             val args = Bundle()
             args.putString("key", data)

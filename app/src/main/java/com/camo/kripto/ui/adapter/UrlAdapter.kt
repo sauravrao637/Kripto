@@ -11,11 +11,8 @@ class UrlAdapter(private val dataSet: List<String>) :
     RecyclerView.Adapter<UrlAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val textView: TextView
+        val textView: TextView = view.findViewById(R.id.tv_url)
 
-        init {
-            textView = view.findViewById(R.id.tv_url)
-        }
     }
 
 

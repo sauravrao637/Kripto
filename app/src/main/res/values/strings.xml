@@ -38,24 +38,13 @@
     <string name="official_forum">Official Forum</string>
     <string name="blockchain">Blockchain</string>
     <string name="others">Others</string>
+    <string name="about">About</string>
+    <string name="favourites">Favourites</string>
+    <string name="market">Market</string>
+    <string name="more">More</string>
+    <string name="pref_order">Default Order By</string>
+    <string name="pref_def_start_screen">Default Start Screen</string>
+    <string name="pref_per_change_dur">Default Percentage Change Duration</string>
 
-    <string-array name="order_by_array">
-        <item>market_cap_desc</item>
-        <item>gecko_desc</item>
-        <item>gecko_asc</item>
-        <item>market_cap_asc</item>
-        <item>market_cap_desc</item>
-        <item>volume_asc</item>
-        <item>volume_desc</item>
-    </string-array>
 
-    <string-array name="market_duration">
-        <item>1h</item>
-        <item>24h</item>
-        <item>7d</item>
-        <item>14d</item>
-        <item>30d</item>
-        <item>200d</item>
-        <item>1y</item>
-    </string-array>
 </resources>

@@ -19,25 +19,27 @@ import kotlinx.coroutines.flow.Flow
 
 class MarketCapVM(private val cgRepo: CGRepo) : ViewModel() {
     lateinit var arr: Array<String>
-    private val TAG = MarketCapVM::class.simpleName
+
 
     var prefCurrency: MutableLiveData<String> = MutableLiveData()
-    var orderby: MutableLiveData<Int> = MutableLiveData()
-    var duration: MutableLiveData<Int> = MutableLiveData()
+    var orderby: MutableLiveData<String> = MutableLiveData()
+    var duration: MutableLiveData<String> = MutableLiveData()
 
-    fun getMarketCap(s: String?, order: Int?, duration: Int?, coins: List<CoinIdName>?): Flow<PagingData<CoinMarket.CoinMarketItem>> {
-
-
+    fun getMarketCap(s: String?, order: String?, dur: String?, coins: List<CoinIdName>?): Flow<PagingData<CoinMarket.CoinMarketItem>> {
         return Pager(
             // Configure how data is loaded by passing additional properties to
             // PagingConfig, such as prefetchDistance.
             PagingConfig(pageSize = 25)
         ) {
-            MarketCapPS(cgRepo, s ?: "inr", order?:0, duration?:0,coins)
+            MarketCapPS(cgRepo, s ?: "inr", order,dur,coins)
         }.flow.cachedIn(viewModelScope)
     }
 
     fun durationArr(arr: Array<String>) {
         this.arr = arr
+    }
+
+    companion object{
+        private val TAG = MarketCapVM::class.simpleName
     }
 }

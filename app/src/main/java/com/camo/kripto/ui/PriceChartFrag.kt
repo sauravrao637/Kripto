@@ -239,14 +239,14 @@ class PriceChartFrag : Fragment() {
 
         binding.chart.xAxis.labelCount = 3
         binding.chart.xAxis.setCenterAxisLabels(true)
-        binding.chart.xAxis.enableGridDashedLine(10f,10f,50f)
+        binding.chart.xAxis.enableGridDashedLine(10f, 10f, 50f)
 
         binding.chart.xAxis.textColor = Color.WHITE
         binding.chart.axisLeft.textColor = Color.WHITE
 
         binding.chart.animateX(500)
         binding.chart.xAxis.valueFormatter = Formatter()
-        binding.chart.marker = ChartMarker(context,R.layout.marker_view)
+        binding.chart.marker = ChartMarker(context, R.layout.marker_view)
 
     }
 
@@ -266,6 +266,7 @@ class PriceChartFrag : Fragment() {
     }
 
     private fun setPerChange(it: String?) {
+        var text = "NA"
         val coinCD = viewModel.currentCoinData.value
         val curr = viewModel.currency.value ?: "inr"
         var change: Double? = null
@@ -309,11 +310,11 @@ class PriceChartFrag : Fragment() {
                 } else {
                     binding.tvPerChange.setTextColor(Color.RED)
                 }
-                binding.tvPerChange.text = change.toString()
-            } else {
-                binding.tvPerChange.text = R.string.na.toString()
-
+                text = "$change%"
             }
+            binding.tvPerChange.text = text
+
+
         }
     }
 

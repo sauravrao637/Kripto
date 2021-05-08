@@ -17,7 +17,6 @@ import com.camo.kripto.database.repository.AppDbRepo
 import com.camo.kripto.databinding.ActivityCoinBinding
 import com.camo.kripto.ui.adapter.CoinActivityTabAdapter
 import com.camo.kripto.ui.base.VMFactory
-import com.camo.kripto.ui.user.UserActivity
 import com.camo.kripto.ui.viewModel.CoinActivityVM
 import com.camo.kripto.utils.Status
 import com.google.android.material.tabs.TabLayout
@@ -27,7 +26,7 @@ import kotlinx.coroutines.flow.collect
 
 
 class CoinActivity : AppCompatActivity() {
-    private val TAG = CoinActivity::class.simpleName
+
     private lateinit var binding: ActivityCoinBinding
     private lateinit var viewModel: CoinActivityVM
     private var id: String? = null
@@ -174,6 +173,22 @@ class CoinActivity : AppCompatActivity() {
     }
 
     private var menu: Menu? = null
+
+
+    private var toggleFavJob: Job? = null
+    private fun toggleFav(id: String, name: String) {
+        toggleFavJob?.cancel()
+        toggleFavJob = lifecycleScope.launch {
+            if (withContext(Dispatchers.IO) { repo?.count(id) } == 0) {
+                withContext(Dispatchers.IO) { repo?.addFavCoin(FavCoin(id, name)) }
+                setFavStatus(boolean = true, show = true)
+            } else {
+                withContext(Dispatchers.IO) { repo?.removeFavCoin(id) }
+                setFavStatus(boolean = false, show = true)
+            }
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.coin_menu, menu)
@@ -184,7 +199,7 @@ class CoinActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_settings -> {
             // User chose the "Settings" item, show the app settings UI...
-            val intent = Intent(this@CoinActivity, UserActivity::class.java)
+            val intent = Intent(this@CoinActivity, SettingsActivity::class.java)
             startActivity(intent)
             true
         }
@@ -201,24 +216,11 @@ class CoinActivity : AppCompatActivity() {
         }
 
         else -> {
-            // If we got here, the user's action was not recognized.
-            // Invoke the superclass to handle it.
             super.onOptionsItemSelected(item)
         }
     }
 
-    private var toggleFavJob: Job? = null
-    private fun toggleFav(id: String, name: String) {
-        toggleFavJob?.cancel()
-        toggleFavJob = lifecycleScope.launch {
-            if (withContext(Dispatchers.IO) { repo?.count(id) } == 0) {
-                withContext(Dispatchers.IO) { repo?.addFavCoin(FavCoin(id, name)) }
-                setFavStatus(true, true)
-            } else {
-                withContext(Dispatchers.IO) { repo?.removeFavCoin(id) }
-                setFavStatus(false, true)
-            }
-        }
+    companion object{
+        private val TAG = CoinActivity::class.simpleName
     }
-
 }

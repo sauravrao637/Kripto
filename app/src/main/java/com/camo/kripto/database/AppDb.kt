@@ -4,13 +4,16 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.camo.kripto.database.dao.CurrencyDao
 import com.camo.kripto.database.dao.FavCoinDao
+import com.camo.kripto.database.model.Currency
 import com.camo.kripto.database.model.FavCoin
 
-@Database(entities = [FavCoin::class], version = 1)
+@Database(entities = [FavCoin::class, Currency::class], version = 2)
 //@TypeConverters(DateTypeConverter::class)
 abstract class AppDb : RoomDatabase() {
     abstract fun favCoinDao(): FavCoinDao
+    abstract fun currencyDao(): CurrencyDao
 
     companion object {
         var INSTANCE: AppDb? = null
@@ -22,7 +25,9 @@ abstract class AppDb : RoomDatabase() {
                         context.applicationContext,
                         AppDb::class.java,
                         "kriptoDB.db"
-                    ).build()
+                    ).fallbackToDestructiveMigration().
+                    build()
+
                 }
             }
             return INSTANCE

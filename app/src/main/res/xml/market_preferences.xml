@@ -1,14 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/black">
     <PreferenceCategory
         android:key="pref_curr"
         android:title="@string/pref_market">
 
         <DropDownPreference
-            android:key="pref_currency"
             android:defaultValue="inr"
-            android:summary="@string/pref_currency_summary"
+            android:key="pref_currency"
+            android:summary="%s"
             android:title="@string/pref_currency" />
+        <DropDownPreference
+            android:key="pref_order"
+            android:summary="%s"
+            android:title="@string/pref_order"
+            android:entries="@array/order_by_array"
+            android:entryValues="@array/order_by_array"/>
+        <DropDownPreference
+            android:key="pref_def_frag"
+            android:summary="%s"
+            android:title="@string/pref_def_start_screen"
+            android:entries="@array/start_screens_array"
+            android:entryValues="@array/start_screens_values" />
+        <DropDownPreference
+            android:key="pref_per_change_dur"
+            android:summary="%s"
+            android:title="@string/pref_per_change_dur"
+            android:entries="@array/market_duration"
+            android:entryValues="@array/market_duration" />
 
     </PreferenceCategory>
 </PreferenceScreen>

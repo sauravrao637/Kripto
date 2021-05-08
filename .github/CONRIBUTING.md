@@ -1,27 +1,67 @@
 Kripto contribution guidelines
-===============================
+===
 
-## Issue reporting/feature requests
+### Code practices
 
-* **Already reported**? make sure your issue/feature hasn't been reported/requested.
-* **Already fixed**? Check whether your issue/feature is already fixed/implemented.
-* **Can you fix it**? If you are an Android developer, you are always welcome to fix an issue or implement a feature yourself. PRs welcome! See [Code contribution](#code-contribution) for more info.
-* **Is it in English**? Issues in other languages will be ignored unless someone translates them.
-* **Is it one issue**? Multiple issues require multiple reports, that can be linked to track their statuses.
+Following the best practice to make it easy for the reviewer as well as the contributor. 
 
-## Code contribution
+ * Single commit per pull request.
+ * Reference the issue numbers in the commit message. Follow the pattern ``` Fixes #<issue number> <commit message>```
+ * Follow uniform design practices. The design language must be consistent throughout the app.
+ * The pull request will not get merged until and unless the commits are squashed. In case there are multiple commits on the PR, the commit author needs to squash them.
+ * If the PR is related to any front end change, please attach relevant screenshots in the pull request description.
 
-* If you want to help out with an existing bug report or feature request, leave a comment on that issue saying you want to try your hand at it.
-* If there is no existing issue for what you want to work on, open a new one describing your changes. This gives the community a chance to give feedback before you spend time on something that is already in development, should be done differently, or should be avoided completely.
-* Use proper code formatting (Ctrl+Shift+L for Android Studio) 
-* Do not bring non-free software (e.g. binary blobs) into the project.
-* Make changes on a separate branch with a meaningful name, not on the _master_ branch or the _dev_ branch. This is commonly known as *feature branch workflow*. You may then send your changes as a pull request (PR) on GitHub.
-* Please test (compile and run) your code before submitting changes! Ideally, provide test feedback in the PR description. Untested code will **not** be merged!
-* Make sure your PR is up-to-date with the rest of the code. Often, a simple click on "Update branch" will do the job, but if not, you must rebase the dev branch manually and resolve the problems on your own. You can find help [on the wiki](https://github.com/TeamNewPipe/NewPipe/wiki/How-to-merge-a-PR) (Thanks to NewPipe). That makes the maintainers' jobs way easier.
-* Please show intention to maintain your features and code after you contribute a PR. Unmaintained code is a hassle for core developers. If you do not intend to maintain features you plan to contribute, please rethink your submission, or clearly state that in the PR description.
-* Respond if someone requests changes or otherwise raises issues about your PRs.
-* Send PRs that only cover one specific issue/solution/bug. Do not send PRs that are huge and consist of multiple independent solutions.
-* Try to figure out yourself why builds on our CI fail.
+#### How to `git squash`?
 
-## Communication
-* Post suggestions, changes, ideas etc. on GitHub or IRC.
+As a tip for new developers those who are new with squashing commits into one, multiple commits may appear in your pull request mostly due to following reasons.
+
+ * Intentionally adding multiple commit messages after each change without just `git add`ing.
+ * Updating the current branch with the remote so a merge commit takes place.
+
+Despite any reason, follow the steps given below to squash all commits into one adhering to our best practices.
+
+ * Setup remote to upstream branch if not set before
+
+`$ git remote add upstream https://github.com/fossasia/pslab-android.git`
+
+ * Check into the branch related to the pull request
+
+`$ git checkout <branch-name>`
+
+ * Perform a soft reset to retain the changes while removing all the commit details
+
+`$ git reset --soft upstream/development`
+
+ * Add files to the staging area
+
+`$ git add <file paths or "." to add everything>`
+
+ * Create a new commit with a proper message following commit message guidelines
+
+`$ git commit -m "tag: commit message"`
+
+ * If you have already made a pull request
+
+`$ git push -f origin <branch-name>`
+
+### Branch Policy
+
+We have the following branches
+* **development** All development goes on in this branch. If you're making a contribution, you are supposed to make a pull request to _development_. Make sure it passes a build check on Travis.
+* **master** This contains the stable code. After significant features/bugfixes are accumulated on development, we move it to master.
+
+### Code style
+
+Please try to follow the mentioned guidelines while writing and submitting your code as it makes easier for the reviewer and other developers to understand.
+
+ * While naming the layout files, ensure that the convention followed is (activity/fragment) _ (name).xml like ```activity_oscilloscope.xml``` , ```frag_control_main.xml``` .
+ * Name the views and widgets defined in the layout files as (viewtype/widget) _ (fragment/activity name) _ (no. in the file) like ```spinner_channel_select_la1``` , ```button_activity_oscilloscope1``` .
+ * The activity/fragment file name corresponding to the layout files should be named as                       (activity/fragment name)(activity/fragment).java like ```FragChannelsParameter.java``` corresponding to the layout file ```frag_channels_parameter.xml``` .
+
+
+## Developers
+
+### Maintainers
+The project is maintained by
+- Saurav Rao ([@sauravrao637](https://github.com/sauravrao637))
+
