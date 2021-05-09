@@ -11,7 +11,7 @@ class CGApiHelper(private val cgService: CGService) {
     suspend fun getCoins() = cgService.getCoins()
     suspend fun getSupportedCurr() = cgService.getSupportedCurr()
     suspend fun getMarketCap(
-        curr: String,
+        curr: String?,
         page: Int,
         order: String?,
         duration: String?,
@@ -24,8 +24,9 @@ class CGApiHelper(private val cgService: CGService) {
                 s += i.id + ","
             }
         }
+
         return cgService.getMarketCap(
-            curr,
+            curr?:"inr",
             25,
             page,
             order ?: "market_cap_desc",
@@ -44,4 +45,6 @@ class CGApiHelper(private val cgService: CGService) {
     suspend fun getMarketChart(id: String, curr: String, days: String): MarketChart {
         return cgService.getCoinMarketChart(id, curr, days)
     }
+
+    suspend fun getTrending() = cgService.getTrending()
 }

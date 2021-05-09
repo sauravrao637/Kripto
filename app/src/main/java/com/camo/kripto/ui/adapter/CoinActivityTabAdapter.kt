@@ -3,7 +3,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.camo.kripto.ui.CoinInfoFrag
-import com.camo.kripto.ui.PriceChartFrag
+import com.camo.kripto.ui.FragPriceChart
 
 class CoinActivityTabAdapter(fragmentActivity: FragmentActivity) :
     FragmentStateAdapter(fragmentActivity) {
@@ -15,9 +15,9 @@ class CoinActivityTabAdapter(fragmentActivity: FragmentActivity) :
 
     override fun createFragment(position: Int): Fragment {
         return when(position){
-            0 -> PriceChartFrag()
+            0 -> FragPriceChart()
             1-> CoinInfoFrag()
-            else -> PriceChartFrag()
+            else -> FragPriceChart()
         }
     }
 

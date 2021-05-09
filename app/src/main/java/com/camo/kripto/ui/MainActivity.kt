@@ -6,24 +6,32 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import androidx.appcompat.app.ActionBar
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.camo.kripto.R
 import com.camo.kripto.data.api.CGApiHelper
 import com.camo.kripto.data.api.RetrofitBuilder
 import com.camo.kripto.databinding.ActivityMainBinding
-import com.camo.kripto.ui.FragMarket
-import com.camo.kripto.ui.FragMore
+import com.camo.kripto.ui.adapter.TrendingAdapter
 import com.camo.kripto.ui.base.VMFactory
 import com.camo.kripto.ui.viewModel.MarketCapVM
+import com.camo.kripto.utils.Status
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
+
 
     private var binding: ActivityMainBinding? = null
     private lateinit var viewModel: MarketCapVM
     private lateinit var sharedPreferences: SharedPreferences
     private var actionBar: ActionBar? = null
+    private var trendingAdapter: TrendingAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +51,44 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun setupObservers() {
+        viewModel.trending.observe(this, {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    binding?.rvTrending?.visibility = View.VISIBLE
+                    binding?.pbTrending?.visibility = View.GONE
+                    binding?.btnRefreshTrending?.visibility = View.GONE
+                    if (it.data != null) {
+                        Log.d(TAG, it.toString())
+//                TODO
+//                getMarketCapForTrending()
+                        trendingAdapter?.list = it.data.coins
+                    }
+                }
+
+                Status.LOADING -> {
+                    binding?.rvTrending?.visibility = View.INVISIBLE
+                    binding?.pbTrending?.visibility = View.VISIBLE
+                }
+
+                Status.ERROR -> {
+                    binding?.rvTrending?.visibility = View.INVISIBLE
+                    binding?.pbTrending?.visibility = View.INVISIBLE
+                    binding?.btnRefreshTrending?.visibility = View.VISIBLE
+
+                }
+            }
+
+        })
+    }
+//    private var mCforTrendingJob : Job? = null
+//    private fun getMarketCapForTrending() {
+//        mCforTrendingJob?.cancel()
+//        mCforTrendingJob = lifecycleScope.launch{
+//            viewModel.getMarketCap(viewModel.prefCurrency.value,)
+//        }
+//    }
+
     private fun setupVM() {
         val arr = this.resources.getStringArray(R.array.market_duration)
         viewModel = ViewModelProviders.of(
@@ -54,14 +100,14 @@ class MainActivity : AppCompatActivity() {
 
         var curr = sharedPreferences.getString("pref_currency", "inr")
         if (curr == null) curr = "inr"
-        viewModel.duration.postValue(sharedPreferences.getString("pref_per_change_dur","1h"))
+        viewModel.duration.postValue(sharedPreferences.getString("pref_per_change_dur", "1h"))
         viewModel.prefCurrency.postValue(curr)
         viewModel.orderby.postValue(sharedPreferences.getString("pref_order", "market_cap_desc"))
     }
 
     private fun setupUI() {
 
-
+        trendingAdapter = TrendingAdapter()
         binding?.bottomNav?.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.menu_fav -> {
@@ -97,10 +143,26 @@ class MainActivity : AppCompatActivity() {
         } else {
             binding?.bottomNav?.selectedItemId = R.id.menu_market
         }
+
+        binding?.rvTrending?.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding?.rvTrending?.adapter = trendingAdapter
+        trendingAdapter?.curr = viewModel.prefCurrency.value ?: "inr"
+        getTrending()
+
+        binding?.btnRefreshTrending?.setOnClickListener {
+            getTrending()
+        }
     }
 
-    private fun setupObservers() {
-
+    var getTrendingJob: Job? = null
+    fun getTrending() {
+        getTrendingJob?.cancel()
+        getTrendingJob = lifecycleScope.launch {
+            viewModel.getTrending().collect {
+                viewModel.trending.postValue(it)
+            }
+        }
     }
 
     override fun onDestroy() {

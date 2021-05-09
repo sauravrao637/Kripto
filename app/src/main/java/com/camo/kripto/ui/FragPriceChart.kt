@@ -31,8 +31,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
-class PriceChartFrag : Fragment() {
-    private val TAG = PriceChartFrag::class.simpleName
+class FragPriceChart : Fragment() {
+    private val TAG = FragPriceChart::class.simpleName
     private lateinit var viewModel: CoinActivityVM
     private lateinit var binding: FragPriceChartBinding
 
@@ -44,11 +44,10 @@ class PriceChartFrag : Fragment() {
 
 
         binding = FragPriceChartBinding.inflate(inflater, container, false)
-
+        binding.root.visibility = View.INVISIBLE
         setupViewModel()
         setupUI()
         setupObservers()
-
         return binding.root
     }
 
@@ -106,8 +105,13 @@ class PriceChartFrag : Fragment() {
     private fun setupObservers() {
         //observing coin
         viewModel.currentCoinData.observe(viewLifecycleOwner, {
-            if (it != null) coinChanged(it)
-            else Log.d(TAG, "coinData null")
+            if (it != null) {
+                binding.root.visibility = View.VISIBLE
+                coinChanged(it)
+            } else {
+
+                Log.d(TAG, "coinData null")
+            }
             updateChart()
         })
         //observing duration selected

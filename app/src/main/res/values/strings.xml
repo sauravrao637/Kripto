@@ -45,6 +45,7 @@
     <string name="pref_order">Default Order By</string>
     <string name="pref_def_start_screen">Default Start Screen</string>
     <string name="pref_per_change_dur">Default Percentage Change Duration</string>
+    <string name="repos">Repositories</string>
 
 
 </resources>

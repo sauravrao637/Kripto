@@ -1,9 +1,6 @@
 package com.camo.kripto.data.api
 
-import com.camo.kripto.data.model.Coin
-import com.camo.kripto.data.model.CoinCD
-import com.camo.kripto.data.model.CoinMarket
-import com.camo.kripto.data.model.MarketChart
+import com.camo.kripto.data.model.*
 import kotlinx.coroutines.flow.Flow
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -44,4 +41,7 @@ interface CGService {
         @Query("days")days: String,
 
     ): MarketChart
+
+    @GET("search/trending")
+    suspend fun getTrending(): Trending
 }

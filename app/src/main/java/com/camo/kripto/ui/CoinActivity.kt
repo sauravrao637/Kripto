@@ -89,13 +89,14 @@ class CoinActivity : AppCompatActivity() {
                     when (result.status) {
                         Status.SUCCESS -> {
                             binding.viewPager.visibility = View.VISIBLE
-
+                            binding.pb.visibility = View.GONE
                             result.data?.let { CD ->
                                 viewModel.allCurr.postValue(CD)
                             }
                         }
                         Status.ERROR -> {
-                            binding.viewPager.visibility = View.GONE
+                            binding.viewPager.visibility = View.INVISIBLE
+                            binding.pb.visibility = View.GONE
                             Toast.makeText(
                                 this@CoinActivity,
                                 "\uD83D\uDE28 Wooops" + it.message,
@@ -104,7 +105,8 @@ class CoinActivity : AppCompatActivity() {
                             Log.d(TAG, "error")
                         }
                         Status.LOADING -> {
-                            binding.viewPager.visibility = View.GONE
+                            binding.pb.visibility = View.VISIBLE
+                            binding.viewPager.visibility = View.INVISIBLE
                         }
                     }
                 }

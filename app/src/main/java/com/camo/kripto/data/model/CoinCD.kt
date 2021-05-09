@@ -33,16 +33,16 @@ data class CoinCD(
 
 
     data class Links(
-        val homepage: List<String>,
-        val blockchain_site: List<String>,
-        val official_forum_url: List<String>,
-        val chat_url: List<String>,
-        val announcement_url: List<String>,
-        val twitter_screen_name: String,
-        val facebook_username: String,
+        val homepage: List<String?>?,
+        val blockchain_site: List<String?>?,
+        val official_forum_url: List<String?>?,
+        val chat_url: List<String?>?,
+        val announcement_url: List<String?>?,
+        val twitter_screen_name: String?,
+        val facebook_username: String?,
         val bitcointalk_thread_identifier: Any,
-        val telegram_channel_identifier: String,
-        val subreddit_url: String,
+        val telegram_channel_identifier: String?,
+        val subreddit_url: String?,
         val repos_url: Map<String,List<String>>
     )
 

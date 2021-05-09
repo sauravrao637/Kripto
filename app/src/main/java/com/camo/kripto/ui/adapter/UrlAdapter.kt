@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.camo.kripto.R
 
-class UrlAdapter(private val dataSet: List<String>) :
+class UrlAdapter(private val dataSet: List<String?>?) :
     RecyclerView.Adapter<UrlAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -28,9 +28,9 @@ class UrlAdapter(private val dataSet: List<String>) :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
 
         //TODO diable view binding for url_item
-        viewHolder.textView.text = dataSet[position]
+        viewHolder.textView.text = dataSet?.get(position)?:"NA"
     }
 
-    override fun getItemCount() = dataSet.size
+    override fun getItemCount() = dataSet?.size?:0
 
 }
