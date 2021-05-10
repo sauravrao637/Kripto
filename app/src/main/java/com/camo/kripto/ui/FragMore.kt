@@ -33,7 +33,6 @@ class FragMore: Fragment() {
             requireActivity().startActivity(intent)
 
         }
-//        TODO("Not yet implemented")
     }
 
 

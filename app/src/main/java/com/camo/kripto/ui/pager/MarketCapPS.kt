@@ -10,7 +10,7 @@ import com.camo.kripto.database.model.CoinIdName
 
 class MarketCapPS(
     private val backend: CGRepo,
-    private val curr: String,
+    private val curr: String?,
     private val order: String?,
     private val duration: String?,
     private val coins:List<CoinIdName>?

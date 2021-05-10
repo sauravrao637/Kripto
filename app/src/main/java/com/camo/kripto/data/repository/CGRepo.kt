@@ -13,10 +13,14 @@ class CGRepo(private val cgApiHelper: CGApiHelper) {
         cgApiHelper.getMarketChart(id, curr, days)
 
     suspend fun getMarketCap(
-        curr: String,
+        curr: String?,
         page: Int,
         order: String?,
         duration: String?,
         coins: List<CoinIdName>?
     ): List<CoinMarket.CoinMarketItem> = cgApiHelper.getMarketCap(curr,page,order,duration,coins)
+
+    suspend fun getTrending() = cgApiHelper.getTrending()
+
+    suspend fun getGlobal() = cgApiHelper.getGlobal()
 }
