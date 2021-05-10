@@ -115,9 +115,11 @@ class FragMarket : Fragment() {
 //
 //        }
         binding.tvDuration.setOnClickListener {
-            var i = viewModel.arr.indexOf(viewModel.duration.value)
-            i = (i + 1) % 7
-            viewModel.duration.postValue(viewModel.arr[i])
+            if(viewModel.arr!=null){
+                var i = viewModel.arr!!.indexOf(viewModel.duration.value)
+                i = (i + 1) % 7
+                viewModel.duration.postValue(viewModel.arr!![i])
+            }
         }
     }
 

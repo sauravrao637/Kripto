@@ -32,7 +32,10 @@ import kotlinx.coroutines.launch
 
 
 class FragPriceChart : Fragment() {
-    private val TAG = FragPriceChart::class.simpleName
+    companion object{
+        private val TAG = FragPriceChart::class.simpleName
+    }
+
     private lateinit var viewModel: CoinActivityVM
     private lateinit var binding: FragPriceChartBinding
 

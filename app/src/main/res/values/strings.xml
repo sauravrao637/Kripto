@@ -46,6 +46,12 @@
     <string name="pref_def_start_screen">Default Start Screen</string>
     <string name="pref_per_change_dur">Default Percentage Change Duration</string>
     <string name="repos">Repositories</string>
+    <string name="volume">Volume</string>
+    <string name="active_cryptocurrencies">Active Cryptocurrencies</string>
+    <string name="upcoming_icos">Upcoming ICOs</string>
+    <string name="ongoing_icos">Ongoing ICOs</string>
+    <string name="ended_icos">Ended ICOs</string>
+    <string name="markets">Markets</string>
 
 
 </resources>

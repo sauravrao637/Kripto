@@ -47,4 +47,6 @@ class CGApiHelper(private val cgService: CGService) {
     }
 
     suspend fun getTrending() = cgService.getTrending()
+
+    suspend fun getGlobal() = cgService.getGlobal()
 }

@@ -10,7 +10,10 @@
         android:title="Market"
         android:icon="@drawable/ic_trending_up"
         />
-
+    <item android:id="@+id/menu_global"
+        android:title="Global"
+        android:icon="@drawable/ic_global"
+        />
     <item android:id="@+id/menu_more"
         android:title="More"
         android:icon="@drawable/ic_dots_hor"

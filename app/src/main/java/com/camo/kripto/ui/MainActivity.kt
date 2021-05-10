@@ -59,9 +59,7 @@ class MainActivity : AppCompatActivity() {
                     binding?.pbTrending?.visibility = View.GONE
                     binding?.btnRefreshTrending?.visibility = View.GONE
                     if (it.data != null) {
-                        Log.d(TAG, it.toString())
-//                TODO
-//                getMarketCapForTrending()
+//                TODO get marketCap data for trending
                         trendingAdapter?.list = it.data.coins
                     }
                 }
@@ -81,13 +79,6 @@ class MainActivity : AppCompatActivity() {
 
         })
     }
-//    private var mCforTrendingJob : Job? = null
-//    private fun getMarketCapForTrending() {
-//        mCforTrendingJob?.cancel()
-//        mCforTrendingJob = lifecycleScope.launch{
-//            viewModel.getMarketCap(viewModel.prefCurrency.value,)
-//        }
-//    }
 
     private fun setupVM() {
         val arr = this.resources.getStringArray(R.array.market_duration)
@@ -95,23 +86,40 @@ class MainActivity : AppCompatActivity() {
             this, VMFactory(CGApiHelper(RetrofitBuilder.CG_SERVICE))
         ).get(MarketCapVM::class.java)
 
-        viewModel.durationArr(arr)
+        if (viewModel.arr == null) viewModel.arr = arr
         //must post currency as soon as vm setup
+        //TODO fix on rotation duration changes
+        viewModel.duration.postValue(
+            sharedPreferences.getString(
+                "pref_per_change_dur",
+                "1h"
+            )
+        )
 
-        var curr = sharedPreferences.getString("pref_currency", "inr")
-        if (curr == null) curr = "inr"
-        viewModel.duration.postValue(sharedPreferences.getString("pref_per_change_dur", "1h"))
-        viewModel.prefCurrency.postValue(curr)
-        viewModel.orderby.postValue(sharedPreferences.getString("pref_order", "market_cap_desc"))
+        if (viewModel.prefCurrency.value == null) {
+            var curr = sharedPreferences.getString("pref_currency", "inr")
+            if (curr == null) curr = "inr"
+            viewModel.prefCurrency.postValue(curr)
+        }
+        if (viewModel.orderby.value == null) viewModel.orderby.postValue(
+            sharedPreferences.getString(
+                "pref_order",
+                "market_cap_desc"
+            )
+        )
     }
 
     private fun setupUI() {
 
-        trendingAdapter = TrendingAdapter()
+//        setting up bottomnavigation bar
+
         binding?.bottomNav?.setOnNavigationItemSelectedListener {
+            viewModel.currentFrag = it.itemId
             when (it.itemId) {
+
                 R.id.menu_fav -> {
                     actionBar?.title = this.resources.getString(R.string.favourites)
+
                     supportFragmentManager.beginTransaction().apply {
                         replace(R.id.fl_frag_holder, FragMarket.getInst(FragMarket.KEY_FAV))
                         commit()
@@ -133,16 +141,29 @@ class MainActivity : AppCompatActivity() {
                     }
                     true
                 }
-
+                R.id.menu_global -> {
+                    supportFragmentManager.beginTransaction().apply {
+                        replace(R.id.fl_frag_holder, FragGlobal())
+                        commit()
+                    }
+                    true
+                }
                 else -> false
             }
         }
-
-        if (sharedPreferences.getString("pref_def_frag", "0").equals("0")) {
-            binding?.bottomNav?.selectedItemId = R.id.menu_fav
+//        set view to default//curr fragment
+        if (viewModel.currentFrag == null) {
+            if (sharedPreferences.getString("pref_def_frag", "0").equals("0")) {
+                binding?.bottomNav?.selectedItemId = R.id.menu_fav
+            } else {
+                binding?.bottomNav?.selectedItemId = R.id.menu_market
+            }
         } else {
-            binding?.bottomNav?.selectedItemId = R.id.menu_market
+            binding?.bottomNav?.selectedItemId = viewModel.currentFrag!!
         }
+
+//        setting up trending coins rv
+        trendingAdapter = TrendingAdapter()
 
         binding?.rvTrending?.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -164,6 +185,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
 
     override fun onDestroy() {
         binding = null

@@ -44,4 +44,7 @@ interface CGService {
 
     @GET("search/trending")
     suspend fun getTrending(): Trending
+
+    @GET("global")
+    suspend fun getGlobal() :Global
 }

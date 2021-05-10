@@ -12,6 +12,7 @@
 [<img src="assets/screenshots/ss_4.jpg" width=160>](assets/screenshots/ss_4.jpg)
 [<img src="assets/screenshots/ss_5.jpg" width=160>](assets/screenshots/ss_5.jpg)
 [<img src="assets/screenshots/ss_6.jpg" width=160>](assets/screenshots/ss_6.jpg)
+[<img src="assets/screenshots/ss_7.jpg" width=160>](assets/screenshots/ss_7.jpg)
 
 ## Description
 

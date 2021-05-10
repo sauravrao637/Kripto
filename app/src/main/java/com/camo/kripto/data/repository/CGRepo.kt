@@ -21,4 +21,6 @@ class CGRepo(private val cgApiHelper: CGApiHelper) {
     ): List<CoinMarket.CoinMarketItem> = cgApiHelper.getMarketCap(curr,page,order,duration,coins)
 
     suspend fun getTrending() = cgApiHelper.getTrending()
+
+    suspend fun getGlobal() = cgApiHelper.getGlobal()
 }
