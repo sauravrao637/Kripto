@@ -49,4 +49,6 @@ class CGApiHelper(private val cgService: CGService) {
     suspend fun getTrending() = cgService.getTrending()
 
     suspend fun getGlobal() = cgService.getGlobal()
+
+    suspend fun getExchanges(page:Int) = cgService.getExchanges(25,page)
 }

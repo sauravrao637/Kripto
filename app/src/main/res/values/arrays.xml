@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="start_screens_array" >
-        <item>Favourites</item>
-        <item>Market</item>
+        <item>@string/favourites</item>
+        <item>@string/Cryptocurrencies</item>
+        <item>@string/exchanges</item>
     </string-array>
     <string-array name="start_screens_values">
         <item>0</item>
         <item>1</item>
+        <item>2</item>
     </string-array>
 
     <string-array name="order_by_array">

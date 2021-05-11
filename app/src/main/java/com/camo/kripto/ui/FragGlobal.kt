@@ -7,7 +7,6 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -89,11 +88,19 @@ class FragGlobal : Fragment() {
         binding.tvFragGloablActiveCryptocurrencies.text =
             global.data.active_cryptocurrencies.toString()
         binding.tvFragGlobalEndedIcos.text = global.data.ended_icos.toString()
-        binding.tvFragGlobalMarketCap.text = Extras.getFormattedDoubleCurr(global.data.total_market_cap[curr],curr)
+        binding.tvFragGlobalMarketCap.text = Extras.getFormattedDoubleCurr(
+            global.data.total_market_cap[curr],
+            curr,
+            suffix = ""
+        )
         binding.tvFragGlobalMarkets.text = global.data.markets.toString()
         binding.tvFragGlobalOngoingIcos.text = global.data.ongoing_icos.toString()
         binding.tvFragGlobalUpcomingIcos.text = global.data.upcoming_icos.toString()
-        binding.tvFragGlobalVolume.text = Extras.getFormattedDoubleCurr(global.data.total_volume[curr],curr)
+        binding.tvFragGlobalVolume.text = Extras.getFormattedDoubleCurr(
+            global.data.total_volume[curr],
+            curr,
+            suffix = ""
+        )
 
         updateChart()
         setData(global.data.market_cap_percentage)

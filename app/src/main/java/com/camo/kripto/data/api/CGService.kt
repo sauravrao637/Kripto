@@ -47,4 +47,10 @@ interface CGService {
 
     @GET("global")
     suspend fun getGlobal() :Global
+
+    @GET("exchanges")
+    suspend fun getExchanges(
+        @Query("per_page")perPage: Int,
+        @Query("page")page:Int
+    ): Exchanges
 }

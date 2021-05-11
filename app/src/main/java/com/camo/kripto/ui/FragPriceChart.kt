@@ -27,7 +27,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.*
 
 
 class FragPriceChart : Fragment() {
@@ -342,27 +341,35 @@ class FragPriceChart : Fragment() {
 
     private fun updateUI(coinCD: CoinCD, curr: String) {
 
-        binding.tv24HHigh.text = Extras.getFormattedDoubleCurr(coinCD.market_data.high_24h[curr],curr)
+        binding.tv24HHigh.text = Extras.getFormattedDoubleCurr(
+            coinCD.market_data.high_24h[curr],
+            curr,
+            suffix = ""
+        )
         binding.tvAllTimeHigh.text =
-            Extras.getFormattedDoubleCurr(coinCD.market_data.ath[curr], curr)
+            Extras.getFormattedDoubleCurr(coinCD.market_data.ath[curr], curr, suffix = "")
         binding.tvAllTimeHightOn.text = Extras.getInLocalTime(coinCD.market_data.ath_date[curr])
         binding.tvAllTimeLow.text =
-            Extras.getFormattedDoubleCurr(coinCD.market_data.atl[curr], curr)
+            Extras.getFormattedDoubleCurr(coinCD.market_data.atl[curr], curr, suffix = "")
         binding.tvAllTimeLowOn.text = Extras.getInLocalTime(coinCD.market_data.atl_date[curr])
         binding.tv24HLow.text =
-            Extras.getFormattedDoubleCurr(coinCD.market_data.low_24h[curr], curr)
+            Extras.getFormattedDoubleCurr(coinCD.market_data.low_24h[curr], curr, suffix = "")
         binding.tvCurrentPrice.text =
-            Extras.getFormattedDoubleCurr(coinCD.market_data.current_price[curr], curr)
+            Extras.getFormattedDoubleCurr(coinCD.market_data.current_price[curr], curr, suffix = "")
         binding.tvAvailableSupply.text =
             Extras.getFormattedDouble(coinCD.market_data.circulating_supply)
         binding.tvFullyDilutedValuation.text =
-            Extras.getFormattedDoubleCurr(coinCD.market_data.fully_diluted_valuation[curr], curr)
+            Extras.getFormattedDoubleCurr(
+                coinCD.market_data.fully_diluted_valuation[curr],
+                curr,
+                suffix = ""
+            )
         binding.tvMarketCap.text =
-            Extras.getFormattedDoubleCurr(coinCD.market_data.market_cap[curr], curr)
+            Extras.getFormattedDoubleCurr(coinCD.market_data.market_cap[curr], curr, suffix = "")
         binding.tvMarketCapRank.text = coinCD.market_cap_rank.toString()
         binding.tvTotalSupply.text = Extras.getFormattedDouble(coinCD.market_data.total_supply)
         binding.tvTradingVolume.text =
-            Extras.getFormattedDoubleCurr(coinCD.market_data.total_volume[curr], curr)
+            Extras.getFormattedDoubleCurr(coinCD.market_data.total_volume[curr], curr, suffix = "")
 
 
     }

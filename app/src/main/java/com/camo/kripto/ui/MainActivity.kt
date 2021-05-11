@@ -113,20 +113,22 @@ class MainActivity : AppCompatActivity() {
 //        setting up bottomnavigation bar
 
         binding?.bottomNav?.setOnNavigationItemSelectedListener {
-            viewModel.currentFrag = it.itemId
+
             when (it.itemId) {
 
                 R.id.menu_fav -> {
-                    actionBar?.title = this.resources.getString(R.string.favourites)
-
+                    viewModel.currentFrag = it.itemId
+                    actionBar?.title = resources.getString(R.string.favourites)
                     supportFragmentManager.beginTransaction().apply {
                         replace(R.id.fl_frag_holder, FragMarket.getInst(FragMarket.KEY_FAV))
                         commit()
                     }
                     true
                 }
-                R.id.menu_market -> {
-                    actionBar?.title = this.resources.getString(R.string.market)
+                R.id.menu_cryptocurrencies -> {
+                    viewModel.currentFrag = it.itemId
+                    actionBar?.title = resources.getString(R.string.Cryptocurrencies)
+
                     supportFragmentManager.beginTransaction().apply {
                         replace(R.id.fl_frag_holder, FragMarket.getInst(FragMarket.KEY_ALL))
                         commit()
@@ -134,15 +136,17 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.menu_more -> {
+                    viewModel.currentFrag = it.itemId
                     supportFragmentManager.beginTransaction().apply {
                         replace(R.id.fl_frag_holder, FragMore())
                         commit()
                     }
                     true
                 }
-                R.id.menu_global -> {
+                R.id.menu_exchanges -> {
+                    viewModel.currentFrag = it.itemId
                     supportFragmentManager.beginTransaction().apply {
-                        replace(R.id.fl_frag_holder, FragGlobal())
+                        replace(R.id.fl_frag_holder, FragExchanges())
                         commit()
                     }
                     true
@@ -154,8 +158,10 @@ class MainActivity : AppCompatActivity() {
         if (viewModel.currentFrag == null) {
             if (sharedPreferences.getString("pref_def_frag", "0").equals("0")) {
                 binding?.bottomNav?.selectedItemId = R.id.menu_fav
-            } else {
-                binding?.bottomNav?.selectedItemId = R.id.menu_market
+            } else if(sharedPreferences.getString("pref_def_frag", "0").equals("1")) {
+                binding?.bottomNav?.selectedItemId = R.id.menu_cryptocurrencies
+            }else if(sharedPreferences.getString("pref_def_frag", "0").equals("2")) {
+                binding?.bottomNav?.selectedItemId = R.id.menu_exchanges
             }
         } else {
             binding?.bottomNav?.selectedItemId = viewModel.currentFrag!!
@@ -193,6 +199,7 @@ class MainActivity : AppCompatActivity() {
         binding = null
         super.onDestroy()
     }
+
 
 
 }

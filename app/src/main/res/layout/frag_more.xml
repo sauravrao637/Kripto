@@ -9,6 +9,17 @@
     android:padding="16dp">
 
     <Button
+        android:id="@+id/bGlobal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#00FFFFFF"
+        android:drawableStart="@drawable/ic_global"
+        android:text="@string/global"
+        android:textAlignment="viewStart"
+        android:textColor="@color/white"
+        android:textSize="24sp" />
+
+    <Button
         android:id="@+id/bSettings"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

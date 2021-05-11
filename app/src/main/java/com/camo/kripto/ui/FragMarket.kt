@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -13,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.camo.kripto.R
 import com.camo.kripto.database.AppDb
 import com.camo.kripto.database.model.CoinIdName
 import com.camo.kripto.database.repository.AppDbRepo
@@ -45,6 +43,7 @@ class FragMarket : Fragment() {
     ): View {
         key = arguments?.getString("key") ?: KEY_ALL
         binding = FragMarketBinding.inflate(LayoutInflater.from(context))
+
         repo = context?.let { AppDb.getAppDb(it)?.let { AppDbRepo(it) } }
 
         setupVM()
@@ -74,7 +73,7 @@ class FragMarket : Fragment() {
 
     private fun setupVM() {
         viewModel = ViewModelProviders.of(
-            requireActivity(),
+            requireActivity()
         ).get(MarketCapVM::class.java)
     }
 
@@ -82,6 +81,7 @@ class FragMarket : Fragment() {
         binding.rvMarketCap.layoutManager = LinearLayoutManager(requireActivity())
         adapter =
             MarketCapAdapter(viewModel.prefCurrency.value ?: "inr", MarketCapAdapter.Comparator)
+
         binding.rvMarketCap.addItemDecoration(
             DividerItemDecoration(
                 binding.rvMarketCap.context,
@@ -98,24 +98,9 @@ class FragMarket : Fragment() {
         binding.rvMarketCap.adapter =
             adapter.withLoadStateFooter(footer = MCLoadStateAdapter { adapter.retry() })
 
-//        binding.ddOrderBy.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//                //TODO changes
-//                viewModel.orderby.postValue()
-//            }
-//
-//            override fun onItemSelected(
-//                parent: AdapterView<*>?,
-//                view: View?,
-//                position: Int,
-//                id: Long
-//            ) {
-//                viewModel.orderby.postValue(position)
-//            }
-//
-//        }
+
         binding.tvDuration.setOnClickListener {
-            if(viewModel.arr!=null){
+            if (viewModel.arr != null) {
                 var i = viewModel.arr!!.indexOf(viewModel.duration.value)
                 i = (i + 1) % 7
                 viewModel.duration.postValue(viewModel.arr!![i])
@@ -138,16 +123,7 @@ class FragMarket : Fragment() {
     }
 
     private fun initAdapters() {
-        ArrayAdapter.createFromResource(
-            requireActivity(),
-            R.array.order_by_array,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            // Specify the layout to use when the list of choices appears
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            // Apply the adapter to the spinner
-            binding.ddOrderBy.adapter = adapter
-        }
+//        TODO set able to order in fragment
 
         adapter.addLoadStateListener { loadState ->
             // show empty list
@@ -172,7 +148,7 @@ class FragMarket : Fragment() {
                     "\uD83D\uDE28 Wooops",
                     Toast.LENGTH_LONG
                 ).show()
-                Timber.d( it.toString())
+                Timber.d(it.toString())
             }
         }
     }

@@ -52,7 +52,9 @@
     <string name="ongoing_icos">Ongoing ICOs</string>
     <string name="ended_icos">Ended ICOs</string>
     <string name="markets">Markets</string>
-
+    <string name="exchanges">Exchanges</string>
+    <string name="Cryptocurrencies">Cryptocurrencies</string>
+    <string name="global">Global</string>
 
 
 </resources>

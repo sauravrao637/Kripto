@@ -37,11 +37,16 @@ class Extras {
             return prefix + getFormattedDouble(double) + "%"
         }
 
-        fun getFormattedDoubleCurr(double: Double?, curr: String, prefix: String = " "): String {
+        fun getFormattedDoubleCurr(
+            double: Double?,
+            curr: String,
+            prefix: String = "",
+            suffix: String
+        ): String {
             if (double == null) return "NA"
             var text = getFormattedDouble(double)
             text = getCurrencySymbol(curr) + text
-            return prefix + text;
+            return prefix + text + suffix;
         }
 
         fun getCurrencySymbol(currencyCode: String?): String? {
@@ -77,11 +82,11 @@ class Extras {
         }
 
 
-        fun getCurrSymbolList(it: List<String>?): ArrayList<String>  {
+        fun getCurrSymbolList(it: List<String>?): ArrayList<String> {
             val list = ArrayList<String>()
             if (it != null) {
-                for(s in it){
-                    list.add(getCurrencySymbol(s)?:"")
+                for (s in it) {
+                    list.add(getCurrencySymbol(s) ?: "")
                 }
             }
             return list

@@ -23,4 +23,6 @@ class CGRepo(private val cgApiHelper: CGApiHelper) {
     suspend fun getTrending() = cgApiHelper.getTrending()
 
     suspend fun getGlobal() = cgApiHelper.getGlobal()
+
+    suspend fun getExchanges(page:Int) = cgApiHelper.getExchanges(page)
 }

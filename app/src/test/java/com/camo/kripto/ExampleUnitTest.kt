@@ -17,6 +17,6 @@ class ExampleUnitTest {
     }
     @Test
     fun formatter(){
-        println(Extras.getFormattedDoubleCurr(-1983793712310.985739570,"inr"))
+        println(Extras.getFormattedDoubleCurr(-1983793712310.985739570, "inr", suffix = ""))
     }
 }

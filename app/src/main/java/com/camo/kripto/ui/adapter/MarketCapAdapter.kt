@@ -40,8 +40,16 @@ class MarketCapAdapter(
                 .into(holder.coinIv)
 
             holder.coinName.text = coinMarketItem.symbol
-            holder.currPrice.text = Extras.getFormattedDoubleCurr(coinMarketItem.current_price, curr)
-            holder.marketCap.text = Extras.getFormattedDoubleCurr(coinMarketItem.market_cap, curr)
+            holder.currPrice.text = Extras.getFormattedDoubleCurr(
+                coinMarketItem.current_price,
+                curr,
+                suffix = ""
+            )
+            holder.marketCap.text = Extras.getFormattedDoubleCurr(
+                coinMarketItem.market_cap,
+                curr,
+                suffix = ""
+            )
 
             val perChange = coinMarketItem.market_cap_change
             if(perChange>=0) holder.priceChangePercentage.setTextColor(Color.GREEN)
