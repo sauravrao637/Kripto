@@ -3,8 +3,8 @@ package com.camo.kripto.ui.about
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
-import com.camo.kripto.R
 import com.camo.kripto.databinding.ActivityAboutBinding
+import com.camo.kripto.utils.Extras
 
 class AboutActivity : AppCompatActivity() {
 
@@ -14,6 +14,8 @@ class AboutActivity : AppCompatActivity() {
 
         binding = ActivityAboutBinding.inflate(LayoutInflater.from(this))
         supportActionBar?.title = "About Kripto"
+        binding.tvAboutVersion.text = Extras.getAppVersion(this)
+
         setContentView(binding.root)
     }
 }

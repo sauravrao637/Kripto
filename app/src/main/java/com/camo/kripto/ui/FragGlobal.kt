@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import com.camo.kripto.data.model.Global
 import com.camo.kripto.databinding.FragGlobalBinding
 import com.camo.kripto.ui.viewModel.MarketCapVM
+import com.camo.kripto.utils.Extras
 import com.camo.kripto.utils.Status
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.Legend
@@ -29,12 +30,11 @@ import com.github.mikephil.charting.utils.MPPointF
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 
 class FragGlobal : Fragment() {
-    companion object {
-        private val TAG = FragGlobal::class.simpleName
-    }
+
 
     private lateinit var binding: FragGlobalBinding
     private lateinit var viewModel: MarketCapVM
@@ -70,7 +70,7 @@ class FragGlobal : Fragment() {
             when (it.status) {
                 Status.ERROR -> {
                     binding.pbFragGlobal.visibility = View.GONE
-                    Log.d(TAG, it.message ?: "some error")
+                    Timber.d(it.message ?: "some error")
                 }
                 Status.LOADING -> {
                     binding.pbFragGlobal.visibility = View.VISIBLE
@@ -89,11 +89,11 @@ class FragGlobal : Fragment() {
         binding.tvFragGloablActiveCryptocurrencies.text =
             global.data.active_cryptocurrencies.toString()
         binding.tvFragGlobalEndedIcos.text = global.data.ended_icos.toString()
-        binding.tvFragGlobalMarketCap.text = global.data.total_market_cap[curr].toString()+" "+curr
+        binding.tvFragGlobalMarketCap.text = Extras.getFormattedDoubleCurr(global.data.total_market_cap[curr],curr)
         binding.tvFragGlobalMarkets.text = global.data.markets.toString()
         binding.tvFragGlobalOngoingIcos.text = global.data.ongoing_icos.toString()
         binding.tvFragGlobalUpcomingIcos.text = global.data.upcoming_icos.toString()
-        binding.tvFragGlobalVolume.text = global.data.total_volume[curr].toString()+" "+curr
+        binding.tvFragGlobalVolume.text = Extras.getFormattedDoubleCurr(global.data.total_volume[curr],curr)
 
         updateChart()
         setData(global.data.market_cap_percentage)

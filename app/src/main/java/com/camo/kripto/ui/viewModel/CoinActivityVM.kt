@@ -1,6 +1,6 @@
 package com.camo.kripto.ui.viewModel
 
-import android.util.Log
+
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.camo.kripto.data.model.CoinCD
@@ -9,9 +9,10 @@ import com.camo.kripto.data.repository.CGRepo
 import com.camo.kripto.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import timber.log.Timber
 
 class CoinActivityVM(private val cgRepo: CGRepo) : ViewModel() {
-    private val TAG= CoinActivityVM::class.simpleName
+
     val currentCoinData = MutableLiveData<CoinCD>()
     var title =  MutableLiveData<String>()
     var duration = MutableLiveData<String>()
@@ -42,7 +43,7 @@ class CoinActivityVM(private val cgRepo: CGRepo) : ViewModel() {
         } else flow {
             emit(Resource.loading(data = null))
             try{
-                Log.d(TAG,curr+id+days)
+                Timber.d("%s %s %s",curr,id,days)
                 emit(Resource.success(data = cgRepo.getMarketChart(id,curr,days)))
             }catch (exception: java.lang.Exception){
                 emit(Resource.error(data = null,message = exception.message?:"Error Occurred"))
@@ -57,7 +58,7 @@ class CoinActivityVM(private val cgRepo: CGRepo) : ViewModel() {
             } catch (exception: Exception) {
 
                 emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
-                Log.d(TAG, exception.toString())
+                Timber.d( exception.toString())
             }
         }
     }

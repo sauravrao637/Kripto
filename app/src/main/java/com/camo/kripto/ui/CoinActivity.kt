@@ -2,7 +2,6 @@ package com.camo.kripto.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +22,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
+import timber.log.Timber
 
 
 class CoinActivity : AppCompatActivity() {
@@ -68,7 +68,6 @@ class CoinActivity : AppCompatActivity() {
             when (position) {
                 0 -> tab.text = "Price Chart"
                 1 -> tab.text = "Info"
-                2 -> tab.text = "NBA"
             }
         }.attach()
 
@@ -102,7 +101,8 @@ class CoinActivity : AppCompatActivity() {
                                 "\uD83D\uDE28 Wooops" + it.message,
                                 Toast.LENGTH_LONG
                             ).show()
-                            Log.d(TAG, "error")
+                            Timber.d(
+                                "error")
                         }
                         Status.LOADING -> {
                             binding.pb.visibility = View.VISIBLE
@@ -117,19 +117,19 @@ class CoinActivity : AppCompatActivity() {
     private var capDataJob: Job? = null
     private fun getNewData(id: String?) {
         capDataJob?.cancel()
-        Log.d(TAG, "launching capDataJob")
+        Timber.d("launching capDataJob")
         capDataJob = lifecycleScope.launch {
             viewModel.getCurrentData(id ?: "bitcoin").collect {
                 it.let { result ->
                     when (result.status) {
                         Status.LOADING -> {
-                            Log.d(TAG, "coin loading")
+                            Timber.d("coin loading")
                             binding.pb.visibility = View.VISIBLE
                             binding.viewPager.visibility = View.GONE
                             binding.tabLayout.visibility = View.GONE
                         }
                         Status.ERROR -> {
-                            Log.d(TAG, "coin error")
+                            Timber.d("coin error")
                             binding.pb.visibility = View.GONE
                             //TODO show error
 //                            binding.viewPager.visibility = View.GONE
@@ -138,7 +138,7 @@ class CoinActivity : AppCompatActivity() {
                         }
 
                         Status.SUCCESS -> {
-                            Log.d(TAG, "coin success")
+                            Timber.d("coin success")
                             binding.pb.visibility = View.GONE
                             binding.viewPager.visibility = View.VISIBLE
                             binding.tabLayout.visibility = View.VISIBLE
@@ -222,7 +222,5 @@ class CoinActivity : AppCompatActivity() {
         }
     }
 
-    companion object{
-        private val TAG = CoinActivity::class.simpleName
-    }
+
 }

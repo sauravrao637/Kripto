@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.camo.kripto.R
 import com.camo.kripto.databinding.FragMoreBinding
+import com.camo.kripto.ui.about.AboutActivity
 
 class FragMore: Fragment() {
 
@@ -32,6 +33,10 @@ class FragMore: Fragment() {
             val intent = Intent(requireActivity(),SettingsActivity::class.java)
             requireActivity().startActivity(intent)
 
+        }
+        binding.bAbout.setOnClickListener {
+            val intent = Intent(requireActivity(), AboutActivity::class.java)
+            requireActivity().startActivity(intent)
         }
     }
 

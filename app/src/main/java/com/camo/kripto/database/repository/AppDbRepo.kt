@@ -11,6 +11,7 @@ import com.camo.kripto.database.model.Currency
 import com.camo.kripto.database.model.FavCoin
 import com.camo.kripto.utils.Resource
 import com.camo.kripto.utils.Status
+import timber.log.Timber
 
 class AppDbRepo(val db:AppDb) {
 
@@ -35,7 +36,6 @@ class AppDbRepo(val db:AppDb) {
 
     suspend fun getCurrencies():List<Currency> = db.currencyDao().getCurrencies()
     companion object {
-        private val TAG = AppDbRepo::class.simpleName
         //loadInRoomCurrencies
         suspend fun lIRcurrencies(repo: AppDbRepo?): Resource<Boolean>{
             val curr = ArrayList<Currency>()
@@ -49,7 +49,7 @@ class AppDbRepo(val db:AppDb) {
                 return Resource(Status.SUCCESS,true,"success")
             } catch (e: Exception)
             {
-                Log.d(TAG, e.message.toString())
+                Timber.d( e.message.toString())
                 return Resource(Status.ERROR,false,e.message)
 
             }

@@ -1,12 +1,11 @@
 package com.camo.kripto.ui.pager
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.camo.kripto.data.api.CGApiHelper
 import com.camo.kripto.data.model.CoinMarket
 import com.camo.kripto.data.repository.CGRepo
 import com.camo.kripto.database.model.CoinIdName
+import timber.log.Timber
 
 class MarketCapPS(
     private val backend: CGRepo,
@@ -32,7 +31,7 @@ class MarketCapPS(
                 nextKey = nextKey
             )
         } catch (e: Exception) {
-            Log.d(TAG, e.toString())
+            Timber.d( e.toString())
             LoadResult.Error(e)
         }
     }
@@ -44,7 +43,5 @@ class MarketCapPS(
         }
     }
 
-    companion object{
-        private val TAG = MarketCapPS::class.simpleName
-    }
+
 }

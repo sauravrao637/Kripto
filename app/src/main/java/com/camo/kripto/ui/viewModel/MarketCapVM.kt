@@ -64,7 +64,5 @@ class MarketCapVM(private val cgRepo: CGRepo) : ViewModel() {
             }
         }
     }
-    companion object{
-        private val TAG = MarketCapVM::class.simpleName
-    }
+
 }

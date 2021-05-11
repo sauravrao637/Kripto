@@ -2,12 +2,11 @@ package com.camo.kripto.ui
 
 
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
@@ -168,12 +167,15 @@ class MainActivity : AppCompatActivity() {
         binding?.rvTrending?.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding?.rvTrending?.adapter = trendingAdapter
+        // add the decoration. done.
+        // add the decoration. done.
         trendingAdapter?.curr = viewModel.prefCurrency.value ?: "inr"
         getTrending()
 
         binding?.btnRefreshTrending?.setOnClickListener {
             getTrending()
         }
+
     }
 
     var getTrendingJob: Job? = null
@@ -192,7 +194,5 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    companion object {
-        private val TAG = MainActivity::class.simpleName
-    }
+
 }

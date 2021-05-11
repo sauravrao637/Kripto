@@ -1,6 +1,5 @@
 package com.camo.kripto.ui.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -9,11 +8,11 @@ import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.camo.kripto.R
 import com.camo.kripto.databinding.LoadMarketCapFooterViewItemBinding
+import timber.log.Timber
 
 class MCLoadStateAdapter(private val retry: () -> Unit) :
     LoadStateAdapter<MCLoadStateAdapter.MCLoadStateViewHolder>() {
 
-    private val TAG = MCLoadStateAdapter::class.simpleName
 
     override fun onBindViewHolder(holder: MCLoadStateViewHolder, loadState: LoadState) {
         holder.bind(loadState)
@@ -32,7 +31,7 @@ class MCLoadStateAdapter(private val retry: () -> Unit) :
         retry: () -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        private val TAG = MCLoadStateAdapter::class.simpleName
+
 
         init {
             binding.retryButton.setOnClickListener { retry.invoke() }
@@ -41,7 +40,7 @@ class MCLoadStateAdapter(private val retry: () -> Unit) :
         fun bind(loadState: LoadState) {
             if (loadState is LoadState.Error) {
                 binding.errorMsg.text = "some error"
-                Log.d(TAG,loadState.error.localizedMessage?:"error")
+                Timber.d(loadState.error.localizedMessage?:"error")
             }
             binding.progressBar.isVisible = loadState is LoadState.Loading
             binding.retryButton.isVisible = loadState is LoadState.Error

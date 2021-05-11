@@ -2,7 +2,6 @@ package com.camo.kripto.ui
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,22 +18,20 @@ import com.camo.kripto.data.model.MarketChart
 import com.camo.kripto.databinding.FragPriceChartBinding
 import com.camo.kripto.ui.base.VMFactory
 import com.camo.kripto.ui.viewModel.CoinActivityVM
-import com.camo.kripto.utils.ChartMarker
+import com.camo.kripto.utils.*
 import com.camo.kripto.utils.Formatter
-import com.camo.kripto.utils.Graph
-import com.camo.kripto.utils.Status
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.LineDataSet
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import java.util.*
 
 
 class FragPriceChart : Fragment() {
-    companion object{
-        private val TAG = FragPriceChart::class.simpleName
-    }
+
 
     private lateinit var viewModel: CoinActivityVM
     private lateinit var binding: FragPriceChartBinding
@@ -113,7 +110,7 @@ class FragPriceChart : Fragment() {
                 coinChanged(it)
             } else {
 
-                Log.d(TAG, "coinData null")
+                Timber.d("coinData null")
             }
             updateChart()
         })
@@ -150,7 +147,7 @@ class FragPriceChart : Fragment() {
     private var chartJob: Job? = null
     private fun updateChart() {
         chartJob?.cancel()
-        Log.d(TAG, "launching chartJob")
+        Timber.d("launching chartJob")
         val id = viewModel.currentCoinData.value?.id
         val curr = viewModel.currency.value
         val dur = viewModel.duration.value
@@ -161,7 +158,7 @@ class FragPriceChart : Fragment() {
                         binding.pbChart.visibility = View.VISIBLE
                         binding.btnRefreshGraph.visibility = View.INVISIBLE
                         binding.chart.visibility = View.INVISIBLE
-                        Log.d(TAG, "graph lvding")
+                        Timber.d("graph lvding")
                     }
                     Status.SUCCESS -> {
                         binding.chart.visibility = View.VISIBLE
@@ -170,7 +167,7 @@ class FragPriceChart : Fragment() {
                         createGraph(it.data)
                     }
                     Status.ERROR -> {
-                        Log.d(TAG, it.message ?: "some error in chartJob")
+                        Timber.d(it.message ?: "some error in chartJob")
                         binding.pbChart.visibility = View.INVISIBLE
                         binding.btnRefreshGraph.visibility = View.VISIBLE
                         binding.chart.visibility = View.INVISIBLE
@@ -345,20 +342,27 @@ class FragPriceChart : Fragment() {
 
     private fun updateUI(coinCD: CoinCD, curr: String) {
 
-        binding.tv24HHigh.text = coinCD.market_data.high_24h[curr].toString()
-        binding.tvAllTimeHigh.text = coinCD.market_data.ath[curr].toString()
-        binding.tvAllTimeHightOn.text = coinCD.market_data.ath_date[curr].toString()
-        binding.tvAllTimeLow.text = coinCD.market_data.atl[curr].toString()
-        binding.tvAllTimeLowOn.text = coinCD.market_data.atl_date[curr].toString()
-        binding.tv24HLow.text = coinCD.market_data.low_24h[curr].toString()
-        binding.tvCurrentPrice.text = coinCD.market_data.current_price[curr].toString()
-        binding.tvAvailableSupply.text = coinCD.market_data.circulating_supply.toString()
+        binding.tv24HHigh.text = Extras.getFormattedDoubleCurr(coinCD.market_data.high_24h[curr],curr)
+        binding.tvAllTimeHigh.text =
+            Extras.getFormattedDoubleCurr(coinCD.market_data.ath[curr], curr)
+        binding.tvAllTimeHightOn.text = Extras.getInLocalTime(coinCD.market_data.ath_date[curr])
+        binding.tvAllTimeLow.text =
+            Extras.getFormattedDoubleCurr(coinCD.market_data.atl[curr], curr)
+        binding.tvAllTimeLowOn.text = Extras.getInLocalTime(coinCD.market_data.atl_date[curr])
+        binding.tv24HLow.text =
+            Extras.getFormattedDoubleCurr(coinCD.market_data.low_24h[curr], curr)
+        binding.tvCurrentPrice.text =
+            Extras.getFormattedDoubleCurr(coinCD.market_data.current_price[curr], curr)
+        binding.tvAvailableSupply.text =
+            Extras.getFormattedDouble(coinCD.market_data.circulating_supply)
         binding.tvFullyDilutedValuation.text =
-            coinCD.market_data.fully_diluted_valuation[curr].toString()
-        binding.tvMarketCap.text = coinCD.market_data.market_cap[curr].toString()
+            Extras.getFormattedDoubleCurr(coinCD.market_data.fully_diluted_valuation[curr], curr)
+        binding.tvMarketCap.text =
+            Extras.getFormattedDoubleCurr(coinCD.market_data.market_cap[curr], curr)
         binding.tvMarketCapRank.text = coinCD.market_cap_rank.toString()
-        binding.tvTotalSupply.text = coinCD.market_data.total_supply.toString()
-        binding.tvTradingVolume.text = coinCD.market_data.total_volume[curr].toString()
+        binding.tvTotalSupply.text = Extras.getFormattedDouble(coinCD.market_data.total_supply)
+        binding.tvTradingVolume.text =
+            Extras.getFormattedDoubleCurr(coinCD.market_data.total_volume[curr], curr)
 
 
     }

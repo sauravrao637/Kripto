@@ -33,6 +33,7 @@ Thanks to
 * <a href="https://github.com/bumptech/glide"> Glide</a>
 * <a href="https://github.com/PhilJay/MPAndroidChart">MPAndroidChart</a>
 * <a href ="https://heroicons.com/"> Heroicons</a> for icons 
+* <a href = "https://github.com/JakeWharton/timber">Timber</a>
 ### Development Setup
 
 Before you begin, you should already have the Android Studio SDK downloaded and set up correctly. You can find a guide on how to do this here: [Setting up Android Studio](http://developer.android.com/sdk/installing/index.html?pkg=studio)

@@ -3,7 +3,6 @@ package com.camo.kripto.ui
 import android.os.Bundle
 import android.text.Html
 import android.text.method.LinkMovementMethod
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,12 +16,11 @@ import com.camo.kripto.databinding.FragCoinInfoBinding
 import com.camo.kripto.ui.adapter.UrlAdapter
 import com.camo.kripto.ui.base.VMFactory
 import com.camo.kripto.ui.viewModel.CoinActivityVM
+import timber.log.Timber
 
 
 class CoinInfoFrag : Fragment() {
-    companion object {
-        private val TAG = CoinInfoFrag::class.simpleName
-    }
+
 
     private lateinit var binding: FragCoinInfoBinding
     private lateinit var viewModel: CoinActivityVM
@@ -48,7 +46,7 @@ class CoinInfoFrag : Fragment() {
                 binding.root.visibility = View.VISIBLE
             } else {
 
-                Log.d(TAG, "coinData null")
+                Timber.d( "coinData null")
             }
         })
     }

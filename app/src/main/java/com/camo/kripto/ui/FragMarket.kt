@@ -1,7 +1,6 @@
 package com.camo.kripto.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +26,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class FragMarket : Fragment() {
 
@@ -55,18 +55,18 @@ class FragMarket : Fragment() {
     }
 
     private fun setupObservers() {
-        viewModel.prefCurrency.observe(requireActivity()) {
+        viewModel.prefCurrency.observe(viewLifecycleOwner) {
 
             getNewData(it, viewModel.orderby.value, viewModel.duration.value)
             adapter.curr = it
 
         }
-        viewModel.orderby.observe(requireActivity()) {
+        viewModel.orderby.observe(viewLifecycleOwner) {
 
             getNewData(viewModel.prefCurrency.value, it, viewModel.duration.value)
 
         }
-        viewModel.duration.observe(requireActivity()) {
+        viewModel.duration.observe(viewLifecycleOwner) {
             binding.tvDuration.text = it
             getNewData(viewModel.prefCurrency.value, viewModel.orderby.value, it)
         }
@@ -74,7 +74,7 @@ class FragMarket : Fragment() {
 
     private fun setupVM() {
         viewModel = ViewModelProviders.of(
-            requireActivity()
+            requireActivity(),
         ).get(MarketCapVM::class.java)
     }
 
@@ -172,7 +172,7 @@ class FragMarket : Fragment() {
                     "\uD83D\uDE28 Wooops",
                     Toast.LENGTH_LONG
                 ).show()
-                Log.d(TAG, it.toString())
+                Timber.d( it.toString())
             }
         }
     }
@@ -194,7 +194,7 @@ class FragMarket : Fragment() {
 
 
     companion object {
-        private val TAG = FragMarket::class.simpleName
+
         val KEY_ALL = "all"
         val KEY_FAV = "fav"
 

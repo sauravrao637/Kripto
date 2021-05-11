@@ -21,7 +21,7 @@ class ChartMarker(context: Context?, layoutResource: Int) : MarkerView(context, 
     override fun refreshContent(e: Entry?, highlight: Highlight?) {
         if (e != null) {
 
-            val s = e.getY().toString()+"\n"+Formatter.getDateTime(e.x)
+            val s = e.getY().toString()+"\n"+Extras.getDateTime(e.x)
             tv.text = s
         }
         super.refreshContent(e, highlight)

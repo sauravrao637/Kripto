@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class MarketSettingsFragment : PreferenceFragmentCompat() {
 
@@ -39,7 +40,7 @@ class MarketSettingsFragment : PreferenceFragmentCompat() {
             currPreference?.isVisible = true
         } else {
 //            TODO error handling
-            Log.d(TAG, "Empty curr array")
+            Timber.d( "Empty curr array")
         }
     }
 
@@ -77,7 +78,5 @@ class MarketSettingsFragment : PreferenceFragmentCompat() {
             }
         }
     }
-    companion object{
-        private val TAG = MarketSettingsFragment::class.simpleName
-    }
+
 }
