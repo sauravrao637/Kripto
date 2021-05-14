@@ -26,7 +26,7 @@ class CGApiHelper(private val cgService: CGService) {
         }
 
         return cgService.getMarketCap(
-            curr?:"inr",
+            curr ?: "inr",
             25,
             page,
             order ?: "market_cap_desc",
@@ -50,5 +50,7 @@ class CGApiHelper(private val cgService: CGService) {
 
     suspend fun getGlobal() = cgService.getGlobal()
 
-    suspend fun getExchanges(page:Int) = cgService.getExchanges(25,page)
+    suspend fun getExchanges(page: Int) = cgService.getExchanges(25, page)
+
+    suspend fun getGlobalDefi() = cgService.getGlobalDefi()
 }

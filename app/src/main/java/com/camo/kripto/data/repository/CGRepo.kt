@@ -18,11 +18,14 @@ class CGRepo(private val cgApiHelper: CGApiHelper) {
         order: String?,
         duration: String?,
         coins: List<CoinIdName>?
-    ): List<CoinMarket.CoinMarketItem> = cgApiHelper.getMarketCap(curr,page,order,duration,coins)
+    ): List<CoinMarket.CoinMarketItem> =
+        cgApiHelper.getMarketCap(curr, page, order, duration, coins)
 
     suspend fun getTrending() = cgApiHelper.getTrending()
 
     suspend fun getGlobal() = cgApiHelper.getGlobal()
 
-    suspend fun getExchanges(page:Int) = cgApiHelper.getExchanges(page)
+    suspend fun getExchanges(page: Int) = cgApiHelper.getExchanges(page)
+
+    suspend fun getGlobalDefi() = cgApiHelper.getGlobalDefi()
 }

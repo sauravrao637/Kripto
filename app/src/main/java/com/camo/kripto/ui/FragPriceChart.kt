@@ -1,5 +1,6 @@
 package com.camo.kripto.ui
 
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.PreferenceManager
 import com.bumptech.glide.Glide
 import com.camo.kripto.R
 import com.camo.kripto.data.api.CGApiHelper
@@ -34,6 +36,7 @@ class FragPriceChart : Fragment() {
 
     private lateinit var viewModel: CoinActivityVM
     private lateinit var binding: FragPriceChartBinding
+    private lateinit var sharedPreferences: SharedPreferences
 
 
     override fun onCreateView(
@@ -44,6 +47,8 @@ class FragPriceChart : Fragment() {
 
         binding = FragPriceChartBinding.inflate(inflater, container, false)
         binding.root.visibility = View.INVISIBLE
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+
         setupViewModel()
         setupUI()
         setupObservers()
@@ -51,9 +56,10 @@ class FragPriceChart : Fragment() {
     }
 
     private fun setupViewModel() {
+        val curr = sharedPreferences.getString("pref_currency","inr")
         viewModel = ViewModelProviders.of(
             requireActivity(),
-            VMFactory(CGApiHelper(RetrofitBuilder.CG_SERVICE))
+            VMFactory(CGApiHelper(RetrofitBuilder.CG_SERVICE), curr =curr, prefOrder = null)
         ).get(CoinActivityVM::class.java)
 
     }

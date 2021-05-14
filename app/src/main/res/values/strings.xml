@@ -55,6 +55,12 @@
     <string name="exchanges">Exchanges</string>
     <string name="Cryptocurrencies">Cryptocurrencies</string>
     <string name="global">Global</string>
+    <string name="defi_market_cap">Defi Market Cap</string>
+    <string name="ethereum_market_cap">Ethereum Market Cap</string>
+    <string name="defi_eth">Defi : Eth</string>
+    <string name="defi_dominance">Defi Dominance</string>
+    <string name="top_coin">Top Coin</string>
+    <string name="dominance">Dominance</string>
 
 
 </resources>

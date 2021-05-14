@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.camo.kripto.R
 import com.camo.kripto.data.api.CGApiHelper
 import com.camo.kripto.data.api.RetrofitBuilder
+import com.camo.kripto.data.repository.CGRepo
 import com.camo.kripto.database.AppDb
 import com.camo.kripto.database.model.FavCoin
 import com.camo.kripto.database.repository.AppDbRepo
@@ -30,7 +31,6 @@ class CoinActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCoinBinding
     private lateinit var viewModel: CoinActivityVM
     private var id: String? = null
-    private var repo: AppDbRepo? = null
     private var toast: Toast? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,27 +38,24 @@ class CoinActivity : AppCompatActivity() {
         binding = ActivityCoinBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
-        repo = AppDb.getAppDb(this)?.let { AppDbRepo(it) }
-//        actionBar?.setDisplayShowCustomEnabled(true)
-//        val inflater =
-//            getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-//        val v: View = CustomActionBarBinding.inflate(inflater).root
-//        actionBar?.customView = v
-
         id = intent.getStringExtra("coinId")
         val curr = intent.getStringExtra("curr")
 
+        setupVM(curr)
+        setupUI()
 
-        viewModel = ViewModelProviders.of(
-            this,
-            VMFactory(CGApiHelper(RetrofitBuilder.CG_SERVICE))
-        ).get(CoinActivityVM::class.java)
-
-        viewModel.currency.postValue(curr)
+        getNewData(id)
         setCurrencies()
+        setupObservers()
+    }
 
+    private fun setupObservers() {
+        viewModel.title.observe(this, {
+            if (it != null) supportActionBar?.title = it
+        })
+    }
 
-        binding.tabLayout.tabGravity = TabLayout.GRAVITY_FILL
+    private fun setupUI() {
         val adapter = CoinActivityTabAdapter(
             this
         )
@@ -70,13 +67,14 @@ class CoinActivity : AppCompatActivity() {
                 1 -> tab.text = "Info"
             }
         }.attach()
+    }
 
-        getNewData(id)
-        setCurrencies()
-
-        viewModel.title.observe(this, {
-            if (it != null) supportActionBar?.title = it
-        })
+    private fun setupVM(curr: String?) {
+        val repo = AppDb.getAppDb(this)?.let { AppDbRepo(it) }
+        viewModel = ViewModelProviders.of(
+            this,
+            VMFactory(CGApiHelper(RetrofitBuilder.CG_SERVICE), appDbRepo = repo, curr = curr, prefOrder = null)
+        ).get(CoinActivityVM::class.java)
     }
 
     private var getCurrJob: Job? = null
@@ -145,7 +143,7 @@ class CoinActivity : AppCompatActivity() {
                             viewModel.currentCoinData.postValue(result.data)
                             if (it.data?.id?.let { it1 ->
                                     withContext(Dispatchers.IO) {
-                                        repo?.count(
+                                        viewModel.getCount(
                                             it1
                                         )
                                     }
@@ -181,11 +179,11 @@ class CoinActivity : AppCompatActivity() {
     private fun toggleFav(id: String, name: String) {
         toggleFavJob?.cancel()
         toggleFavJob = lifecycleScope.launch {
-            if (withContext(Dispatchers.IO) { repo?.count(id) } == 0) {
-                withContext(Dispatchers.IO) { repo?.addFavCoin(FavCoin(id, name)) }
+            if (withContext(Dispatchers.IO) { viewModel.getCount(id) } == 0) {
+                withContext(Dispatchers.IO) { viewModel.addFavCoin(FavCoin(id, name)) }
                 setFavStatus(boolean = true, show = true)
             } else {
-                withContext(Dispatchers.IO) { repo?.removeFavCoin(id) }
+                withContext(Dispatchers.IO) { viewModel.removeFavCoin(id) }
                 setFavStatus(boolean = false, show = true)
             }
         }

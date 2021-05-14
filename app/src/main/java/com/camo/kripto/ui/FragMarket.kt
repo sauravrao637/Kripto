@@ -5,19 +5,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.camo.kripto.data.api.CGApiHelper
+import com.camo.kripto.data.api.RetrofitBuilder
 import com.camo.kripto.database.AppDb
 import com.camo.kripto.database.model.CoinIdName
 import com.camo.kripto.database.repository.AppDbRepo
 import com.camo.kripto.databinding.FragMarketBinding
 import com.camo.kripto.ui.adapter.MCLoadStateAdapter
 import com.camo.kripto.ui.adapter.MarketCapAdapter
+import com.camo.kripto.ui.base.VMFactory
 import com.camo.kripto.ui.viewModel.MarketCapVM
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -72,13 +78,25 @@ class FragMarket : Fragment() {
     }
 
     private fun setupVM() {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val curr = sharedPreferences.getString("pref_currency", "inr") ?: "inr"
+        val prefDur = sharedPreferences.getString("pref_per_change_dur", "1h") ?: "1h"
+        val prefOrder = sharedPreferences.getString(
+            "pref_order",
+            "market_cap_desc"
+        ) ?: "market_cap_desc"
         viewModel = ViewModelProviders.of(
-            requireActivity()
+            requireActivity(), VMFactory(
+                CGApiHelper(RetrofitBuilder.CG_SERVICE),
+                curr = curr,
+                duration = prefDur,
+                prefOrder = prefOrder
+            )
         ).get(MarketCapVM::class.java)
     }
 
     private fun setupUI() {
-        binding.rvMarketCap.layoutManager = LinearLayoutManager(requireActivity())
+        binding.rvMarketCap.layoutManager = LinearLayoutManager(context)
         adapter =
             MarketCapAdapter(viewModel.prefCurrency.value ?: "inr", MarketCapAdapter.Comparator)
 
@@ -88,6 +106,7 @@ class FragMarket : Fragment() {
                 (binding.rvMarketCap.layoutManager as LinearLayoutManager).orientation
             )
         )
+
         binding.root.setOnRefreshListener {
             refresh()
             binding.root.isRefreshing = false
@@ -100,11 +119,7 @@ class FragMarket : Fragment() {
 
 
         binding.tvDuration.setOnClickListener {
-            if (viewModel.arr != null) {
-                var i = viewModel.arr!!.indexOf(viewModel.duration.value)
-                i = (i + 1) % 7
-                viewModel.duration.postValue(viewModel.arr!![i])
-            }
+            viewModel.toggleDuration()
         }
     }
 
@@ -126,15 +141,10 @@ class FragMarket : Fragment() {
 //        TODO set able to order in fragment
 
         adapter.addLoadStateListener { loadState ->
-            // show empty list
             val isListEmpty = loadState.refresh is LoadState.NotLoading && adapter.itemCount == 0
             showEmptyList(isListEmpty)
-
-            // Only show the list if refresh succeeds.
             binding.rvMarketCap.isVisible = loadState.source.refresh is LoadState.NotLoading
-            // Show loading spinner during initial load or refresh.
             binding.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
-            // Show the retry state if initial load or refresh fails.
             binding.retryButton.isVisible = loadState.source.refresh is LoadState.Error
 
             // Toast on any error, regardless of whether it came from RemoteMediator or PagingSource

@@ -1,5 +1,6 @@
 package com.camo.kripto.ui
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Html
 import android.text.method.LinkMovementMethod
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.camo.kripto.data.api.CGApiHelper
 import com.camo.kripto.data.api.RetrofitBuilder
@@ -24,6 +26,7 @@ class CoinInfoFrag : Fragment() {
 
     private lateinit var binding: FragCoinInfoBinding
     private lateinit var viewModel: CoinActivityVM
+    private lateinit var sharedPreferences: SharedPreferences
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,6 +35,8 @@ class CoinInfoFrag : Fragment() {
 
         binding = FragCoinInfoBinding.inflate(inflater, container, false)
         binding.root.visibility = View.INVISIBLE
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+
         setupViewModel()
         setupUI()
         setupObservers()
@@ -100,9 +105,10 @@ class CoinInfoFrag : Fragment() {
     }
 
     private fun setupViewModel() {
+        val curr = sharedPreferences.getString("pref_currency","inr")
         viewModel = ViewModelProviders.of(
             requireActivity(),
-            VMFactory(CGApiHelper(RetrofitBuilder.CG_SERVICE))
+            VMFactory(CGApiHelper(RetrofitBuilder.CG_SERVICE), curr = curr, prefOrder = null)
         ).get(CoinActivityVM::class.java)
     }
 

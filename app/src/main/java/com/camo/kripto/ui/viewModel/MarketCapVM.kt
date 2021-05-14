@@ -7,9 +7,9 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.camo.kripto.R
 import com.camo.kripto.data.model.CoinMarket
 import com.camo.kripto.data.model.Exchanges
-import com.camo.kripto.data.model.Global
 import com.camo.kripto.data.model.Trending
 import com.camo.kripto.data.repository.CGRepo
 import com.camo.kripto.database.model.CoinIdName
@@ -20,16 +20,21 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 
-class MarketCapVM(private val cgRepo: CGRepo) : ViewModel() {
+class MarketCapVM(
+    private val cgRepo: CGRepo,
+    private val prefCurr: String,
+    duration: String,
+    prefOrder: String
+) : ViewModel() {
     var arr: Array<String>? = null
 
 
-    var prefCurrency: MutableLiveData<String> = MutableLiveData()
-    var orderby: MutableLiveData<String> = MutableLiveData()
-    var duration: MutableLiveData<String> = MutableLiveData()
+    var prefCurrency: MutableLiveData<String> = MutableLiveData(prefCurr)
+    var orderby: MutableLiveData<String> = MutableLiveData(prefOrder)
+    var duration: MutableLiveData<String> = MutableLiveData(duration)
     var trending: MutableLiveData<Resource<Trending>> = MutableLiveData()
-    var global: MutableLiveData<Resource<Global>> = MutableLiveData()
     var currentFrag: Int? = null
+
 
     fun getMarketCap(
         currency: String?,
@@ -38,8 +43,6 @@ class MarketCapVM(private val cgRepo: CGRepo) : ViewModel() {
         coins: List<CoinIdName>?
     ): Flow<PagingData<CoinMarket.CoinMarketItem>> {
         return Pager(
-            // Configure how data is loaded by passing additional properties to
-            // PagingConfig, such as prefetchDistance.
             PagingConfig(pageSize = 25)
         ) {
             MarketCapPS(cgRepo, currency, order, dur, coins)
@@ -59,26 +62,21 @@ class MarketCapVM(private val cgRepo: CGRepo) : ViewModel() {
         }
     }
 
-    fun getGlobal(): Flow<Resource<Global>> {
-        return flow {
-            emit(Resource.loading(data = null))
-            try {
-                emit(Resource.success(data = cgRepo.getGlobal()))
-            } catch (exception: Exception) {
-                exception.printStackTrace()
-                emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
-            }
-        }
-    }
 
     fun getExchanges(): Flow<PagingData<Exchanges.ExchangesItem>> {
         return Pager(
-            // Configure how data is loaded by passing additional properties to
-            // PagingConfig, such as prefetchDistance.
             PagingConfig(pageSize = 25)
         ) {
             ExchangesPS(cgRepo)
         }.flow.cachedIn(viewModelScope)
+    }
+
+    fun toggleDuration() {
+        if (arr != null) {
+            var i = arr!!.indexOf(duration.value)
+            i = (i + 1) % 7
+            duration.postValue(arr!![i])
+        }
     }
 
 }

@@ -1,21 +1,20 @@
 package com.camo.kripto.ui
 
 import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
-import android.text.style.RelativeSizeSpan
-import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.PreferenceManager
+import com.camo.kripto.data.api.CGApiHelper
+import com.camo.kripto.data.api.RetrofitBuilder
 import com.camo.kripto.data.model.Global
-import com.camo.kripto.databinding.FragGlobalBinding
-import com.camo.kripto.ui.viewModel.MarketCapVM
+import com.camo.kripto.databinding.FragGlobalCryptoBinding
+import com.camo.kripto.ui.base.VMFactory
+import com.camo.kripto.ui.viewModel.GlobalVM
 import com.camo.kripto.utils.Extras
 import com.camo.kripto.utils.Status
 import com.github.mikephil.charting.animation.Easing
@@ -31,19 +30,19 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+//Fragment for global data for cryptocurrency
+class FragGlobalCrypto : Fragment() {
 
-class FragGlobal : Fragment() {
 
-
-    private lateinit var binding: FragGlobalBinding
-    private lateinit var viewModel: MarketCapVM
+    private lateinit var binding: FragGlobalCryptoBinding
+    private lateinit var viewModel: GlobalVM
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragGlobalBinding.inflate(LayoutInflater.from(context), container, false)
+    ): View {
+        binding = FragGlobalCryptoBinding.inflate(LayoutInflater.from(context), container, false)
         binding.root.visibility = View.VISIBLE
 
         setupVM()
@@ -54,18 +53,20 @@ class FragGlobal : Fragment() {
     }
 
     private fun setupVM() {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val curr = sharedPreferences.getString("pref_currency", "inr") ?: "inr"
         viewModel = ViewModelProviders.of(
-            requireActivity()
-        ).get(MarketCapVM::class.java)
+            requireActivity(),
+            VMFactory(CGApiHelper(RetrofitBuilder.CG_SERVICE), curr = curr)
+        ).get(GlobalVM::class.java)
     }
 
     private fun setupUI() {
         getGlobal()
-
     }
 
     private fun setupObservers() {
-        viewModel.global.observe(viewLifecycleOwner, {
+        viewModel.globalCrypto.observe(viewLifecycleOwner, {
             when (it.status) {
                 Status.ERROR -> {
                     binding.pbFragGlobal.visibility = View.GONE
@@ -83,7 +84,7 @@ class FragGlobal : Fragment() {
         )
     }
 
-    fun updateView(global: Global) {
+    private fun updateView(global: Global) {
         val curr = viewModel.prefCurrency.value ?: "inr"
         binding.tvFragGloablActiveCryptocurrencies.text =
             global.data.active_cryptocurrencies.toString()
@@ -115,7 +116,6 @@ class FragGlobal : Fragment() {
         chart.dragDecelerationFrictionCoef = 0.95f
 
 //        chart.setCenterTextTypeface(tfLight)
-        chart.centerText = generateCenterSpannableText()
 
         chart.isDrawHoleEnabled = true
         chart.setHoleColor(Color.TRANSPARENT)
@@ -157,36 +157,27 @@ class FragGlobal : Fragment() {
         chart.setEntryLabelTextSize(14f)
     }
 
-    private fun generateCenterSpannableText(): SpannableString? {
-        val s = SpannableString("MPAndroidChart\ndeveloped by Philipp Jahoda")
-        s.setSpan(RelativeSizeSpan(1.7f), 0, 14, 0)
-        s.setSpan(StyleSpan(Typeface.NORMAL), 14, s.length - 15, 0)
-        s.setSpan(ForegroundColorSpan(Color.GRAY), 14, s.length - 15, 0)
-        s.setSpan(RelativeSizeSpan(.8f), 14, s.length - 15, 0)
-        s.setSpan(StyleSpan(Typeface.ITALIC), s.length - 14, s.length, 0)
-        s.setSpan(ForegroundColorSpan(ColorTemplate.getHoloBlue()), s.length - 14, s.length, 0)
-        return s
-    }
+
 
     private var globalJob: Job? = null
     fun getGlobal() {
         globalJob?.cancel()
         globalJob = lifecycleScope.launch {
             viewModel.getGlobal().collect {
-                viewModel.global.postValue(it)
+                viewModel.globalCrypto.postValue(it)
             }
         }
     }
 
 
-    private fun setData(data: Map<String, Double>) {
+    private fun setData(graphData: Map<String, Double>) {
         val chart = binding.pieChart
         val entries: ArrayList<PieEntry> = ArrayList()
 
         // NOTE: The order of the entries when being added to the entries array determines their position around the center of
         // the chart.
 
-        for (entry in data.entries) {
+        for (entry in graphData.entries) {
 
             entries.add(
                 PieEntry(

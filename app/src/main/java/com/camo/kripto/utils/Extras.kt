@@ -41,7 +41,7 @@ class Extras {
             double: Double?,
             curr: String,
             prefix: String = "",
-            suffix: String
+            suffix: String =""
         ): String {
             if (double == null) return "NA"
             var text = getFormattedDouble(double)

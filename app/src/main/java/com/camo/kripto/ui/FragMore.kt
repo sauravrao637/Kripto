@@ -40,8 +40,8 @@ class FragMore : Fragment() {
             requireActivity().startActivity(intent)
         }
         binding.bGlobal.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fl_frag_holder, FragGlobal()).addToBackStack(null).commit()
+            val intent = Intent(requireActivity(),GlobalActivity::class.java)
+            requireActivity().startActivity(intent)
         }
     }
 

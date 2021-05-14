@@ -80,32 +80,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupVM() {
-        val arr = this.resources.getStringArray(R.array.market_duration)
+
+        val curr = sharedPreferences.getString("pref_currency", "inr") ?: "inr"
+        val prefDur = sharedPreferences.getString("pref_per_change_dur", "1h") ?: "1h"
+        val prefOrder = sharedPreferences.getString(
+            "pref_order",
+            "market_cap_desc"
+        ) ?: "market_cap_desc"
         viewModel = ViewModelProviders.of(
-            this, VMFactory(CGApiHelper(RetrofitBuilder.CG_SERVICE))
+            this,
+            VMFactory(
+                CGApiHelper(RetrofitBuilder.CG_SERVICE),
+                curr = curr,
+                duration = prefDur,
+                prefOrder = prefOrder
+            )
         ).get(MarketCapVM::class.java)
 
-        if (viewModel.arr == null) viewModel.arr = arr
-        //must post currency as soon as vm setup
-        //TODO fix on rotation duration changes
-        viewModel.duration.postValue(
-            sharedPreferences.getString(
-                "pref_per_change_dur",
-                "1h"
-            )
-        )
-
-        if (viewModel.prefCurrency.value == null) {
-            var curr = sharedPreferences.getString("pref_currency", "inr")
-            if (curr == null) curr = "inr"
-            viewModel.prefCurrency.postValue(curr)
+        if (viewModel.arr == null) {
+            val arr = this.resources.getStringArray(R.array.market_duration)
+            viewModel.arr = arr
         }
-        if (viewModel.orderby.value == null) viewModel.orderby.postValue(
-            sharedPreferences.getString(
-                "pref_order",
-                "market_cap_desc"
-            )
-        )
+
     }
 
     private fun setupUI() {
@@ -158,9 +154,9 @@ class MainActivity : AppCompatActivity() {
         if (viewModel.currentFrag == null) {
             if (sharedPreferences.getString("pref_def_frag", "0").equals("0")) {
                 binding?.bottomNav?.selectedItemId = R.id.menu_fav
-            } else if(sharedPreferences.getString("pref_def_frag", "0").equals("1")) {
+            } else if (sharedPreferences.getString("pref_def_frag", "0").equals("1")) {
                 binding?.bottomNav?.selectedItemId = R.id.menu_cryptocurrencies
-            }else if(sharedPreferences.getString("pref_def_frag", "0").equals("2")) {
+            } else if (sharedPreferences.getString("pref_def_frag", "0").equals("2")) {
                 binding?.bottomNav?.selectedItemId = R.id.menu_exchanges
             }
         } else {
@@ -199,7 +195,6 @@ class MainActivity : AppCompatActivity() {
         binding = null
         super.onDestroy()
     }
-
 
 
 }

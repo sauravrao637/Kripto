@@ -53,4 +53,7 @@ interface CGService {
         @Query("per_page")perPage: Int,
         @Query("page")page:Int
     ): Exchanges
+
+    @GET("global/decentralized_finance_defi")
+    suspend fun getGlobalDefi(): GlobalDefi
 }

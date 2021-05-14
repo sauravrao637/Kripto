@@ -12,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Kripto">
+        <activity android:name=".ui.GlobalActivity" />
         <activity android:name=".ui.about.AboutActivity" />
         <activity android:name=".ui.SettingsActivity" />
         <activity android:name=".ui.CoinActivity" />
