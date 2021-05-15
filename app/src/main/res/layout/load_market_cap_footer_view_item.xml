@@ -8,7 +8,7 @@
     <TextView
         android:id="@+id/error_msg"
         android:textColor="?android:textColorPrimary"
-        android:textSize="@dimen/error_text_size"
+        android:textSize="16sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

@@ -2,12 +2,12 @@ package com.camo.kripto.ui.pager
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.camo.kripto.data.model.CoinMarket
-import com.camo.kripto.data.model.Exchanges
-import com.camo.kripto.data.repository.CGRepo
+import com.camo.kripto.remote.model.Exchanges
+import com.camo.kripto.repos.Repository
 import timber.log.Timber
+import javax.inject.Inject
 
-class ExchangesPS(private val backend: CGRepo) :
+class ExchangesPS @Inject constructor(private val backend: Repository) :
     PagingSource<Int, Exchanges.ExchangesItem>() {
 
 

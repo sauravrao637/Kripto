@@ -12,11 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Kripto">
-        <activity android:name=".ui.GlobalActivity" />
-        <activity android:name=".ui.about.AboutActivity" />
-        <activity android:name=".ui.SettingsActivity" />
-        <activity android:name=".ui.CoinActivity" />
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.presentation.global.GlobalActivity" />
+        <activity android:name="com.camo.kripto.ui.presentation.about.AboutActivity" />
+        <activity android:name=".ui.presentation.settings.SettingsActivity" />
+        <activity android:name="com.camo.kripto.ui.presentation.coin.CoinActivity" />
+        <activity android:name="com.camo.kripto.ui.presentation.home.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

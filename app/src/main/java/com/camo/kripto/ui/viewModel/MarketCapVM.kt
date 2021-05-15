@@ -7,34 +7,38 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.camo.kripto.R
-import com.camo.kripto.data.model.CoinMarket
-import com.camo.kripto.data.model.Exchanges
-import com.camo.kripto.data.model.Trending
-import com.camo.kripto.data.repository.CGRepo
-import com.camo.kripto.database.model.CoinIdName
+import com.camo.kripto.remote.model.CoinMarket
+import com.camo.kripto.remote.model.Exchanges
+import com.camo.kripto.remote.model.Trending
+import com.camo.kripto.local.model.CoinIdName
+import com.camo.kripto.repos.Repository
 import com.camo.kripto.ui.pager.ExchangesPS
 import com.camo.kripto.ui.pager.MarketCapPS
 import com.camo.kripto.utils.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-
-class MarketCapVM(
-    private val cgRepo: CGRepo,
-    private val prefCurr: String,
-    duration: String,
-    prefOrder: String
+@HiltViewModel
+class MarketCapVM @Inject constructor(
+    private val cgRepo:Repository
 ) : ViewModel() {
+    var intialized = false
     var arr: Array<String>? = null
-
-
-    var prefCurrency: MutableLiveData<String> = MutableLiveData(prefCurr)
-    var orderby: MutableLiveData<String> = MutableLiveData(prefOrder)
-    var duration: MutableLiveData<String> = MutableLiveData(duration)
+    var prefCurrency: MutableLiveData<String> = MutableLiveData<String>()
+    var orderby: MutableLiveData<String> = MutableLiveData<String>()
+    var duration: MutableLiveData<String> = MutableLiveData<String>()
     var trending: MutableLiveData<Resource<Trending>> = MutableLiveData()
     var currentFrag: Int? = null
 
+    fun setValues(prefCurr: String,
+                  dur: String,
+                  prefOrder: String){
+        orderby.postValue(prefOrder)
+        duration.postValue(dur)
+        prefCurrency.postValue(prefCurr)
+    }
 
     fun getMarketCap(
         currency: String?,
@@ -45,7 +49,7 @@ class MarketCapVM(
         return Pager(
             PagingConfig(pageSize = 25)
         ) {
-            MarketCapPS(cgRepo, currency, order, dur, coins)
+            MarketCapPS(cgRepo,currency, order, dur, coins)
         }.flow.cachedIn(viewModelScope)
     }
 

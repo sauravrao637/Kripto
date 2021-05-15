@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    tools:context=".ui.SettingsActivity">
+    tools:context=".ui.presentation.settings.SettingsActivity">
 
     <FrameLayout
         android:id="@+id/fl_setting_container"

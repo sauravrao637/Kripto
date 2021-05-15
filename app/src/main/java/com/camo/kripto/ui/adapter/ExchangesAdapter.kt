@@ -10,7 +10,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.camo.kripto.data.model.Exchanges
+import com.camo.kripto.remote.model.Exchanges
 import com.camo.kripto.databinding.ExchangesItemBinding
 import com.camo.kripto.utils.Extras
 import timber.log.Timber

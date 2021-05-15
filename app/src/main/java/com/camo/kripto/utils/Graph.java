@@ -2,15 +2,12 @@ package com.camo.kripto.utils;
 
 import android.graphics.Color;
 
-import com.camo.kripto.data.model.MarketChart;
+import com.camo.kripto.remote.model.MarketChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Graph {
     public static LineData getData(MarketChart marketChart) {

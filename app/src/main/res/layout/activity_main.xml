@@ -10,17 +10,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/bottomNav"
-        android:layout_marginBottom="0dp">
+        android:layout_marginBottom="0dp"
+        android:background="@color/black">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/trending_today"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_trending"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
         <Button
             android:id="@+id/btn_refresh_trending"
@@ -52,7 +62,8 @@
         android:layout_above="@+id/cl_trending"
         android:layout_alignParentTop="true"
         android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp">
+        android:layout_marginBottom="0dp"
+        android:background="@color/black">
 
     </FrameLayout>
 

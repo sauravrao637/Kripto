@@ -61,6 +61,9 @@
     <string name="defi_dominance">Defi Dominance</string>
     <string name="top_coin">Top Coin</string>
     <string name="dominance">Dominance</string>
+    <string name="trending_today">Trending Today</string>
+    <string name="app_logo">App logo</string>
+    <string name="add_to_fav">Add to favourite</string>
 
 
 </resources>

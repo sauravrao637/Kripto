@@ -2,13 +2,13 @@ package com.camo.kripto.ui.pager
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.camo.kripto.data.model.CoinMarket
-import com.camo.kripto.data.repository.CGRepo
-import com.camo.kripto.database.model.CoinIdName
+import com.camo.kripto.local.model.CoinIdName
+import com.camo.kripto.remote.model.CoinMarket
+import com.camo.kripto.repos.Repository
 import timber.log.Timber
 
 class MarketCapPS(
-    private val backend: CGRepo,
+    private val backend: Repository,
     private val curr: String?,
     private val order: String?,
     private val duration: String?,

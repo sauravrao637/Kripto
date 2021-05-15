@@ -1,14 +1,10 @@
 package com.camo.kripto
 
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.camo.kripto.utils.Extras
-
+import androidx.test.platform.app.InstrumentationRegistry
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
-
-import org.junit.Assert.*
-import timber.log.Timber
 
 /**
  * Instrumented test, which will execute on an Android device.

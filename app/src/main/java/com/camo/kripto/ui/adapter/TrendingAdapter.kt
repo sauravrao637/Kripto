@@ -10,8 +10,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.camo.kripto.R
-import com.camo.kripto.data.model.Trending
-import com.camo.kripto.ui.CoinActivity
+import com.camo.kripto.remote.model.Trending
+import com.camo.kripto.ui.presentation.coin.CoinActivity
 
 class TrendingAdapter :
     RecyclerView.Adapter<TrendingAdapter.ViewHolder>() {

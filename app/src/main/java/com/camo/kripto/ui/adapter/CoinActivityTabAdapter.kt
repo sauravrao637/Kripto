@@ -2,12 +2,14 @@ package com.camo.kripto.ui.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.camo.kripto.ui.CoinInfoFrag
-import com.camo.kripto.ui.FragPriceChart
+import com.camo.kripto.ui.presentation.coin.FragCoinInfo
+import com.camo.kripto.ui.presentation.coin.FragPriceChart
 
 class CoinActivityTabAdapter(fragmentActivity: FragmentActivity) :
     FragmentStateAdapter(fragmentActivity) {
-    private val TOTAL_TABS = 2
+    companion object{
+        private const val TOTAL_TABS = 2
+    }
 
     override fun getItemCount(): Int {
         return TOTAL_TABS
@@ -16,7 +18,7 @@ class CoinActivityTabAdapter(fragmentActivity: FragmentActivity) :
     override fun createFragment(position: Int): Fragment {
         return when(position){
             0 -> FragPriceChart()
-            1-> CoinInfoFrag()
+            1-> FragCoinInfo()
             else -> FragPriceChart()
         }
     }
