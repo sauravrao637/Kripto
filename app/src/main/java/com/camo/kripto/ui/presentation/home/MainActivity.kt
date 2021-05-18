@@ -1,10 +1,10 @@
 package com.camo.kripto.ui.presentation.home
 
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
+import android.view.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
@@ -14,12 +14,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.camo.kripto.R
 import com.camo.kripto.databinding.ActivityMainBinding
 import com.camo.kripto.ui.adapter.TrendingAdapter
+import com.camo.kripto.ui.presentation.settings.SettingsActivity
 import com.camo.kripto.ui.viewModel.MarketCapVM
+import com.camo.kripto.utils.Extras
 import com.camo.kripto.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
@@ -31,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     private var trendingAdapter: TrendingAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.Theme_Kripto)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
         setContentView(binding?.root)
@@ -63,7 +67,7 @@ class MainActivity : AppCompatActivity() {
 
                 Status.LOADING -> {
                     binding?.rvTrending?.visibility = View.INVISIBLE
-                    binding?.pbTrending?.visibility = View.VISIBLE
+                    binding?.pbTrending?.visibility = View.INVISIBLE
                 }
 
                 Status.ERROR -> {
@@ -94,11 +98,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
-
 //        setting up bottomnavigation bar
-
         binding?.bottomNav?.setOnNavigationItemSelectedListener {
-
             when (it.itemId) {
                 R.id.menu_fav -> {
                     viewModel.currentFrag = it.itemId
@@ -140,12 +141,16 @@ class MainActivity : AppCompatActivity() {
         }
 //        set view to default//curr fragment
         if (viewModel.currentFrag == null) {
-            if (sharedPreferences.getString("pref_def_frag", "0").equals("0")) {
-                binding?.bottomNav?.selectedItemId = R.id.menu_fav
-            } else if (sharedPreferences.getString("pref_def_frag", "0").equals("1")) {
-                binding?.bottomNav?.selectedItemId = R.id.menu_cryptocurrencies
-            } else if (sharedPreferences.getString("pref_def_frag", "0").equals("2")) {
-                binding?.bottomNav?.selectedItemId = R.id.menu_exchanges
+            when {
+                sharedPreferences.getString("pref_def_frag", "0").equals("0") -> {
+                    binding?.bottomNav?.selectedItemId = R.id.menu_fav
+                }
+                sharedPreferences.getString("pref_def_frag", "0").equals("1") -> {
+                    binding?.bottomNav?.selectedItemId = R.id.menu_cryptocurrencies
+                }
+                sharedPreferences.getString("pref_def_frag", "0").equals("2") -> {
+                    binding?.bottomNav?.selectedItemId = R.id.menu_exchanges
+                }
             }
         } else {
             binding?.bottomNav?.selectedItemId = viewModel.currentFrag!!
@@ -184,5 +189,25 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_settings -> {
+                // User chose the "Settings" item, show the app settings UI...
+                val intent = Intent(this@MainActivity, SettingsActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            R.id.action_share -> {
+                Extras.share(this)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 }

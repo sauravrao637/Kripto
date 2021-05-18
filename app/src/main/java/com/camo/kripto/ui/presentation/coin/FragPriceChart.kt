@@ -7,56 +7,53 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.bumptech.glide.Glide
 import com.camo.kripto.R
+import com.camo.kripto.databinding.FragPriceChartBinding
+import com.camo.kripto.local.model.Currency
 import com.camo.kripto.remote.model.CoinCD
 import com.camo.kripto.remote.model.MarketChart
-import com.camo.kripto.databinding.FragPriceChartBinding
+import com.camo.kripto.repos.Repository
 import com.camo.kripto.ui.viewModel.CoinActivityVM
 import com.camo.kripto.utils.*
-import com.camo.kripto.utils.Formatter
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.LineDataSet
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FragPriceChart : Fragment() {
-
 
     private val viewModel by activityViewModels<CoinActivityVM>()
     private lateinit var binding: FragPriceChartBinding
     private lateinit var sharedPreferences: SharedPreferences
 
+    @Inject
+    lateinit var repo: Repository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
-
         binding = FragPriceChartBinding.inflate(inflater, container, false)
         binding.root.visibility = View.INVISIBLE
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-
-        setupViewModel()
         setupUI()
         setupObservers()
         return binding.root
-    }
-
-    private fun setupViewModel() {
-        val curr = sharedPreferences.getString("pref_currency","inr")
-
-
     }
 
     private fun setupUI() {
@@ -70,12 +67,12 @@ class FragPriceChart : Fragment() {
                 R.id.tv_200d -> text = "200d"
             }
             viewModel.duration.postValue(text)
-
         }
 
         binding.btnRefreshGraph.setOnClickListener {
             updateChart()
         }
+
         binding.tv24h.setOnClickListener(listener)
         binding.tv7d.setOnClickListener(listener)
         binding.tv1m.setOnClickListener(listener)
@@ -86,7 +83,6 @@ class FragPriceChart : Fragment() {
         binding.ddCurrency.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
-//                   TODO
                 }
 
                 override fun onItemSelected(
@@ -99,8 +95,11 @@ class FragPriceChart : Fragment() {
                 }
             }
 
+        binding.ddCurrency.isVisible = false
+        getCurrencies()
 
     }
+
 
     private fun setupObservers() {
         //observing coin
@@ -108,12 +107,14 @@ class FragPriceChart : Fragment() {
             if (it != null) {
                 binding.root.visibility = View.VISIBLE
                 coinChanged(it)
+                updateChart()
             } else {
 
                 Timber.d("coinData null")
             }
-            updateChart()
+
         })
+
         //observing duration selected
         viewModel.duration.observe(viewLifecycleOwner, {
             setPerChange(it)
@@ -123,25 +124,64 @@ class FragPriceChart : Fragment() {
         //observing currency selected
         viewModel.currency.observe(viewLifecycleOwner, {
             val cd = viewModel.currentCoinData.value
-            if (cd != null) {
+            if (cd != null && it != null) {
                 updateUI(cd, it)
                 setPerChange(viewModel.duration.value)
                 updateChart()
             }
         })
 
-        //observing all supported currencies
-        //TODO make room and remove this in future
-        viewModel.allCurr.observe(viewLifecycleOwner, {
-            val adapter = ArrayAdapter(
-                requireContext(),
-                R.layout.support_simple_spinner_dropdown_item,
-                it
-            ) as SpinnerAdapter
-            binding.ddCurrency.adapter = adapter
-            binding.ddCurrency.setSelection(it?.indexOf(viewModel.currency.value) ?: 0)
-        })
+    }
 
+    private fun setCurr(array: Array<String>) {
+        if (array.isEmpty()) {
+            array.set(0, "inr")
+            Timber.d("Empty curr array")
+        }
+
+        val adapter = ArrayAdapter(
+            requireContext(),
+            R.layout.support_simple_spinner_dropdown_item,
+            array
+        ) as SpinnerAdapter
+        binding.ddCurrency.adapter = adapter
+        binding.ddCurrency.setSelection(array.indexOf(viewModel.currency.value))
+        binding.ddCurrency.isVisible = true
+
+
+    }
+
+
+    private var loadCurrJob: Job? = null
+    private fun getCurrencies() {
+        loadCurrJob?.cancel()
+        loadCurrJob = lifecycleScope.launch {
+            val curr = ArrayList<Currency>()
+            withContext(Dispatchers.IO) { repo.getCurrencies() }.let {
+                curr.addAll(it)
+                if (curr.isEmpty()) {
+                    val res = repo.lIRcurrencies()
+                    when (res.status) {
+                        Status.SUCCESS -> getCurrencies()
+                        Status.ERROR -> Toast.makeText(context, res.message, Toast.LENGTH_LONG)
+                            .show()
+
+                        else -> Toast.makeText(
+                            context,
+                            "This wasn't expected at all",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
+            val list = ArrayList<String>()
+            withContext(Dispatchers.IO) {
+                for (c in curr) {
+                    list.add(Extras.getCurrencySymbol(c.id) ?: c.id)
+                }
+            }
+            setCurr(list.toTypedArray())
+        }
     }
 
     private var chartJob: Job? = null
@@ -171,11 +211,12 @@ class FragPriceChart : Fragment() {
                         binding.pbChart.visibility = View.INVISIBLE
                         binding.btnRefreshGraph.visibility = View.VISIBLE
                         binding.chart.visibility = View.INVISIBLE
-                        if (!it.message.equals("null parameter")) Toast.makeText(
-                            context,
-                            "\uD83D\uDE28 Wooops" + it.message,
-                            Toast.LENGTH_LONG
-                        ).show()
+//                        TODO report error
+//                        if (!it.message.equals("null parameter")) Toast.makeText(
+//                            context,
+//                            "\uD83D\uDE28 Wooops" + it.message,
+//                            Toast.LENGTH_SHORT
+//                        ).show()
                     }
                 }
             }
@@ -184,49 +225,19 @@ class FragPriceChart : Fragment() {
     }
 
     private fun createGraph(marketChart: MarketChart?) {
-
         val data = Graph.getData(marketChart)
-
         val color = Color.WHITE
         (data.getDataSetByIndex(0) as LineDataSet).circleHoleColor = color
 
         binding.chart.description.isEnabled = false
-
-        // enable / disable grid background
-//        binding.chart.setDrawGridBackground(true)
-//
-//        binding.chart.setGridBackgroundColor(Color.WHITE)
-
-        // enable touch gestures
         binding.chart.setTouchEnabled(true)
-
-        // enable scaling and dragging
-
-        // enable scaling and dragging
         binding.chart.isDragEnabled = true
         binding.chart.setScaleEnabled(true)
-
-        // if disabled, scaling can be done on x- and y-axis separately
-
-        // if disabled, scaling can be done on x- and y-axis separately
         binding.chart.setPinchZoom(false)
         binding.chart.isDoubleTapToZoomEnabled = false
-
         binding.chart.setBackgroundColor(Color.BLACK)
-
-        // set custom chart offsets (automatic offset calculation is hereby disabled)
-
-        // set custom chart offsets (automatic offset calculation is hereby disabled)
-//        binding.chart.setViewPortOffsets(150f, 0f, 25f, 0f)
-
-        // add data
-
-        // add data
         binding.chart.data = data
 
-        // get the legend (only possible after setting data)
-
-        // get the legend (only possible after setting data)
         val l: Legend = binding.chart.legend
         l.isEnabled = false
 
@@ -235,11 +246,8 @@ class FragPriceChart : Fragment() {
         binding.chart.axisLeft.spaceBottom = 40f
         binding.chart.axisRight.isEnabled = false
 
-//        binding.chart.xAxis.position = XAxis.XAxisPosition.BOTTOM_INSIDE
-
         binding.chart.xAxis.isEnabled = true
         binding.chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-//        binding.chart.xAxis.labelRotationAngle = 315f
 
         binding.chart.xAxis.labelCount = 3
         binding.chart.xAxis.setCenterAxisLabels(true)
@@ -323,30 +331,27 @@ class FragPriceChart : Fragment() {
     }
 
     private fun setCurrentSelected(id: Int) {
-        if (id == binding.tv24h.id) binding.tv24h.setBackgroundColor(Color.GREEN)
-        else binding.tv24h.setBackgroundColor(Color.TRANSPARENT)
-        if (id == binding.tv7d.id) binding.tv7d.setBackgroundColor(Color.GREEN)
-        else binding.tv7d.setBackgroundColor(Color.TRANSPARENT)
-        if (id == binding.tv2w.id) binding.tv2w.setBackgroundColor(Color.GREEN)
-        else binding.tv2w.setBackgroundColor(Color.TRANSPARENT)
-        if (id == binding.tv1m.id) binding.tv1m.setBackgroundColor(Color.GREEN)
-        else binding.tv1m.setBackgroundColor(Color.TRANSPARENT)
-        if (id == binding.tv2m.id) binding.tv2m.setBackgroundColor(Color.GREEN)
-        else binding.tv2m.setBackgroundColor(Color.TRANSPARENT)
-        if (id == binding.tv200d.id) binding.tv200d.setBackgroundColor(Color.GREEN)
-        else binding.tv200d.setBackgroundColor(Color.TRANSPARENT)
-
-
+        if (id == binding.tv24h.id) binding.tv24h.setTextColor(Color.GREEN)
+        else binding.tv24h.setTextColor(Color.WHITE)
+        if (id == binding.tv7d.id) binding.tv7d.setTextColor(Color.GREEN)
+        else binding.tv7d.setTextColor(Color.WHITE)
+        if (id == binding.tv2w.id) binding.tv2w.setTextColor(Color.GREEN)
+        else binding.tv2w.setTextColor(Color.WHITE)
+        if (id == binding.tv1m.id) binding.tv1m.setTextColor(Color.GREEN)
+        else binding.tv1m.setTextColor(Color.WHITE)
+        if (id == binding.tv2m.id) binding.tv2m.setTextColor(Color.GREEN)
+        else binding.tv2m.setTextColor(Color.WHITE)
+        if (id == binding.tv200d.id) binding.tv200d.setTextColor(Color.GREEN)
+        else binding.tv200d.setTextColor(Color.WHITE)
     }
 
-
     private fun updateUI(coinCD: CoinCD, curr: String) {
-
         binding.tv24HHigh.text = Extras.getFormattedDoubleCurr(
             coinCD.market_data.high_24h[curr],
             curr,
             suffix = ""
         )
+
         binding.tvAllTimeHigh.text =
             Extras.getFormattedDoubleCurr(coinCD.market_data.ath[curr], curr, suffix = "")
         binding.tvAllTimeHightOn.text = Extras.getInLocalTime(coinCD.market_data.ath_date[curr])
@@ -365,14 +370,15 @@ class FragPriceChart : Fragment() {
                 curr,
                 suffix = ""
             )
+
         binding.tvMarketCap.text =
             Extras.getFormattedDoubleCurr(coinCD.market_data.market_cap[curr], curr, suffix = "")
+
         binding.tvMarketCapRank.text = coinCD.market_cap_rank.toString()
         binding.tvTotalSupply.text = Extras.getFormattedDouble(coinCD.market_data.total_supply)
         binding.tvTradingVolume.text =
             Extras.getFormattedDoubleCurr(coinCD.market_data.total_volume[curr], curr, suffix = "")
-
-
     }
+
 
 }

@@ -1,19 +1,15 @@
 package com.camo.kripto.ui.adapter
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.camo.kripto.remote.model.Exchanges
 import com.camo.kripto.databinding.ExchangesItemBinding
+import com.camo.kripto.remote.model.Exchanges
 import com.camo.kripto.utils.Extras
-import timber.log.Timber
 
 
 class ExchangesAdapter(diffCallback: DiffUtil.ItemCallback<Exchanges.ExchangesItem>) :
@@ -40,22 +36,10 @@ class ExchangesAdapter(diffCallback: DiffUtil.ItemCallback<Exchanges.ExchangesIt
                 "BTC",
                 suffix = " 24h Trading Vol"
             )
-            holder.binding.ivExchangesLink.setOnClickListener { browse(item.url) }
+            holder.binding.ivExchangesLink.setOnClickListener { Extras.browse(item.url, context) }
         }
     }
 
-    private fun browse(url: String) {
-        try{
-            val intent = Intent()
-            intent.action = Intent.ACTION_VIEW
-            intent.addCategory(Intent.CATEGORY_BROWSABLE)
-            intent.data = Uri.parse(url)
-            context?.startActivity(intent)
-        }catch (e:Exception){
-            Timber.d(e)
-            Toast.makeText(context,"No Browser found :(",Toast.LENGTH_LONG).show()
-        }
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataHolder {
         this.context = parent.context

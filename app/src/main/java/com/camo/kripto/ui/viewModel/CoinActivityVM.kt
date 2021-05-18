@@ -3,9 +3,9 @@ package com.camo.kripto.ui.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.camo.kripto.local.model.FavCoin
 import com.camo.kripto.remote.model.CoinCD
 import com.camo.kripto.remote.model.MarketChart
-import com.camo.kripto.local.model.FavCoin
 import com.camo.kripto.repos.Repository
 import com.camo.kripto.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +21,7 @@ class CoinActivityVM @Inject constructor(private val cgRepo: Repository) : ViewM
     val currentCoinData = MutableLiveData<CoinCD>()
     var title = MutableLiveData<String>()
     var duration = MutableLiveData("24h")
-    var currency = MutableLiveData<String>()
+    var currency = MutableLiveData<String>("btc")
     var allCurr = MutableLiveData<List<String>>()
 
     fun setValues(curr: String?)
@@ -29,9 +29,7 @@ class CoinActivityVM @Inject constructor(private val cgRepo: Repository) : ViewM
         currency.postValue(curr?:"inr")
     }
 
-    //    init {
-//        duration.postValue("24h")
-//    }
+
     fun getCurrentData(id: String): Flow<Resource<CoinCD>> {
         return flow {
             emit(Resource.loading(data = null))
@@ -47,7 +45,12 @@ class CoinActivityVM @Inject constructor(private val cgRepo: Repository) : ViewM
     fun getChart(id: String?, curr: String?, days: String?): Flow<Resource<MarketChart>> {
         return if (id == null || curr == null || days == null) {
             flow {
-                emit(Resource.error(data = null, message = "null parameter"))
+                emit(
+                    Resource.error(
+                        data = null,
+                        message = "null parameter ${id.toString() + curr.toString() + days.toString()}"
+                    )
+                )
             }
         } else flow {
             emit(Resource.loading(data = null))

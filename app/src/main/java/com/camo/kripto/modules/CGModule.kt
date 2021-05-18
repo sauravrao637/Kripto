@@ -2,6 +2,7 @@ package com.camo.kripto.modules
 
 import android.content.Context
 import androidx.room.Room
+import com.camo.kripto.Constants
 import com.camo.kripto.local.AppDb
 import com.camo.kripto.remote.api.CGApiHelper
 import com.camo.kripto.remote.api.CGService
@@ -19,13 +20,11 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object CGModule {
 
-    private const val BASE_URL = "https://api.coingecko.com/api/v3/"
-
     @Singleton
     @Provides
     fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build() //Doesn't require the adapter
     }
@@ -44,11 +43,10 @@ object CGModule {
         context.applicationContext,
         AppDb::class.java,
         "kriptoDB.db"
-    ).fallbackToDestructiveMigration().
-    build()
+    ).fallbackToDestructiveMigration().build()
 
     @Provides
     @Singleton
-    fun getRepo(appDb: AppDb,cgApiHelper: CGApiHelper): Repository = Repository(appDb,cgApiHelper)
+    fun getRepo(appDb: AppDb, cgApiHelper: CGApiHelper): Repository = Repository(appDb, cgApiHelper)
 
 }

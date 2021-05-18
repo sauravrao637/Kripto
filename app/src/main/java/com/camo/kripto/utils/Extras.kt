@@ -1,7 +1,11 @@
 package com.camo.kripto.utils
 
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.widget.Toast
+import com.camo.kripto.Constants
 import timber.log.Timber
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -74,7 +78,28 @@ object Extras {
         val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
         val formatter = DateFormat.getDateTimeInstance()
         formatter.timeZone = TimeZone.getDefault()
-        return formatter.format(parser.parse(s))
+        val date = parser.parse(s) ?: return ""
+        return formatter.format(date)
     }
 
+    fun browse(url: String, context: Context?) {
+        try {
+            val intent = Intent()
+            intent.action = Intent.ACTION_VIEW
+            intent.addCategory(Intent.CATEGORY_BROWSABLE)
+            intent.data = Uri.parse(url)
+            context?.startActivity(intent)
+        } catch (e: Exception) {
+            Timber.d(e)
+            Toast.makeText(context, "No Browser found :(", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    fun share(context: Context) {
+        val intent = Intent()
+        intent.action = Intent.ACTION_SEND
+        intent.putExtra(Intent.EXTRA_TEXT, "Hey Check out this Great app: ${Constants.GH_URL}")
+        intent.type = "text/plain"
+        context.startActivity(Intent.createChooser(intent, "Share To:"))
+    }
 }

@@ -1,8 +1,9 @@
-﻿<h2 align="center"><b>Kripto</b></h2>
+﻿[<img src="assets/kripto.svg" align="center"> ](assets/kripto.svg)
+<h2 align="center"><b>Kripto</b></h2>
 <h4 align="center">A Cryptocurrency app for Android.</h4>
 <p align="center"><a href="#screenshots">Screenshots</a> &bull; <a href="#description">Description</a> &bull; <a href="#features">Features</a> &bull; <a href="#contribution">Contribution</a> &bull;<a href="#license">License</a></p>
 
-<b>WARNING: THIS IS STILL IN DEVLOPMENT, THEREFORE YOU MAY ENCOUNTER BUGS. IF YOU DO, OPEN AN ISSUE VIA OUR GITHUB REPOSITORY.</b>
+<b>WARNING: THIS IS STILL IN DEVELOPMENT, THEREFORE YOU MAY ENCOUNTER BUGS. IF YOU DO, OPEN AN ISSUE VIA OUR GITHUB REPOSITORY.</b>
 
 ## Screenshots
 [<img src="assets/screenshots/ss_1.jpg" width=160>](assets/screenshots/ss_1.jpg)
@@ -12,6 +13,8 @@
 [<img src="assets/screenshots/ss_5.jpg" width=160>](assets/screenshots/ss_5.jpg)
 [<img src="assets/screenshots/ss_6.jpg" width=160>](assets/screenshots/ss_6.jpg)
 [<img src="assets/screenshots/ss_7.jpg" width=160>](assets/screenshots/ss_7.jpg)
+[<img src="assets/screenshots/ss_8.jpg" width=160>](assets/screenshots/ss_8.jpg)
+
 
 ## Description
 
@@ -22,17 +25,23 @@ Thanks to
 
 
 ### Features
+* View current price, market cap,price char and much more for more than 7000 coins
+* Track more than 400 exchanges and their "Trust Score" as per Coingecko
 * Favourite a coin
-* to be added
+* Choose your preferred currency and much more in preferences screen!!
+* View top 7 trending coins in last 24hr
+* More to be added :)
 
 ### Libraries and Dependencies
-* <a href= "https://square.github.io/retrofit/">Retrofit</a>
-* <a href="https://github.com/google/gson">Gson</a>
+* <a href= "https://square.github.io/retrofit/">Retrofit</a> for network requests
+* <a href="https://github.com/google/gson">Gson</a> for parsing JSON data
 * <a href="https://square.github.io/okhttp/">OkHttp</a>
-* <a href="https://github.com/bumptech/glide"> Glide</a>
-* <a href="https://github.com/PhilJay/MPAndroidChart">MPAndroidChart</a>
-* <a href ="https://heroicons.com/"> Heroicons</a> for icons 
-* <a href = "https://github.com/JakeWharton/timber">Timber</a>
+* <a href="https://github.com/bumptech/glide">Glide</a>
+* <a href="https://github.com/PhilJay/MPAndroidChart">MPAndroidChart</a> for graphing
+* <a href ="https://heroicons.com/">Heroicons</a> for icons 
+* <a href="https://github.com/googlecodelabs/android-hilt">Hilt</a> for DI
+* <a href="https://github.com/JakeWharton/timber">Timber</a> for logging
+
 ### Development Setup
 
 Before you begin, you should already have the Android Studio SDK downloaded and set up correctly. You can find a guide on how to do this here: [Setting up Android Studio](http://developer.android.com/sdk/installing/index.html?pkg=studio)
@@ -74,7 +83,6 @@ For setting up the PSLab Android project you may follow any of the two methods l
 If you want build apk only, go to Build>Build apk and apk would be build and directory where apk is generated would be prompted by Android Studio.
 
 ### Permissions Required
-
 1. Internet Access : It is required for the app to load data from web.
 2. Read/Write Storage : It is required for feature :- Favourite a coin
 ## Contribution

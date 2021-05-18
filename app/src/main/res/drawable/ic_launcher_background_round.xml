@@ -5,13 +5,13 @@
     android:autoMirrored="true"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <path android:pathData="M20.25,20.25L87.75,20.25L87.75,87.75L20.25,87.75L20.25,20.25Z">
+    <path android:pathData="M87,54C87,72.21 72.21,87 54,87C35.79,87 21,72.21 21,54C21,35.79 35.79,21 54,21C72.21,21 87,35.79 87,54Z">
         <aapt:attr name="android:fillColor">
             <gradient
                 android:endX="54"
-                android:endY="87.75"
+                android:endY="87"
                 android:startX="54"
-                android:startY="20.25"
+                android:startY="21"
                 android:type="linear">
                 <item
                     android:color="#FFEAA506"

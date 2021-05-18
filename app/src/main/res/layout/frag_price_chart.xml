@@ -14,37 +14,92 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:layout_weight="0"
             android:padding="8dp">
 
             <TextView
                 android:id="@+id/tv_current_price"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1.75"
                 android:textSize="36sp"
                 tools:text="4,203,257inr" />
 
             <TextView
                 android:id="@+id/tv_per_change"
-                android:layout_width="56dp"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_weight="0.5"
                 android:textAlignment="center"
                 tools:text="-0.2%" />
 
             <Spinner
                 android:id="@+id/dd_currency"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp" />
+                android:layout_gravity="top"
+                android:layout_weight="0.75" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:text="@string/_24h_high"
+                android:textAlignment="viewStart"
+                android:textColor="@android:color/holo_green_dark" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:text="@string/_24h_low"
+                android:textAlignment="viewEnd"
+                android:textColor="@android:color/holo_red_dark" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_24_h_high"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:textAlignment="viewStart"
+                android:textColor="@android:color/holo_green_dark"
+                tools:text="1" />
+
+            <TextView
+                android:id="@+id/tv_24_h_low"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:textAlignment="viewEnd"
+                android:textColor="@android:color/holo_red_dark"
+                tools:text="1" />
+
         </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="0dp"
-            android:layout_weight="1">
+            android:layout_margin="0dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -158,7 +213,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="4dp"
-            android:layout_weight="0"
             android:orientation="horizontal">
 
             <TextView
@@ -180,7 +234,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="4dp"
-            android:layout_weight="0"
             android:orientation="horizontal">
 
             <TextView
@@ -202,7 +255,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="4dp"
-            android:layout_weight="0"
             android:orientation="horizontal">
 
             <TextView
@@ -224,7 +276,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="4dp"
-            android:layout_weight="0"
             android:orientation="horizontal">
 
             <TextView
@@ -246,51 +297,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="4dp"
-            android:layout_weight="0"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:text="@string/_24h_high" />
-
-            <TextView
-                android:id="@+id/tv_24_h_high"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:textAlignment="viewEnd"
-                tools:text="1" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="4dp"
-            android:layout_weight="0"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:text="@string/_24h_low" />
-
-            <TextView
-                android:id="@+id/tv_24_h_low"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:textAlignment="viewEnd"
-                tools:text="1" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="4dp"
-            android:layout_weight="0"
             android:orientation="horizontal">
 
             <TextView
@@ -312,7 +318,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="4dp"
-            android:layout_weight="0"
             android:orientation="horizontal">
 
             <TextView
@@ -334,14 +339,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="4dp"
-            android:layout_weight="0"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
-                android:text="@string/all_time_high" />
+                android:text="@string/all_time_high"
+                android:textColor="@android:color/holo_green_dark" />
 
             <TextView
                 android:id="@+id/tv_all_time_high"
@@ -349,6 +354,7 @@
                 android:layout_height="wrap_content"
                 android:padding="2dp"
                 android:textAlignment="viewEnd"
+                android:textColor="@android:color/holo_green_dark"
                 tools:text="1" />
         </LinearLayout>
 
@@ -356,14 +362,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="4dp"
-            android:layout_weight="0"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
-                android:text="@string/all_time_hight_on" />
+                android:text="@string/all_time_hight_on"
+                android:textColor="@android:color/holo_green_dark" />
 
             <TextView
                 android:id="@+id/tv_all_time_hight_on"
@@ -371,6 +377,7 @@
                 android:layout_height="wrap_content"
                 android:padding="2dp"
                 android:textAlignment="viewEnd"
+                android:textColor="@android:color/holo_green_dark"
                 tools:text="1" />
         </LinearLayout>
 
@@ -378,14 +385,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="4dp"
-            android:layout_weight="0"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
-                android:text="@string/all_time_low" />
+                android:text="@string/all_time_low"
+                android:textColor="@android:color/holo_red_dark" />
 
             <TextView
                 android:id="@+id/tv_all_time_low"
@@ -393,6 +400,7 @@
                 android:layout_height="wrap_content"
                 android:padding="2dp"
                 android:textAlignment="viewEnd"
+                android:textColor="@android:color/holo_red_dark"
                 tools:text="1" />
         </LinearLayout>
 
@@ -400,14 +408,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="4dp"
-            android:layout_weight="0"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
-                android:text="@string/all_time_low_on" />
+                android:text="@string/all_time_low_on"
+                android:textColor="@android:color/holo_red_dark" />
 
             <TextView
                 android:id="@+id/tv_all_time_low_on"
@@ -415,6 +423,7 @@
                 android:layout_height="wrap_content"
                 android:padding="2dp"
                 android:textAlignment="viewEnd"
+                android:textColor="@android:color/holo_red_dark"
                 tools:text="1" />
         </LinearLayout>
 

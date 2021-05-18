@@ -18,17 +18,12 @@ public class Graph {
             //TODO for rest
         }
 
-        // create a dataset and give it a type
+
         LineDataSet set1 = new LineDataSet(prices, "Price");
 
-        // set1.setFillAlpha(110);
-        // set1.setFillColor(Color.RED);
 
         set1.setLineWidth(0.5f);
-        set1.setCircleRadius(2f);
-        set1.setCircleHoleRadius(1f);
         set1.setColor(Color.WHITE);
-        set1.setCircleColor(Color.WHITE);
         set1.setHighLightColor(Color.BLUE);
         set1.setDrawValues(false);
 

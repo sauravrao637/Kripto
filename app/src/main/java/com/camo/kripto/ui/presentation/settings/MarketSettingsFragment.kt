@@ -28,7 +28,6 @@ class MarketSettingsFragment : PreferenceFragmentCompat() {
 
         setPreferencesFromResource(R.xml.market_preferences, rootKey)
         currPreference = findPreference("pref_currency")
-
         currPreference?.isVisible = false
         getCurrencies()
     }
@@ -40,7 +39,6 @@ class MarketSettingsFragment : PreferenceFragmentCompat() {
             currPreference?.entryValues = array
             currPreference?.isVisible = true
         } else {
-//            TODO error handling
             Timber.d( "Empty curr array")
         }
     }
