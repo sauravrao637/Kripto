@@ -1,4 +1,4 @@
-﻿[<img src="assets/kripto.svg" align="center"> ](assets/kripto.svg)
+﻿<h2 align="center">[<img src="assets/kripto.svg">](assets/kripto.svg)</h2>
 <h2 align="center"><b>Kripto</b></h2>
 <h4 align="center">A Cryptocurrency app for Android.</h4>
 <p align="center"><a href="#screenshots">Screenshots</a> &bull; <a href="#description">Description</a> &bull; <a href="#features">Features</a> &bull; <a href="#contribution">Contribution</a> &bull;<a href="#license">License</a></p>
