@@ -67,17 +67,9 @@ class CoinActivityVM @Inject constructor(private val cgRepo: Repository) : ViewM
         return flow {
             emit(Resource.loading(data = null))
             try {
-                val data = cgRepo.getSupportedCurr()
-                if(data.isNotEmpty()) {
-                    allCurr.postValue(data)
-                    emit(Resource.success(data = data))
-
-                }
-                else{
-                    Timber.d("Empty Supported currencies")
-                    emit(Resource.error(null,"ENo supported currencies found"))
-                }
+                emit(Resource.success(data = cgRepo.getSupportedCurr()))
             } catch (exception: Exception) {
+
                 emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
                 Timber.d(exception.toString())
             }

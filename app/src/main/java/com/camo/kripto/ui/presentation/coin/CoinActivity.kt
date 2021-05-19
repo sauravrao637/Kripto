@@ -80,6 +80,9 @@ class CoinActivity : AppCompatActivity() {
                         Status.SUCCESS -> {
                             binding.viewPager.visibility = View.VISIBLE
                             binding.pb.visibility = View.GONE
+                            result.data?.let { CD ->
+                                viewModel.allCurr.postValue(CD)
+                            }
                         }
                         Status.ERROR -> {
                             binding.viewPager.visibility = View.INVISIBLE
@@ -90,7 +93,7 @@ class CoinActivity : AppCompatActivity() {
                                 Toast.LENGTH_LONG
                             ).show()
                             Timber.d(
-                                "some error in getCurrJob"
+                                "error"
                             )
                         }
                         Status.LOADING -> {
