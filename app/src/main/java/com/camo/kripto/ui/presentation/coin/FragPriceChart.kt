@@ -131,22 +131,26 @@ class FragPriceChart : Fragment() {
             }
         })
 
+        viewModel.allCurr.observe(viewLifecycleOwner){
+            currencies ->
+            val adapter = ArrayAdapter(
+                requireContext(),
+                R.layout.support_simple_spinner_dropdown_item,
+                currencies
+            ) as SpinnerAdapter
+            binding.ddCurrency.adapter = adapter
+            binding.ddCurrency.setSelection(currencies.indexOf(viewModel.currency.value))
+            binding.ddCurrency.isVisible = true
+        }
+
     }
 
     private fun setCurr(array: Array<String>) {
         if (array.isEmpty()) {
-            array.set(0, "inr")
             Timber.d("Empty curr array")
         }
 
-        val adapter = ArrayAdapter(
-            requireContext(),
-            R.layout.support_simple_spinner_dropdown_item,
-            array
-        ) as SpinnerAdapter
-        binding.ddCurrency.adapter = adapter
-        binding.ddCurrency.setSelection(array.indexOf(viewModel.currency.value))
-        binding.ddCurrency.isVisible = true
+
 
 
     }
