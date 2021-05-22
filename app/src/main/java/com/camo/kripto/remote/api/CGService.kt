@@ -1,5 +1,6 @@
 package com.camo.kripto.remote.api
 
+import com.camo.kripto.local.model.Coin
 import com.camo.kripto.remote.model.*
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -7,7 +8,7 @@ import retrofit2.http.Query
 
 interface CGService {
     @GET("coins/list?include_platform=false")
-    suspend fun getCoins(): List<Coin.CoinItem>
+    suspend fun getCoins(): ArrayList<Coin>
 
     @GET("simple/supported_vs_currencies")
     suspend fun getSupportedCurr(): ArrayList<String>

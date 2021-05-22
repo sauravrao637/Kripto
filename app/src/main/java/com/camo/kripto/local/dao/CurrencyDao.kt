@@ -14,4 +14,7 @@ interface CurrencyDao {
     @Query("Select * FROM Currency")
     suspend fun getCurrencies(): List<Currency>
 
+    @Query("SELECT COUNT() FROM Currency")
+    suspend fun count(): Int
+
 }
