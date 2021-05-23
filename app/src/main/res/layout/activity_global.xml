@@ -41,6 +41,7 @@
         android:layout_height="0dp"
         android:layout_below="@id/tabLayout_global_activity"
         android:layout_centerInParent="true"
+        android:background="?attr/colorSecondaryVariant"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

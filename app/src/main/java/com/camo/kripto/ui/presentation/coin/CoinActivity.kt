@@ -29,6 +29,8 @@ class CoinActivity : AppCompatActivity() {
     private var toast: Toast? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val theme: Int = R.style.AppTheme_RED
+        setTheme(theme)
         super.onCreate(savedInstanceState)
         binding = ActivityCoinBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)

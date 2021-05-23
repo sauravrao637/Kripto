@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() {
     private val viewModel by viewModels<MarketCapVM>()
     private var actionBar: ActionBar? = null
     private var trendingAdapter: TrendingAdapter? = null
-
     @Inject
     lateinit var sharedPreferences: SharedPreferences
 
@@ -44,8 +43,10 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.Theme_Kripto)
+        val theme: Int = R.style.AppTheme_RED
+        setTheme(theme)
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
         setContentView(binding?.root)
         actionBar = this.supportActionBar

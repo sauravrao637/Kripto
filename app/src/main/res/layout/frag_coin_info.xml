@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="?android:attr/colorBackground"
     android:orientation="vertical">
 
     <ScrollView
@@ -12,8 +12,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="0dp"
         android:layout_marginBottom="0dp"
-        android:layout_weight="1"
-        android:background="@color/transparent">
+        android:layout_weight="1">
 
 
         <LinearLayout

@@ -1,0 +1,276 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimaryVariant">@color/primaryLightColorRed</item>
+        <item name="colorPrimary">@color/primaryColorRed</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColorRed</item>
+        <item name="colorSecondaryVariant">@color/secondaryLightColorRed</item>
+        <item name="colorSecondary">@color/secondaryColorRed</item>
+        <item name="colorAccent">@color/secondaryDarkColorRed</item>
+        <item name="colorOnPrimary">@color/primaryTextColorRed</item>
+        <item name="colorOnSecondary">@color/secondaryTextColorRed</item>
+    </style>
+    <style name="AppTheme.ActionBar">
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="AppTheme.RED" parent="AppTheme.ActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimaryVariant">@color/primaryLightColorRed</item>
+        <item name="colorPrimary">@color/primaryColorRed</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColorRed</item>
+        <item name="colorSecondaryVariant">@color/secondaryLightColorRed</item>
+        <item name="colorSecondary">@color/secondaryColorRed</item>
+        <item name="colorAccent">@color/secondaryDarkColorRed</item>
+        <item name="colorOnPrimary">@color/primaryTextColorRed</item>
+        <item name="colorOnSecondary">@color/secondaryTextColorRed</item>
+    </style>
+
+<!--    <style name="AppTheme.PINK" parent="AppTheme.NoActionBar">-->
+<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+<!--        <item name="colorPrimaryVariant"></item>-->
+<!--        <item name="colorPrimary"></item>-->
+<!--        <item name="colorPrimaryDark"></item>-->
+<!--        <item name="colorSecondaryVariant"></item>-->
+<!--        <item name="colorSecondary"></item>-->
+<!--        <item name="colorAccent"></item>-->
+<!--        <item name="colorOnPrimary"></item>-->
+<!--        <item name="colorOnSecondary"></item>-->
+<!--    </style>-->
+
+<!--    <style name="AppTheme.PURPLE" parent="AppTheme.NoActionBar">-->
+<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+<!--        <item name="colorPrimaryVariant"></item>-->
+<!--        <item name="colorPrimary"></item>-->
+<!--        <item name="colorPrimaryDark"></item>-->
+<!--        <item name="colorSecondaryVariant"></item>-->
+<!--        <item name="colorSecondary"></item>-->
+<!--        <item name="colorAccent"></item>-->
+<!--        <item name="colorOnPrimary"></item>-->
+<!--        <item name="colorOnSecondary"></item>-->
+<!--    </style>-->
+
+<!--    <style name="AppTheme.DEEPPURPLE" parent="AppTheme.NoActionBar">-->
+<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+<!--        <item name="colorPrimaryVariant"></item>-->
+<!--        <item name="colorPrimary"></item>-->
+<!--        <item name="colorPrimaryDark"></item>-->
+<!--        <item name="colorSecondaryVariant"></item>-->
+<!--        <item name="colorSecondary"></item>-->
+<!--        <item name="colorAccent"></item>-->
+<!--        <item name="colorOnPrimary"></item>-->
+<!--        <item name="colorOnSecondary"></item>-->
+<!--    </style>-->
+
+<!--    <style name="AppTheme.INDIGO" parent="AppTheme.NoActionBar">-->
+<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+<!--        <item name="colorPrimaryVariant"></item>-->
+<!--        <item name="colorPrimary"></item>-->
+<!--        <item name="colorPrimaryDark"></item>-->
+<!--        <item name="colorSecondaryVariant"></item>-->
+<!--        <item name="colorSecondary"></item>-->
+<!--        <item name="colorAccent"></item>-->
+<!--        <item name="colorOnPrimary"></item>-->
+<!--        <item name="colorOnSecondary"></item>-->
+<!--    </style>-->
+
+<!--    <style name="AppTheme.BLUE" parent="AppTheme.NoActionBar">-->
+<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+<!--        <item name="colorPrimaryVariant"></item>-->
+<!--        <item name="colorPrimary"></item>-->
+<!--        <item name="colorPrimaryDark"></item>-->
+<!--        <item name="colorSecondaryVariant"></item>-->
+<!--        <item name="colorSecondary"></item>-->
+<!--        <item name="colorAccent"></item>-->
+<!--        <item name="colorOnPrimary"></item>-->
+<!--        <item name="colorOnSecondary"></item>-->
+<!--    </style>-->
+
+<!--    <style name="AppTheme.LIGHTBLUE" parent="AppTheme.NoActionBar">-->
+<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+<!--        <item name="colorPrimaryVariant"></item>-->
+<!--        <item name="colorPrimary"></item>-->
+<!--        <item name="colorPrimaryDark"></item>-->
+<!--        <item name="colorSecondaryVariant"></item>-->
+<!--        <item name="colorSecondary"></item>-->
+<!--        <item name="colorAccent"></item>-->
+<!--        <item name="colorOnPrimary"></item>-->
+<!--        <item name="colorOnSecondary"></item>-->
+<!--    </style>-->
+
+<!--    <style name="AppTheme.CYAN" parent="AppTheme.NoActionBar">-->
+<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+<!--        <item name="colorPrimaryVariant"></item>-->
+<!--        <item name="colorPrimary"></item>-->
+<!--        <item name="colorPrimaryDark"></item>-->
+<!--        <item name="colorSecondaryVariant"></item>-->
+<!--        <item name="colorSecondary"></item>-->
+<!--        <item name="colorAccent"></item>-->
+<!--        <item name="colorOnPrimary"></item>-->
+<!--        <item name="colorOnSecondary"></item>-->
+<!--    </style>-->
+
+<!--    <style name="AppTheme.TEAL" parent="AppTheme.NoActionBar">-->
+<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+<!--        <item name="colorPrimaryVariant"></item>-->
+<!--        <item name="colorPrimary"></item>-->
+<!--        <item name="colorPrimaryDark"></item>-->
+<!--        <item name="colorSecondaryVariant"></item>-->
+<!--        <item name="colorSecondary"></item>-->
+<!--        <item name="colorAccent"></item>-->
+<!--        <item name="colorOnPrimary"></item>-->
+<!--        <item name="colorOnSecondary"></item>-->
+<!--    </style>-->
+
+<!--    <style name="AppTheme.GREEN" parent="AppTheme.NoActionBar">-->
+<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+<!--        <item name="colorPrimaryVariant"></item>-->
+<!--        <item name="colorPrimary"></item>-->
+<!--        <item name="colorPrimaryDark"></item>-->
+<!--        <item name="colorSecondaryVariant"></item>-->
+<!--        <item name="colorSecondary"></item>-->
+<!--        <item name="colorAccent"></item>-->
+<!--        <item name="colorOnPrimary"></item>-->
+<!--        <item name="colorOnSecondary"></item>-->
+<!--    </style>-->
+
+<!--    <style name="AppTheme.LIGHTGREEN" parent="AppTheme.NoActionBar">-->
+<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+<!--        <item name="colorPrimaryVariant"></item>-->
+<!--        <item name="colorPrimary"></item>-->
+<!--        <item name="colorPrimaryDark"></item>-->
+<!--        <item name="colorSecondaryVariant"></item>-->
+<!--        <item name="colorSecondary"></item>-->
+<!--        <item name="colorAccent"></item>-->
+<!--        <item name="colorOnPrimary"></item>-->
+<!--        <item name="colorOnSecondary"></item>-->
+<!--    </style>-->
+
+<!--    <style name="AppTheme.LIME" parent="AppTheme.NoActionBar">-->
+<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+<!--        <item name="colorPrimaryVariant"></item>-->
+<!--        <item name="colorPrimary"></item>-->
+<!--        <item name="colorPrimaryDark"></item>-->
+<!--        <item name="colorSecondaryVariant"></item>-->
+<!--        <item name="colorSecondary"></item>-->
+<!--        <item name="colorAccent"></item>-->
+<!--        <item name="colorOnPrimary"></item>-->
+<!--        <item name="colorOnSecondary"></item>-->
+<!--    </style>-->
+
+<!--    <style name="AppTheme.YELLOW" parent="AppTheme.NoActionBar">-->
+<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+<!--        <item name="colorPrimaryVariant"></item>-->
+<!--        <item name="colorPrimary"></item>-->
+<!--        <item name="colorPrimaryDark"></item>-->
+<!--        <item name="colorSecondaryVariant"></item>-->
+<!--        <item name="colorSecondary"></item>-->
+<!--        <item name="colorAccent"></item>-->
+<!--        <item name="colorOnPrimary"></item>-->
+<!--        <item name="colorOnSecondary"></item>-->
+<!--    </style>-->
+
+<!--    <style name="AppTheme.AMBER" parent="AppTheme.NoActionBar">-->
+<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+<!--        <item name="colorPrimaryVariant"></item>-->
+<!--        <item name="colorPrimary"></item>-->
+<!--        <item name="colorPrimaryDark"></item>-->
+<!--        <item name="colorSecondaryVariant"></item>-->
+<!--        <item name="colorSecondary"></item>-->
+<!--        <item name="colorAccent"></item>-->
+<!--        <item name="colorOnPrimary"></item>-->
+<!--        <item name="colorOnSecondary"></item>-->
+<!--    </style>-->
+
+<!--    <style name="AppTheme.ORANGE" parent="AppTheme.NoActionBar">-->
+<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+<!--        <item name="colorPrimaryVariant"></item>-->
+<!--        <item name="colorPrimary"></item>-->
+<!--        <item name="colorPrimaryDark"></item>-->
+<!--        <item name="colorSecondaryVariant"></item>-->
+<!--        <item name="colorSecondary"></item>-->
+<!--        <item name="colorAccent"></item>-->
+<!--        <item name="colorOnPrimary"></item>-->
+<!--        <item name="colorOnSecondary"></item>-->
+<!--    </style>-->
+
+<!--    <style name="AppTheme.DEEPORANGE" parent="AppTheme.NoActionBar">-->
+<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+<!--        <item name="colorPrimaryVariant"></item>-->
+<!--        <item name="colorPrimary"></item>-->
+<!--        <item name="colorPrimaryDark"></item>-->
+<!--        <item name="colorSecondaryVariant"></item>-->
+<!--        <item name="colorSecondary"></item>-->
+<!--        <item name="colorAccent"></item>-->
+<!--        <item name="colorOnPrimary"></item>-->
+<!--        <item name="colorOnSecondary"></item>-->
+<!--    </style>-->
+
+<!--    <style name="AppTheme.BROWN" parent="AppTheme.NoActionBar">-->
+<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+<!--        <item name="colorPrimaryVariant"></item>-->
+<!--        <item name="colorPrimary"></item>-->
+<!--        <item name="colorPrimaryDark"></item>-->
+<!--        <item name="colorSecondaryVariant"></item>-->
+<!--        <item name="colorSecondary"></item>-->
+<!--        <item name="colorAccent"></item>-->
+<!--        <item name="colorOnPrimary"></item>-->
+<!--        <item name="colorOnSecondary"></item>-->
+<!--    </style>-->
+
+<!--    <style name="AppTheme.GRAY" parent="AppTheme.NoActionBar">-->
+<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+<!--        <item name="colorPrimaryVariant"></item>-->
+<!--        <item name="colorPrimary"></item>-->
+<!--        <item name="colorPrimaryDark"></item>-->
+<!--        <item name="colorSecondaryVariant"></item>-->
+<!--        <item name="colorSecondary"></item>-->
+<!--        <item name="colorAccent"></item>-->
+<!--        <item name="colorOnPrimary"></item>-->
+<!--        <item name="colorOnSecondary"></item>-->
+<!--    </style>-->
+
+<!--    <style name="AppTheme.BLUEGRAY" parent="AppTheme.NoActionBar">-->
+<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+<!--        <item name="colorPrimaryVariant"></item>-->
+<!--        <item name="colorPrimary"></item>-->
+<!--        <item name="colorPrimaryDark"></item>-->
+<!--        <item name="colorSecondaryVariant"></item>-->
+<!--        <item name="colorSecondary"></item>-->
+<!--        <item name="colorAccent"></item>-->
+<!--        <item name="colorOnPrimary"></item>-->
+<!--        <item name="colorOnSecondary"></item>-->
+<!--    </style>-->
+
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+    <!-- Text styles -->
+    <style name="Text" parent="TextAppearance.AppCompat"></style>
+    <style name="Text.Caption" parent="TextAppearance.AppCompat.Caption"></style>
+    <style name="Text.Small" parent="TextAppearance.AppCompat.Small"></style>
+    <style name="Text.Body1" parent="TextAppearance.AppCompat.Body1"></style>
+    <style name="Text.Body2" parent="TextAppearance.AppCompat.Body2"></style>
+    <style name="Text.Medium" parent="TextAppearance.AppCompat.Medium"></style>
+    <style name="Text.Large" parent="TextAppearance.AppCompat.Large"></style>
+    <style name="Text.Headline" parent="TextAppearance.AppCompat.Headline"></style>
+    <style name="Text.Title" parent="TextAppearance.AppCompat.Title"></style>
+    <style name="Text.Display1" parent="TextAppearance.AppCompat.Display1"></style>
+    <style name="Text.Subhead" parent="TextAppearance.AppCompat.Subhead"></style>
+    <style name="Text.Button" parent="TextAppearance.AppCompat.Button"></style>
+
+    <!-- Button Styles-->
+    <style name="Buton" parent="Widget.AppCompat.Button"></style>
+    <style name="Buton.Small" parent="Widget.AppCompat.Button.Small"></style>
+    <style name="Buton.Colored" parent="Widget.AppCompat.Button.Colored"></style>
+    <style name="Buton.Borderless" parent="Widget.AppCompat.Button.Borderless"></style>
+    <style name="Buton.Borderless.Colored" parent="Widget.AppCompat.Button.Borderless.Colored"></style>
+
+</resources>

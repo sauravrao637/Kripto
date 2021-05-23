@@ -10,7 +10,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/bottomNav"
         android:layout_marginBottom="0dp"
-        android:background="@color/black">
+        android:background="?android:attr/colorBackground"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/textView3"
@@ -58,21 +59,21 @@
         android:id="@+id/fl_frag_holder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/cl_trending"
+        android:layout_above="@+id/bottomNav"
         android:layout_alignParentTop="true"
         android:layout_marginTop="0dp"
         android:layout_marginBottom="0dp"
-        android:background="@color/black">
+        android:background="?android:attr/colorBackground">
 
     </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
-        android:layout_height="58dp"
+        android:layout_height="@dimen/size_56dp"
         android:layout_alignParentBottom="true"
+        android:background="?attr/colorPrimaryDark"
         app:elevation="2dp"
-        app:itemBackground="@color/black"
         app:itemIconSize="24dp"
         app:itemIconTint="@color/selector_nav_item"
         app:itemTextColor="@color/selector_nav_item"

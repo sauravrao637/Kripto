@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android"
     android:opacity="opaque">
-    <item android:drawable="@color/black" />
+    <item android:drawable="?attr/colorPrimary" />
     <item
         android:drawable="@drawable/ic_kripto"
         android:gravity="center" />
-    <item>
-        <bitmap
-            android:gravity="bottom"
-            android:src="@drawable/kripto" />
-    </item>
+
 </layer-list>

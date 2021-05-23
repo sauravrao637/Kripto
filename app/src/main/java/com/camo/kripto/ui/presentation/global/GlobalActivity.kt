@@ -7,6 +7,7 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
+import com.camo.kripto.R
 import com.camo.kripto.databinding.ActivityGlobalBinding
 import com.camo.kripto.ui.adapter.GlobalActivityTabAdapter
 import com.camo.kripto.ui.viewModel.GlobalVM
@@ -21,6 +22,8 @@ class GlobalActivity : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val theme: Int = R.style.AppTheme_RED
+        setTheme(theme)
         super.onCreate(savedInstanceState)
         binding = ActivityGlobalBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)

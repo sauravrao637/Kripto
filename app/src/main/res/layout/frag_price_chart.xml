@@ -8,6 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/colorPrimaryVariant"
         android:orientation="vertical">
 
         <LinearLayout
@@ -18,19 +19,18 @@
 
             <TextView
                 android:id="@+id/tv_current_price"
-                android:layout_width="0dp"
+                style="@style/Text.Display1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.75"
-                android:textSize="36sp"
+                android:fontFamily="sans-serif-condensed-medium"
                 tools:text="4,203,257inr" />
 
             <TextView
                 android:id="@+id/tv_per_change"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_weight="0.5"
                 android:textAlignment="center"
                 tools:text="-0.2%" />
 
@@ -38,8 +38,9 @@
                 android:id="@+id/dd_currency"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="top"
+                android:layout_gravity="end"
                 android:layout_weight="0.75" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -113,10 +114,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="0dp" />
+                    android:layout_marginBottom="0dp"
+                    tools:layout_marginBottom="16dp" />
 
                 <Button
                     android:id="@+id/btn_refreshGraph"
+                    style="@style/Buton.Borderless.Colored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
