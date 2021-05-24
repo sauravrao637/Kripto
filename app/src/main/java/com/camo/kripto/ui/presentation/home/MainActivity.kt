@@ -17,6 +17,7 @@ import com.camo.kripto.R
 import com.camo.kripto.databinding.ActivityMainBinding
 import com.camo.kripto.repos.Repository
 import com.camo.kripto.ui.adapter.TrendingAdapter
+import com.camo.kripto.ui.presentation.search.SearchActivity
 import com.camo.kripto.ui.presentation.settings.SettingsActivity
 import com.camo.kripto.ui.viewModel.MarketCapVM
 import com.camo.kripto.utils.Extras
@@ -263,6 +264,12 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.action_share -> {
                 Extras.share(this)
+                true
+            }
+
+            R.id.search ->{
+                val intent = Intent(this@MainActivity, SearchActivity::class.java)
+                startActivity(intent)
                 true
             }
             else -> super.onOptionsItemSelected(item)

@@ -14,15 +14,11 @@ import javax.inject.Inject
 
 class Repository @Inject constructor(private val db: AppDb, private val cgApiHelper: CGApiHelper) {
 
-
     suspend fun addFavCoin(favCoin: FavCoin) = db.favCoinDao().addFavCoin(favCoin)
-
 
     suspend fun removeFavCoin(id: String) = db.favCoinDao().removeFavCoin(id)
 
-
     suspend fun getFavCoins(): List<FavCoin> = db.favCoinDao().getFavCoins()
-
 
     suspend fun count(id: String): Int = db.favCoinDao().count(id)
 
@@ -49,16 +45,17 @@ class Repository @Inject constructor(private val db: AppDb, private val cgApiHel
 
         }
     }
-    suspend fun lIRCoins(): Resource<Boolean>{
+
+    suspend fun lIRCoins(): Resource<Boolean> {
         val coins: ArrayList<Coin>
-        return try{
+        return try {
             coins = getCoins()
             clearCoins()
             addCoins(coins)
-            Resource(Status.SUCCESS,true,"success")
-        }catch (e :Exception){
+            Resource(Status.SUCCESS, true, "success")
+        } catch (e: Exception) {
             Timber.d(e.message.toString())
-            Resource(Status.ERROR,false,e.message)
+            Resource(Status.ERROR, false, e.message)
         }
     }
 
@@ -69,10 +66,13 @@ class Repository @Inject constructor(private val db: AppDb, private val cgApiHel
     suspend fun clearCurrencies() {
         db.currencyDao().deleteAllCurrencies()
     }
+
     suspend fun clearCoins() {
         db.coinDao().deleteAllCoins()
     }
+
     suspend fun getCoins() = cgApiHelper.getCoins()
+    suspend fun getCoinFilterByName(name: String) = db.coinDao().getCoinFilterByName("%$name%")
     suspend fun getCurrentData(id: String) = cgApiHelper.getCurrentData(id)
     suspend fun getSupportedCurr() = cgApiHelper.getSupportedCurr()
     suspend fun getMarketChart(id: String, curr: String, days: String) =

@@ -12,15 +12,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ui.presentation.search.SearchActivity"></activity>
         <activity android:name=".ui.presentation.global.GlobalActivity" />
-        <activity android:name="com.camo.kripto.ui.presentation.about.AboutActivity" />
+        <activity android:name=".ui.presentation.about.AboutActivity" />
         <activity android:name=".ui.presentation.settings.SettingsActivity" />
-        <activity android:name="com.camo.kripto.ui.presentation.coin.CoinActivity" />
+        <activity android:name=".ui.presentation.coin.CoinActivity" />
         <activity
-            android:name="com.camo.kripto.ui.presentation.home.MainActivity"
+            android:name=".ui.presentation.home.MainActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

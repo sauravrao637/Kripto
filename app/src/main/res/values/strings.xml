@@ -74,6 +74,7 @@
     <string name="contribution_text">Got some ideas or suggestions? feel free to contribute :) The more is done the better it gets!</string>
     <string name="percent">%</string>
     <string name="error">Error</string>
+    <string name="search">Search</string>
 
 
 </resources>
