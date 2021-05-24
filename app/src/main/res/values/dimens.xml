@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <resources>
+    <dimen name="app_bar_height">240dp</dimen>
+    <dimen name="bottom_sheet_height">320dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
     <dimen name="error_text_size">16dp</dimen>
     <dimen name="default_text_size">16sp</dimen>
+    <dimen name="size_48dp">48dp</dimen>
+    <dimen name="size_56dp">56dp</dimen>
+    <dimen name="progress_bar_size">0dp</dimen>
+    <dimen name="small_text_size">12sp</dimen>
 </resources>

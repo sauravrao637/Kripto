@@ -28,8 +28,8 @@ Thanks to
 * View current price, market cap,price char and much more for more than 7000 coins
 * Track more than 400 exchanges and their "Trust Score" as per Coingecko
 * Favourite a coin
+* Track global Cryptocurrency and Defi Market
 * Choose your preferred currency and much more in preferences screen!!
-* View top 7 trending coins in last 24hr
 * More to be added :)
 
 ### Libraries and Dependencies
@@ -41,6 +41,7 @@ Thanks to
 * <a href ="https://heroicons.com/">Heroicons</a> for icons 
 * <a href="https://github.com/googlecodelabs/android-hilt">Hilt</a> for DI
 * <a href="https://github.com/JakeWharton/timber">Timber</a> for logging
+* <a href="https://github.com/pkjvit/Android-Multi-Theme-UI>Multi Theme UI</a>
 
 ### Development Setup
 

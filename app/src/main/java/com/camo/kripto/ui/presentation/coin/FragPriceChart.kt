@@ -80,20 +80,6 @@ class FragPriceChart : Fragment() {
         binding.tv2m.setOnClickListener(listener)
         binding.tv200d.setOnClickListener(listener)
 
-        binding.ddCurrency.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                }
-
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    viewModel.currency.postValue(viewModel.allCurr.value?.get(position))
-                }
-            }
 
         binding.ddCurrency.isVisible = false
         getCurrencies()
@@ -131,6 +117,24 @@ class FragPriceChart : Fragment() {
             }
         })
 
+        viewModel.allCurr.observe(viewLifecycleOwner,{
+            binding.ddCurrency.onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                    }
+
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        viewModel.currency.postValue(viewModel.allCurr.value?.get(position))
+                    }
+                }
+
+        })
+
     }
 
     private fun setCurr(array: Array<String>) {
@@ -159,25 +163,11 @@ class FragPriceChart : Fragment() {
             val curr = ArrayList<Currency>()
             withContext(Dispatchers.IO) { repo.getCurrencies() }.let {
                 curr.addAll(it)
-                if (curr.isEmpty()) {
-                    val res = repo.lIRcurrencies()
-                    when (res.status) {
-                        Status.SUCCESS -> getCurrencies()
-                        Status.ERROR -> Toast.makeText(context, res.message, Toast.LENGTH_LONG)
-                            .show()
-
-                        else -> Toast.makeText(
-                            context,
-                            "This wasn't expected at all",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                }
             }
             val list = ArrayList<String>()
             withContext(Dispatchers.IO) {
                 for (c in curr) {
-                    list.add(Extras.getCurrencySymbol(c.id) ?: c.id)
+                    list.add(c.id)
                 }
             }
             setCurr(list.toTypedArray())
@@ -332,17 +322,17 @@ class FragPriceChart : Fragment() {
 
     private fun setCurrentSelected(id: Int) {
         if (id == binding.tv24h.id) binding.tv24h.setTextColor(Color.GREEN)
-        else binding.tv24h.setTextColor(Color.WHITE)
+        else binding.tv24h.setTextColor(Color.BLACK)
         if (id == binding.tv7d.id) binding.tv7d.setTextColor(Color.GREEN)
-        else binding.tv7d.setTextColor(Color.WHITE)
+        else binding.tv7d.setTextColor(Color.BLACK)
         if (id == binding.tv2w.id) binding.tv2w.setTextColor(Color.GREEN)
-        else binding.tv2w.setTextColor(Color.WHITE)
+        else binding.tv2w.setTextColor(Color.BLACK)
         if (id == binding.tv1m.id) binding.tv1m.setTextColor(Color.GREEN)
-        else binding.tv1m.setTextColor(Color.WHITE)
+        else binding.tv1m.setTextColor(Color.BLACK)
         if (id == binding.tv2m.id) binding.tv2m.setTextColor(Color.GREEN)
-        else binding.tv2m.setTextColor(Color.WHITE)
+        else binding.tv2m.setTextColor(Color.BLACK)
         if (id == binding.tv200d.id) binding.tv200d.setTextColor(Color.GREEN)
-        else binding.tv200d.setTextColor(Color.WHITE)
+        else binding.tv200d.setTextColor(Color.BLACK)
     }
 
     private fun updateUI(coinCD: CoinCD, curr: String) {

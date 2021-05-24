@@ -52,20 +52,21 @@ class MarketSettingsFragment : PreferenceFragmentCompat() {
 
             withContext(Dispatchers.IO) { repo.getCurrencies() }.let {
                 curr.addAll(it)
-                if (curr.isEmpty()) {
-                    val res = repo.lIRcurrencies()
-                    when (res.status) {
-                        Status.SUCCESS -> getCurrencies()
-                        Status.ERROR -> Toast.makeText(context, res.message, Toast.LENGTH_LONG)
-                            .show()
-
-                        else -> Toast.makeText(
-                            context,
-                            "this wwasn't expected at all",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                }
+//                if (curr.isEmpty()) {
+//                    Timber.d("Room db empty :(")
+//                    val res = repo.lIRcurrencies()
+//                    when (res.status) {
+//                        Status.SUCCESS -> getCurrencies()
+//                        Status.ERROR -> Toast.makeText(context, res.message, Toast.LENGTH_LONG)
+//                            .show()
+//
+//                        else -> Toast.makeText(
+//                            context,
+//                            "this wwasn't expected at all",
+//                            Toast.LENGTH_LONG
+//                        ).show()
+//                    }
+//                }
             }
             val list = ArrayList<String>()
             withContext(Dispatchers.IO) {

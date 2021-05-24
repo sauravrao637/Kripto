@@ -1,11 +1,12 @@
 package com.camo.kripto.remote.api
 
+import com.camo.kripto.local.model.Coin
 import com.camo.kripto.local.model.CoinIdName
 import com.camo.kripto.remote.model.*
 
 interface CGApiHelperIF {
     //    id_asc, id_desc
-    suspend fun getCoins(): List<Coin.CoinItem>
+    suspend fun getCoins(): ArrayList<Coin>
 
     suspend fun getSupportedCurr(): ArrayList<String>
 

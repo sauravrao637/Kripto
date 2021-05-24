@@ -13,6 +13,7 @@
             android:id="@+id/tv_frag_global_markets"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSecondary"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@+id/tv_frag_global_ended_icos"
             app:layout_constraintTop_toTopOf="@+id/textView11"
@@ -24,6 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/markets"
+            android:textColor="?attr/colorOnSecondary"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@+id/textView10"
             app:layout_constraintTop_toBottomOf="@+id/textView10" />
@@ -32,6 +34,7 @@
             android:id="@+id/tv_frag_global_ended_icos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSecondary"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@+id/tv_frag_global_ongoing_icos"
             app:layout_constraintTop_toTopOf="@+id/textView10"
@@ -43,6 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/ended_icos"
+            android:textColor="?attr/colorOnSecondary"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@+id/textView9"
             app:layout_constraintTop_toBottomOf="@+id/textView9" />
@@ -51,6 +55,7 @@
             android:id="@+id/tv_frag_global_ongoing_icos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSecondary"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@+id/tv_frag_global_upcoming_icos"
             app:layout_constraintTop_toTopOf="@+id/textView9"
@@ -62,6 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/ongoing_icos"
+            android:textColor="?attr/colorOnSecondary"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@+id/textView6"
             app:layout_constraintTop_toBottomOf="@+id/textView8" />
@@ -70,6 +76,7 @@
             android:id="@+id/tv_frag_global_upcoming_icos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSecondary"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@+id/tv_frag_gloabl_active_cryptocurrencies"
             app:layout_constraintTop_toTopOf="@+id/textView8"
@@ -82,6 +89,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
             android:text="@string/market_cap"
+            android:textColor="?attr/colorOnSecondary"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -92,6 +100,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:fontFamily="sans-serif-condensed-light"
+            android:textColor="?attr/colorOnSecondary"
             app:layout_constraintStart_toStartOf="@+id/textView4"
             app:layout_constraintTop_toBottomOf="@+id/textView4"
             tools:text="2,598,067,440,668" />
@@ -103,6 +113,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/volume"
+            android:textColor="?attr/colorOnSecondary"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@+id/textView4"
             app:layout_constraintTop_toBottomOf="@+id/tv_frag_global_market_cap" />
@@ -113,6 +124,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:fontFamily="sans-serif-condensed-light"
+            android:textColor="?attr/colorOnSecondary"
             app:layout_constraintStart_toStartOf="@+id/textView5"
             app:layout_constraintTop_toBottomOf="@+id/textView5"
             tools:text="2,598,067,440,668" />
@@ -123,6 +136,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/active_cryptocurrencies"
+            android:textColor="?attr/colorOnSecondary"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@+id/textView5"
             app:layout_constraintTop_toBottomOf="@+id/tv_frag_global_volume" />
@@ -132,6 +146,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
+            android:textColor="?attr/colorOnSecondary"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView6"
@@ -143,6 +158,8 @@
             android:layout_width="match_parent"
             android:layout_height="360dp"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView11" />
@@ -153,6 +170,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/upcoming_icos"
+            android:textColor="?attr/colorOnSecondary"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@+id/textView6"
             app:layout_constraintTop_toBottomOf="@+id/textView6" />

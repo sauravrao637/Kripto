@@ -20,6 +20,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object CGModule {
 
+
     @Singleton
     @Provides
     fun getRetrofit(): Retrofit {
@@ -31,11 +32,11 @@ object CGModule {
 
     @Provides
     @Singleton
-    fun getCGService(retrofit: Retrofit): CGService = retrofit.create(CGService::class.java)
+    fun getCGService(): CGService = getRetrofit().create(CGService::class.java)
 
     @Provides
     @Singleton
-    fun getCGApiHelper(cgService: CGService): CGApiHelper = CGApiHelper(cgService)
+    fun getCGApiHelper(): CGApiHelper = CGApiHelper(getCGService())
 
     @Provides
     @Singleton
@@ -47,6 +48,6 @@ object CGModule {
 
     @Provides
     @Singleton
-    fun getRepo(appDb: AppDb, cgApiHelper: CGApiHelper): Repository = Repository(appDb, cgApiHelper)
+    fun getRepo(@ApplicationContext context:Context): Repository = Repository(getAppDb(context), getCGApiHelper())
 
 }

@@ -4,46 +4,52 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="?attr/colorPrimary"
     android:orientation="vertical"
     android:padding="16dp">
 
     <Button
         android:id="@+id/bGlobal"
+        style="@style/Text.Headline"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="#00FFFFFF"
         android:drawableStart="@drawable/ic_global"
-        android:drawablePadding="8dp"
+        android:drawablePadding="16dp"
+        android:drawableTint="?attr/colorSecondaryVariant"
         android:text="@string/global"
         android:textAlignment="viewStart"
-        android:textColor="@color/white"
+        android:textColor="?attr/colorOnPrimary"
         android:textSize="24sp" />
 
     <Button
         android:id="@+id/bSettings"
+        style="@style/Text.Headline"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="#00FFFFFF"
         android:drawableStart="@drawable/ic_settings"
-        android:drawablePadding="8dp"
+        android:drawablePadding="16dp"
+        android:drawableTint="?attr/colorSecondaryVariant"
         android:text="@string/action_settings"
         android:textAlignment="viewStart"
-        android:textColor="@color/white"
+        android:textColor="?attr/colorOnPrimary"
         android:textSize="24sp" />
 
     <Button
         android:id="@+id/bAbout"
+        style="@style/Text.Headline"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="#00FFFFFF"
         android:drawableStart="@drawable/ic_info"
-        android:drawablePadding="8dp"
+        android:drawablePadding="16dp"
+        android:drawableTint="?attr/colorSecondaryVariant"
         android:text="@string/about"
         android:textAlignment="viewStart"
-        android:textColor="@color/white"
+        android:textColor="?attr/colorOnPrimary"
         android:textSize="24sp" />
 
 </LinearLayout>

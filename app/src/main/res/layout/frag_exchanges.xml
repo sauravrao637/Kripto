@@ -8,7 +8,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#1f1d1c">
+        android:background="?attr/colorPrimaryVariant">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_frag_exchanges_1"
@@ -31,6 +31,7 @@
 
         <Button
             android:id="@+id/btn_frag_exchanges_1"
+            style="@style/Buton.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/action_refresh"

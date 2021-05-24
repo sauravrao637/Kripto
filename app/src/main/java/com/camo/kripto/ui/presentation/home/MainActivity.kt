@@ -9,33 +9,45 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
 import com.camo.kripto.R
 import com.camo.kripto.databinding.ActivityMainBinding
+import com.camo.kripto.repos.Repository
 import com.camo.kripto.ui.adapter.TrendingAdapter
+import com.camo.kripto.ui.presentation.search.SearchActivity
 import com.camo.kripto.ui.presentation.settings.SettingsActivity
 import com.camo.kripto.ui.viewModel.MarketCapVM
 import com.camo.kripto.utils.Extras
 import com.camo.kripto.utils.Status
+import com.camo.kripto.works.SyncLocalWorker
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-
     private var binding: ActivityMainBinding? = null
     private val viewModel by viewModels<MarketCapVM>()
-    private lateinit var sharedPreferences: SharedPreferences
     private var actionBar: ActionBar? = null
     private var trendingAdapter: TrendingAdapter? = null
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
+
+    @Inject
+    lateinit var repository: Repository
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.Theme_Kripto)
+        val theme: Int = R.style.AppTheme_RED
+        setTheme(theme)
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
         setContentView(binding?.root)
         actionBar = this.supportActionBar
@@ -43,13 +55,62 @@ class MainActivity : AppCompatActivity() {
 //        actionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
 //        actionBar?.setDisplayShowCustomEnabled(true)
 //        actionBar?.setCustomView(R.layout.custom_action_bar)
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this@MainActivity)
-
+//        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        incLaunchCount()
+        shouldSync()
         setupVM()
         setupUI()
         setupObservers()
+    }
 
+    private fun shouldSync() {
+        val count = sharedPreferences.getInt("numRun", 0)
+        Timber.d("count$count")
+//        if (count <= 5) {
+//            setupForFirstTime()
+//        }
+        lifecycleScope.launch(Dispatchers.IO)
+        {
+            if (repository.getCurrCount() == 0) {
+                setupForFirstTime()
+            }
+        }
+    }
 
+    private var firstTimeJob: Job? = null
+    private fun setupForFirstTime() {
+        if (firstTimeJob != null) {
+            firstTimeJob?.cancel()
+            Timber.d("not null")
+        }
+
+        firstTimeJob = GlobalScope.launch(Dispatchers.IO) {
+            val syncWorkRequest: WorkRequest =
+                OneTimeWorkRequestBuilder<SyncLocalWorker>()
+                    .build()
+            WorkManager
+                .getInstance(this@MainActivity)
+                .enqueue(syncWorkRequest)
+        }
+    }
+
+    private fun incLaunchCount() {
+        var c: Int = sharedPreferences.getInt("numRun", 0)
+        c++
+        sharedPreferences.edit().putInt("numRun", c).apply()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        decLaunchCount()
+    }
+
+    private fun decLaunchCount() {
+        if (!isFinishing) {
+            var c = sharedPreferences.getInt("numRun", 0)
+            c--
+            sharedPreferences.edit().putInt("numRun", c).apply()
+        }
     }
 
     private fun setupObservers() {
@@ -64,12 +125,10 @@ class MainActivity : AppCompatActivity() {
                         trendingAdapter?.list = it.data.coins
                     }
                 }
-
                 Status.LOADING -> {
                     binding?.rvTrending?.visibility = View.INVISIBLE
                     binding?.pbTrending?.visibility = View.INVISIBLE
                 }
-
                 Status.ERROR -> {
                     binding?.rvTrending?.visibility = View.INVISIBLE
                     binding?.pbTrending?.visibility = View.INVISIBLE
@@ -83,7 +142,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupVM() {
 
-        if(!viewModel.intialized) {
+        if (!viewModel.intialized) {
             val curr = sharedPreferences.getString("pref_currency", "inr") ?: "inr"
             val prefDur = sharedPreferences.getString("pref_per_change_dur", "1h") ?: "1h"
             val prefOrder = sharedPreferences.getString(
@@ -205,6 +264,12 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.action_share -> {
                 Extras.share(this)
+                true
+            }
+
+            R.id.search ->{
+                val intent = Intent(this@MainActivity, SearchActivity::class.java)
+                startActivity(intent)
                 true
             }
             else -> super.onOptionsItemSelected(item)

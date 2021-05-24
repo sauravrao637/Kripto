@@ -18,8 +18,8 @@ class AboutTabAdapter(fragmentActivity: FragmentActivity, private val ghApiHelpe
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> FragAboutKripto()
-            1 -> FragContributors(ghApiHelper)
-            else -> FragContributors(ghApiHelper)
+            1 -> FragContributors()
+            else -> FragContributors()
         }
     }
 }

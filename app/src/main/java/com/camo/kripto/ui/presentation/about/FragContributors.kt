@@ -12,10 +12,12 @@ import com.camo.kripto.remote.api.GHApiHelper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class FragContributors(val ghApiHelper: GHApiHelper?) : Fragment() {
+class FragContributors : Fragment() {
 
+    @Inject lateinit var ghApiHelper: GHApiHelper
     private lateinit var binding: FragContirbutorsBinding
     private lateinit var adapter: ContributorAdapter
 

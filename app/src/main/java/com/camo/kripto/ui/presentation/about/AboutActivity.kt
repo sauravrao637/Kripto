@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import com.camo.kripto.R
 import com.camo.kripto.databinding.ActivityAboutBinding
 import com.camo.kripto.remote.api.GHApiHelper
 import com.camo.kripto.utils.Extras
@@ -20,6 +21,8 @@ class AboutActivity : AppCompatActivity() {
     lateinit var ghApiHelper: GHApiHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val theme: Int = R.style.AppTheme_RED
+        setTheme(theme)
         super.onCreate(savedInstanceState)
 
         binding = ActivityAboutBinding.inflate(LayoutInflater.from(this))

@@ -17,5 +17,5 @@ interface FavCoinDao {
 
     //TODO make suspend
     @Query("SELECT COUNT() FROM FavCoin WHERE id = :id")
-    fun count(id: String): Int
+    suspend fun count(id: String): Int
 }

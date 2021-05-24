@@ -29,6 +29,8 @@ class CoinActivity : AppCompatActivity() {
     private var toast: Toast? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val theme: Int = R.style.AppTheme_RED
+        setTheme(theme)
         super.onCreate(savedInstanceState)
         binding = ActivityCoinBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
@@ -117,16 +119,14 @@ class CoinActivity : AppCompatActivity() {
                         Status.LOADING -> {
                             Timber.d("coin loading")
                             binding.pb.visibility = View.VISIBLE
-                            binding.viewPager.visibility = View.GONE
-                            binding.tabLayout.visibility = View.GONE
+                            binding.viewPager.visibility = View.INVISIBLE
+                            binding.tabLayout.visibility = View.INVISIBLE
+                            binding.tvErrorMsg.visibility = View.INVISIBLE
                         }
                         Status.ERROR -> {
                             Timber.d("coin error")
-                            binding.pb.visibility = View.GONE
-                            //TODO show error
-//                            binding.viewPager.visibility = View.GONE
-//                            binding.tabLayout.visibility = View.GONE
-
+                            binding.pb.visibility = View.INVISIBLE
+                            binding.tvErrorMsg.visibility = View.VISIBLE
                         }
 
                         Status.SUCCESS -> {
@@ -134,6 +134,7 @@ class CoinActivity : AppCompatActivity() {
                             binding.pb.visibility = View.GONE
                             binding.viewPager.visibility = View.VISIBLE
                             binding.tabLayout.visibility = View.VISIBLE
+                            binding.tvErrorMsg.visibility = View.INVISIBLE
                             viewModel.currentCoinData.postValue(result.data)
                             if (it.data?.id?.let { it1 ->
                                     withContext(Dispatchers.IO) {
