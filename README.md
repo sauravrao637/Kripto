@@ -41,7 +41,7 @@ Thanks to
 * <a href ="https://heroicons.com/">Heroicons</a> for icons 
 * <a href="https://github.com/googlecodelabs/android-hilt">Hilt</a> for DI
 * <a href="https://github.com/JakeWharton/timber">Timber</a> for logging
-* <a href="https://github.com/pkjvit/Android-Multi-Theme-UI>Multi Theme UI</a>
+* <a href="https://github.com/pkjvit/Android-Multi-Theme-UI">Multi Theme UI</a>
 
 ### Development Setup
 
