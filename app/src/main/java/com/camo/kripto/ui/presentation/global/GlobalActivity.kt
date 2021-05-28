@@ -10,20 +10,20 @@ import androidx.preference.PreferenceManager
 import com.camo.kripto.R
 import com.camo.kripto.databinding.ActivityGlobalBinding
 import com.camo.kripto.ui.adapter.GlobalActivityTabAdapter
+import com.camo.kripto.ui.presentation.BaseActivity
 import com.camo.kripto.ui.viewModel.GlobalVM
+import com.camo.kripto.utils.ThemeUtil
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class GlobalActivity : AppCompatActivity() {
+class GlobalActivity : BaseActivity() {
 
     private lateinit var binding: ActivityGlobalBinding
     private val viewModel by viewModels<GlobalVM>()
-    private lateinit var sharedPreferences: SharedPreferences
+//    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val theme: Int = R.style.AppTheme_RED
-        setTheme(theme)
         super.onCreate(savedInstanceState)
         binding = ActivityGlobalBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
@@ -36,8 +36,8 @@ class GlobalActivity : AppCompatActivity() {
     }
 
     private fun setupVM() {
-        val curr = sharedPreferences.getString("pref_currency", "inr")?:"inr"
-        if(!viewModel.initialized)viewModel.setValues(curr)
+        val curr = sharedPreferences.getString("pref_currency", "inr") ?: "inr"
+        if (!viewModel.initialized) viewModel.setValues(curr)
     }
 
     private fun setupUI() {
@@ -46,7 +46,10 @@ class GlobalActivity : AppCompatActivity() {
         )
         binding.viewPagerGlobalActivity.adapter = adapter
 
-        TabLayoutMediator(binding.tabLayoutGlobalActivity, binding.viewPagerGlobalActivity) { tab, position ->
+        TabLayoutMediator(
+            binding.tabLayoutGlobalActivity,
+            binding.viewPagerGlobalActivity
+        ) { tab, position ->
             when (position) {
                 0 -> tab.text = "Crypto"
                 1 -> tab.text = "Defi"
@@ -64,8 +67,9 @@ class GlobalActivity : AppCompatActivity() {
             if (it != null) supportActionBar?.title = it
         })
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId){
+        return when (item.itemId) {
             android.R.id.home -> {
                 this.finish()
                 true

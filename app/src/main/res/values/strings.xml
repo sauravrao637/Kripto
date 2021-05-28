@@ -70,11 +70,13 @@
     <string name="app_tagline">A Cryptocurrency app for Android</string>
     <string name="contributing">Contributing</string>
     <string name="view_on_github">View on Github</string>
-    <string name="sync_wtih_server">Sync wtih Server</string>
+    <string name="sync_wtih_server">Sync with Server</string>
     <string name="contribution_text">Got some ideas or suggestions? feel free to contribute :) The more is done the better it gets!</string>
     <string name="percent">%</string>
     <string name="error">Error</string>
     <string name="search">Search</string>
+    <string name="general">General</string>
+    <string name="pref_theme">Theme</string>
 
 
 </resources>

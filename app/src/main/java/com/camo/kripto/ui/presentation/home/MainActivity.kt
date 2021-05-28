@@ -17,11 +17,13 @@ import com.camo.kripto.R
 import com.camo.kripto.databinding.ActivityMainBinding
 import com.camo.kripto.repos.Repository
 import com.camo.kripto.ui.adapter.TrendingAdapter
+import com.camo.kripto.ui.presentation.BaseActivity
 import com.camo.kripto.ui.presentation.search.SearchActivity
 import com.camo.kripto.ui.presentation.settings.SettingsActivity
 import com.camo.kripto.ui.viewModel.MarketCapVM
 import com.camo.kripto.utils.Extras
 import com.camo.kripto.utils.Status
+import com.camo.kripto.utils.ThemeUtil
 import com.camo.kripto.works.SyncLocalWorker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -30,24 +32,19 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private var binding: ActivityMainBinding? = null
     private val viewModel by viewModels<MarketCapVM>()
     private var actionBar: ActionBar? = null
     private var trendingAdapter: TrendingAdapter? = null
-    @Inject
-    lateinit var sharedPreferences: SharedPreferences
 
     @Inject
     lateinit var repository: Repository
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val theme: Int = R.style.AppTheme_RED
-        setTheme(theme)
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
         setContentView(binding?.root)
         actionBar = this.supportActionBar
@@ -267,7 +264,7 @@ class MainActivity : AppCompatActivity() {
                 true
             }
 
-            R.id.search ->{
+            R.id.search -> {
                 val intent = Intent(this@MainActivity, SearchActivity::class.java)
                 startActivity(intent)
                 true

@@ -1,5 +1,6 @@
 package com.camo.kripto.ui.presentation.settings
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -10,14 +11,17 @@ import androidx.work.*
 import com.camo.kripto.Constants
 import com.camo.kripto.R
 import com.camo.kripto.databinding.ActivitySettingsBinding
+import com.camo.kripto.ui.presentation.BaseActivity
+import com.camo.kripto.utils.ThemeUtil
 import com.camo.kripto.works.SyncLocalWorker
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class SettingsActivity : AppCompatActivity() {
-
+class SettingsActivity : BaseActivity() {
     private lateinit var binding: ActivitySettingsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(LayoutInflater.from(this))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -25,7 +29,7 @@ class SettingsActivity : AppCompatActivity() {
 
         supportActionBar?.title = "Kripto Settings"
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fl_setting_container, MarketSettingsFragment()).commit()
+            .replace(R.id.fl_setting_container, FragMarketSettings()).commit()
         setContentView(binding.root)
 
         binding.btnSync.setOnClickListener {

@@ -18,7 +18,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MarketSettingsFragment : PreferenceFragmentCompat() {
+class FragMarketSettings : PreferenceFragmentCompat() {
 
 
     @Inject lateinit var repo : Repository

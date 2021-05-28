@@ -1,6 +1,7 @@
 package com.camo.kripto.ui.presentation.coin
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -14,11 +15,13 @@ import com.camo.kripto.ui.presentation.settings.SettingsActivity
 import com.camo.kripto.ui.adapter.CoinActivityTabAdapter
 import com.camo.kripto.ui.viewModel.CoinActivityVM
 import com.camo.kripto.utils.Status
+import com.camo.kripto.utils.ThemeUtil
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CoinActivity : AppCompatActivity() {
@@ -27,11 +30,13 @@ class CoinActivity : AppCompatActivity() {
     private val viewModel by viewModels<CoinActivityVM>()
     private var id: String? = null
     private var toast: Toast? = null
-
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
-        val theme: Int = R.style.AppTheme_RED
-        setTheme(theme)
+
         super.onCreate(savedInstanceState)
+        val theme: Int = ThemeUtil.getThemeId(sharedPreferences.getString("pref_theme", ThemeUtil.THEME_RED))
+        setTheme(theme)
         binding = ActivityCoinBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
