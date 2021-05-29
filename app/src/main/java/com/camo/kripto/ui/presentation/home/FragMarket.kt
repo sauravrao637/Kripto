@@ -29,15 +29,13 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class FragMarket : Fragment() {
 
-
-
     private lateinit var adapter: MarketCapAdapter
     private lateinit var binding: FragMarketBinding
     private val viewModel by activityViewModels<MarketCapVM>()
     private lateinit var key: String
 
-    @Inject lateinit var repo: Repository
-
+    @Inject
+    lateinit var repo: Repository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,7 +44,6 @@ class FragMarket : Fragment() {
     ): View {
         key = arguments?.getString("key") ?: KEY_ALL
         binding = FragMarketBinding.inflate(LayoutInflater.from(context))
-
 
         setupVM()
         setupUI()
@@ -74,7 +71,6 @@ class FragMarket : Fragment() {
     }
 
     private fun setupVM() {
-
     }
 
     private fun setupUI() {
@@ -145,7 +141,6 @@ class FragMarket : Fragment() {
         }
     }
 
-
     private var capDataJob: Job? = null
     private fun getNewData(it: String?, order: String?, dur: String?) {
         capDataJob?.cancel()
@@ -160,9 +155,7 @@ class FragMarket : Fragment() {
         }
     }
 
-
     companion object {
-
         const val KEY_ALL = "all"
         const val KEY_FAV = "fav"
 

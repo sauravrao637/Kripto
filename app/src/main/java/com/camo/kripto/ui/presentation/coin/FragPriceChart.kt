@@ -80,12 +80,10 @@ class FragPriceChart : Fragment() {
         binding.tv2m.setOnClickListener(listener)
         binding.tv200d.setOnClickListener(listener)
 
-
         binding.ddCurrency.isVisible = false
         getCurrencies()
 
     }
-
 
     private fun setupObservers() {
         //observing coin
@@ -134,7 +132,6 @@ class FragPriceChart : Fragment() {
                 }
 
         })
-
     }
 
     private fun setCurr(array: Array<String>) {
@@ -151,7 +148,6 @@ class FragPriceChart : Fragment() {
         binding.ddCurrency.adapter = adapter
         binding.ddCurrency.setSelection(array.indexOf(viewModel.currency.value))
         binding.ddCurrency.isVisible = true
-
 
     }
 
@@ -251,7 +247,6 @@ class FragPriceChart : Fragment() {
         binding.chart.marker = ChartMarker(context, R.layout.marker_view)
 
     }
-
 
     private fun coinChanged(coinCD: CoinCD) {
         viewModel.title.postValue(coinCD.name)
@@ -369,6 +364,4 @@ class FragPriceChart : Fragment() {
         binding.tvTradingVolume.text =
             Extras.getFormattedDoubleCurr(coinCD.market_data.total_volume[curr], curr, suffix = "")
     }
-
-
 }

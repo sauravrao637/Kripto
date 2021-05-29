@@ -16,8 +16,6 @@ class MarketCapPS(
 ) :
     PagingSource<Int, CoinMarket.CoinMarketItem>() {
 
-
-
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CoinMarket.CoinMarketItem> {
         return try {
             // Start refresh at page 1 if undefined.
@@ -42,6 +40,4 @@ class MarketCapPS(
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
         }
     }
-
-
 }

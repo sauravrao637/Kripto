@@ -21,7 +21,6 @@ import timber.log.Timber
 @AndroidEntryPoint
 class FragGlobalDefi : Fragment() {
 
-
     private lateinit var binding: FragGlobalDefiBinding
     private val viewModel by activityViewModels<GlobalVM>()
 
@@ -42,8 +41,7 @@ class FragGlobalDefi : Fragment() {
 
     private fun setupVM() {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val curr = sharedPreferences.getString("pref_currency", "inr") ?: "inr"
-
+        sharedPreferences.getString("pref_currency", "inr") ?: "inr"
     }
 
     private fun setupUI() {
@@ -89,7 +87,6 @@ class FragGlobalDefi : Fragment() {
 
     }
 
-
     private var globalDefiJob: Job? = null
     private fun getGlobalDefi() {
         globalDefiJob?.cancel()
@@ -99,6 +96,4 @@ class FragGlobalDefi : Fragment() {
             }
         }
     }
-
-
 }

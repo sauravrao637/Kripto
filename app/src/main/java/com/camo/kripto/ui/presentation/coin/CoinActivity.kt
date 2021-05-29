@@ -203,27 +203,21 @@ class CoinActivity : AppCompatActivity() {
             startActivity(intent)
             true
         }
-
         R.id.action_refresh -> {
             getNewData(id)
             true
         }
-
         R.id.action_fav -> {
             val coinCd = viewModel.currentCoinData.value
             if (coinCd != null) toggleFav(coinCd.id, coinCd.name)
             true
         }
-
         android.R.id.home -> {
             this.finish()
             true
         }
-
         else -> {
             super.onOptionsItemSelected(item)
         }
     }
-
-
 }

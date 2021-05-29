@@ -24,7 +24,5 @@ class Formatter : ValueFormatter() {
     override fun getAxisLabel(value: Float, axis: AxisBase?): String? {
         return Extras.getDateTime(value)
     }
-
     // ... override other methods for the other chart types
-
 }

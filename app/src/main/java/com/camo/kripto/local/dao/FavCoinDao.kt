@@ -8,7 +8,6 @@ interface FavCoinDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addFavCoin(favCoin: FavCoin)
 
-
     @Query("DELETE FROM FavCoin WHERE id == :id")
     suspend fun removeFavCoin(id: String)
 

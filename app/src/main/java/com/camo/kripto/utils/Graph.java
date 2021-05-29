@@ -18,9 +18,7 @@ public class Graph {
             //TODO for rest
         }
 
-
         LineDataSet set1 = new LineDataSet(prices, "Price");
-
 
         set1.setLineWidth(0.5f);
         set1.setColor(Color.WHITE);

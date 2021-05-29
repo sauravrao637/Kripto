@@ -21,7 +21,6 @@ import timber.log.Timber
 @AndroidEntryPoint
 class FragCoinInfo : Fragment() {
 
-
     private lateinit var binding: FragCoinInfoBinding
     private val viewModel by activityViewModels<CoinActivityVM>()
     private lateinit var sharedPreferences: SharedPreferences
@@ -29,7 +28,6 @@ class FragCoinInfo : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
 
         binding = FragCoinInfoBinding.inflate(inflater, container, false)
         binding.root.visibility = View.INVISIBLE
@@ -54,9 +52,7 @@ class FragCoinInfo : Fragment() {
         })
     }
 
-
     private fun coinChanged(coinCD: CoinCD) {
-
         binding.rvHomepageUrls.adapter = UrlAdapter(coinCD.links.homepage)
         binding.rvHomepageUrls.setHasFixedSize(true)
         binding.rvOfficialForumUrls.adapter = UrlAdapter(coinCD.links.official_forum_url)
@@ -89,8 +85,6 @@ class FragCoinInfo : Fragment() {
         }
 
         binding.tvTwitter.text = coinCD.links.twitter_screen_name
-
-
     }
 
     private fun setupUI() {
@@ -103,8 +97,5 @@ class FragCoinInfo : Fragment() {
     }
 
     private fun setupViewModel() {
-
     }
-
-
 }

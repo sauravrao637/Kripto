@@ -29,7 +29,6 @@ class CoinActivityVM @Inject constructor(private val cgRepo: Repository) : ViewM
         currency.postValue(curr?:"inr")
     }
 
-
     fun getCurrentData(id: String): Flow<Resource<CoinCD>> {
         return flow {
             emit(Resource.loading(data = null))

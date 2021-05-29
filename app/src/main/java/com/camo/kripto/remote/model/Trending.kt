@@ -2,10 +2,7 @@ package com.camo.kripto.remote.model
 
 import com.camo.kripto.local.model.CoinIdName
 
-data class Trending(
-    val coins: List<Coin>,
-//    val exchanges: List<Any>
-) {
+data class Trending(val coins: List<Coin>, /* val exchanges: List<Any>*/) {
     data class Coin(
         val item: Item
     ) {

@@ -13,7 +13,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="coral">#FF7F50</color>>
-    <color name = "transparent">#00FFFFFF</color>
+    <color name="transparent">#00FFFFFF</color>
 
     <!-- RED Theme -->
     <color name="primaryColorRed">#F44336</color>
@@ -105,7 +105,6 @@
     <color name="secondaryDarkColorTeal">#caa052</color>
     <color name="primaryTextColorTeal">#ffffff</color>
     <color name="secondaryTextColorTeal">#000000</color>
-
 
 
     <!--  GREEN Theme -->
@@ -207,5 +206,9 @@
     <color name="secondaryDarkColorBlueGray">#a6b320</color>
     <color name="primaryTextColorBlueGray">#ffffff</color>
     <color name="secondaryTextColorBlueGray">#000000</color>
+    <color name="light_blue_50">#FFE1F5FE</color>
+    <color name="light_blue_200">#FF81D4FA</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="light_blue_900">#FF01579B</color>
 
 </resources>

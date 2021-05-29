@@ -53,7 +53,6 @@ class MarketCapVM @Inject constructor(
         }.flow.cachedIn(viewModelScope)
     }
 
-
     fun getTrending(): Flow<Resource<Trending>> {
         return flow {
             emit(Resource.loading(data = null))
@@ -65,7 +64,6 @@ class MarketCapVM @Inject constructor(
             }
         }
     }
-
 
     fun getExchanges(): Flow<PagingData<Exchanges.ExchangesItem>> {
         return Pager(
@@ -82,5 +80,4 @@ class MarketCapVM @Inject constructor(
             duration.postValue(arr!![i])
         }
     }
-
 }

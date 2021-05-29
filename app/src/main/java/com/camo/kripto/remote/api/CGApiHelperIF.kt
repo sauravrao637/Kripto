@@ -3,6 +3,7 @@ package com.camo.kripto.remote.api
 import com.camo.kripto.local.model.Coin
 import com.camo.kripto.local.model.CoinIdName
 import com.camo.kripto.remote.model.*
+import retrofit2.Response
 
 interface CGApiHelperIF {
     //    id_asc, id_desc
@@ -29,4 +30,6 @@ interface CGApiHelperIF {
     suspend fun getExchanges(page: Int): Exchanges
 
     suspend fun getGlobalDefi(): GlobalDefi
+
+    suspend fun ping(): Response<Any>
 }

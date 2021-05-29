@@ -48,6 +48,5 @@ class GlobalVM @Inject constructor(private val cgRepo: Repository) : ViewModel()
                 emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
             }
         }
-
     }
 }

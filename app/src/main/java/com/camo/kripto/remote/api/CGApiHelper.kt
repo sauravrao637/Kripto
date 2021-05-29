@@ -10,7 +10,9 @@ class CGApiHelper @Inject constructor(private val cgService: CGService) : CGApiH
 
     //    id_asc, id_desc
     override suspend fun getCoins() = cgService.getCoins()
+
     override suspend fun getSupportedCurr() = cgService.getSupportedCurr()
+
     override suspend fun getMarketCap(
         curr: String?,
         page: Int,
@@ -18,14 +20,12 @@ class CGApiHelper @Inject constructor(private val cgService: CGService) : CGApiH
         duration: String?,
         ids: List<CoinIdName>?
     ): List<CoinMarket.CoinMarketItem> {
-
         var s = ""
         if (ids != null && ids.isNotEmpty()) {
             for (i in ids) {
                 s += i.id + ","
             }
         }
-
         return cgService.getMarketCap(
             curr ?: "inr",
             25,
@@ -54,4 +54,6 @@ class CGApiHelper @Inject constructor(private val cgService: CGService) : CGApiH
     override suspend fun getExchanges(page: Int) = cgService.getExchanges(25, page)
 
     override suspend fun getGlobalDefi() = cgService.getGlobalDefi()
+
+    override suspend fun ping() = cgService.ping()
 }

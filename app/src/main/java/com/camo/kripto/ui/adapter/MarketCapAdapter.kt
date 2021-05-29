@@ -21,7 +21,6 @@ class MarketCapAdapter(
 ) :
     PagingDataAdapter<CoinMarket.CoinMarketItem, MarketCapAdapter.DataHolder>(diffCallback) {
 
-
     lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataHolder {
@@ -74,7 +73,6 @@ class MarketCapAdapter(
         context.startActivity(intent)
     }
 
-
     class DataHolder(marketCapItemBinding: MarketCapItemBinding) :
         RecyclerView.ViewHolder(marketCapItemBinding.root) {
         val root = marketCapItemBinding.root
@@ -84,7 +82,6 @@ class MarketCapAdapter(
         val marketCap = marketCapItemBinding.tvMarketCap
         val priceChangePercentage = marketCapItemBinding.tvDur
     }
-
 
     object Comparator : DiffUtil.ItemCallback<CoinMarket.CoinMarketItem>() {
         override fun areItemsTheSame(
@@ -102,7 +99,4 @@ class MarketCapAdapter(
             return oldItem == newItem
         }
     }
-
-
-
 }

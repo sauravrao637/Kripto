@@ -52,6 +52,4 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.ViewHolder>(){
         this.list = coins
         notifyDataSetChanged()
     }
-
-
 }

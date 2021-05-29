@@ -32,7 +32,6 @@ import timber.log.Timber
 //Fragment for global data for cryptocurrency
 class FragGlobalCrypto : Fragment() {
 
-
     private lateinit var binding: FragGlobalCryptoBinding
     private val viewModel by activityViewModels<GlobalVM>()
 
@@ -53,9 +52,7 @@ class FragGlobalCrypto : Fragment() {
 
     private fun setupVM() {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val curr = sharedPreferences.getString("pref_currency", "inr") ?: "inr"
-
-
+        sharedPreferences.getString("pref_currency", "inr") ?: "inr"
     }
 
     private fun setupUI() {
@@ -138,7 +135,6 @@ class FragGlobalCrypto : Fragment() {
         chart.isRotationEnabled = true
         chart.isHighlightPerTapEnabled = true
 
-
         chart.animateY(1000, Easing.EaseInOutQuad)
 
         val l: Legend = chart.legend
@@ -215,5 +211,4 @@ class FragGlobalCrypto : Fragment() {
         chart.highlightValues(null)
         chart.invalidate()
     }
-
 }

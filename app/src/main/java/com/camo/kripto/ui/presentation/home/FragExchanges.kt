@@ -54,7 +54,6 @@ class FragExchanges : Fragment() {
             refresh()
             binding.root.isRefreshing = false
         }
-
     }
 
     private fun refresh() {
@@ -62,7 +61,6 @@ class FragExchanges : Fragment() {
     }
 
     private fun setupVM() {
-
     }
 
     private fun showEmptyList(show: Boolean) {
@@ -104,9 +102,7 @@ class FragExchanges : Fragment() {
                 Timber.d(it.toString())
             }
         }
-
     }
-
 
     private var exchangesJob: Job? = null
     private fun getExchanges() {

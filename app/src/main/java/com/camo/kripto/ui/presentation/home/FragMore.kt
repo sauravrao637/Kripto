@@ -23,7 +23,6 @@ class FragMore : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         binding = FragMoreBinding.inflate(LayoutInflater.from(context))
         (activity as MainActivity).supportActionBar?.title =
             context?.resources?.getString(R.string.more)
@@ -31,7 +30,6 @@ class FragMore : Fragment() {
 
         return binding.root
     }
-
 
     private fun setupUI() {
         binding.bSettings.setOnClickListener {
@@ -48,6 +46,4 @@ class FragMore : Fragment() {
             requireActivity().startActivity(intent)
         }
     }
-
-
 }

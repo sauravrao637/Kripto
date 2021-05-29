@@ -26,7 +26,6 @@ class TrendingAdapter :
         val root = view.rootView
     }
 
-
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         this.context = viewGroup.context
         val view = LayoutInflater.from(viewGroup.context)
@@ -34,7 +33,6 @@ class TrendingAdapter :
 
         return ViewHolder(view)
     }
-
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 

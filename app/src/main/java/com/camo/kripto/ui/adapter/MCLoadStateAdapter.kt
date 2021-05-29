@@ -13,7 +13,6 @@ import timber.log.Timber
 class MCLoadStateAdapter(private val retry: () -> Unit) :
     LoadStateAdapter<MCLoadStateAdapter.MCLoadStateViewHolder>() {
 
-
     override fun onBindViewHolder(holder: MCLoadStateViewHolder, loadState: LoadState) {
         holder.bind(loadState)
     }
@@ -25,13 +24,10 @@ class MCLoadStateAdapter(private val retry: () -> Unit) :
         return MCLoadStateViewHolder.create(parent, retry)
     }
 
-
     class MCLoadStateViewHolder(
         private val binding: LoadMarketCapFooterViewItemBinding,
         retry: () -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
-
-
 
         init {
             binding.retryButton.setOnClickListener { retry.invoke() }

@@ -20,7 +20,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class FragMarketSettings : PreferenceFragmentCompat() {
 
-
     @Inject lateinit var repo : Repository
 
     private var currPreference: DropDownPreference? = null
@@ -42,7 +41,6 @@ class FragMarketSettings : PreferenceFragmentCompat() {
             Timber.d( "Empty curr array")
         }
     }
-
 
     private var loadCurrJob: Job? = null
     private fun getCurrencies() {
@@ -78,5 +76,4 @@ class FragMarketSettings : PreferenceFragmentCompat() {
             }
         }
     }
-
 }

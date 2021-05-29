@@ -10,7 +10,6 @@ import javax.inject.Inject
 class ExchangesPS @Inject constructor(private val backend: Repository) :
     PagingSource<Int, Exchanges.ExchangesItem>() {
 
-
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Exchanges.ExchangesItem> {
         return try {
             // Start refresh at page 1 if undefined.

@@ -1,13 +1,11 @@
 package com.camo.kripto.ui.presentation.home
 
-
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.OneTimeWorkRequestBuilder
@@ -23,7 +21,6 @@ import com.camo.kripto.ui.presentation.settings.SettingsActivity
 import com.camo.kripto.ui.viewModel.MarketCapVM
 import com.camo.kripto.utils.Extras
 import com.camo.kripto.utils.Status
-import com.camo.kripto.utils.ThemeUtil
 import com.camo.kripto.works.SyncLocalWorker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -41,7 +38,6 @@ class MainActivity : BaseActivity() {
 
     @Inject
     lateinit var repository: Repository
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,15 +57,37 @@ class MainActivity : BaseActivity() {
     }
 
     private fun shouldSync() {
-        val count = sharedPreferences.getInt("numRun", 0)
-        Timber.d("count$count")
-//        if (count <= 5) {
-//            setupForFirstTime()
-//        }
         lifecycleScope.launch(Dispatchers.IO)
         {
             if (repository.getCurrCount() == 0) {
-                setupForFirstTime()
+                try {
+                    if (repository.pingCG().code() == 200) {
+                        setupForFirstTime()
+                    }
+                    else {
+                        //TODO show error nicely
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(
+                                this@MainActivity,
+                                "Server Down :(, Try Again Later",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            delay(2000)
+                            this@MainActivity.finish()
+                        }
+                    }
+                } catch (e: Exception) {
+                    //TODO show error nicely
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Couldn't reach server :(, Try Again Later",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        delay(2000)
+                        this@MainActivity.finish()
+                    }
+                }
             }
         }
     }
@@ -80,7 +98,6 @@ class MainActivity : BaseActivity() {
             firstTimeJob?.cancel()
             Timber.d("not null")
         }
-
         firstTimeJob = GlobalScope.launch(Dispatchers.IO) {
             val syncWorkRequest: WorkRequest =
                 OneTimeWorkRequestBuilder<SyncLocalWorker>()
@@ -133,7 +150,6 @@ class MainActivity : BaseActivity() {
 
                 }
             }
-
         })
     }
 
@@ -239,7 +255,6 @@ class MainActivity : BaseActivity() {
         }
     }
 
-
     override fun onDestroy() {
         binding = null
         super.onDestroy()
@@ -263,7 +278,6 @@ class MainActivity : BaseActivity() {
                 Extras.share(this)
                 true
             }
-
             R.id.search -> {
                 val intent = Intent(this@MainActivity, SearchActivity::class.java)
                 startActivity(intent)

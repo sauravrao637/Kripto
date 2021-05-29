@@ -72,9 +72,13 @@ class Repository @Inject constructor(private val db: AppDb, private val cgApiHel
     }
 
     suspend fun getCoins() = cgApiHelper.getCoins()
+
     suspend fun getCoinFilterByName(name: String) = db.coinDao().getCoinFilterByName("%$name%")
+
     suspend fun getCurrentData(id: String) = cgApiHelper.getCurrentData(id)
+
     suspend fun getSupportedCurr() = cgApiHelper.getSupportedCurr()
+
     suspend fun getMarketChart(id: String, curr: String, days: String) =
         cgApiHelper.getMarketChart(id, curr, days)
 
@@ -96,4 +100,6 @@ class Repository @Inject constructor(private val db: AppDb, private val cgApiHel
     suspend fun getExchanges(page: Int) = cgApiHelper.getExchanges(page)
 
     suspend fun getGlobalDefi() = cgApiHelper.getGlobalDefi()
+
+    suspend fun pingCG() = cgApiHelper.ping()
 }
