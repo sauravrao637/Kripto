@@ -2,11 +2,17 @@ package com.camo.kripto.ui.presentation.coin
 
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.text.Html
+import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.SpinnerAdapter
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -93,7 +99,6 @@ class FragPriceChart : Fragment() {
                 coinChanged(it)
                 updateChart()
             } else {
-
                 Timber.d("coinData null")
             }
 
@@ -115,7 +120,7 @@ class FragPriceChart : Fragment() {
             }
         })
 
-        viewModel.allCurr.observe(viewLifecycleOwner,{
+        viewModel.allCurr.observe(viewLifecycleOwner, {
             binding.ddCurrency.onItemSelectedListener =
                 object : AdapterView.OnItemSelectedListener {
                     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -136,7 +141,7 @@ class FragPriceChart : Fragment() {
 
     private fun setCurr(array: Array<String>) {
         if (array.isEmpty()) {
-            array.set(0, "inr")
+            array[0] = "inr"
             Timber.d("Empty curr array")
         }
 
@@ -150,7 +155,6 @@ class FragPriceChart : Fragment() {
         binding.ddCurrency.isVisible = true
 
     }
-
 
     private var loadCurrJob: Job? = null
     private fun getCurrencies() {
@@ -259,7 +263,6 @@ class FragPriceChart : Fragment() {
         }
         updateUI(coinCD, viewModel.currency.value ?: "inr")
         setPerChange(viewModel.duration.value)
-
     }
 
     private fun setPerChange(it: String?) {
@@ -299,7 +302,6 @@ class FragPriceChart : Fragment() {
                         coinCD.market_data.price_change_percentage_200d_in_currency[curr]
                     setCurrentSelected(binding.tv200d.id)
                 }
-
             }
             if (change != null) {
                 if (change >= 0) {
@@ -310,8 +312,6 @@ class FragPriceChart : Fragment() {
                 text = "$change%"
             }
             binding.tvPerChange.text = text
-
-
         }
     }
 
@@ -363,5 +363,14 @@ class FragPriceChart : Fragment() {
         binding.tvTotalSupply.text = Extras.getFormattedDouble(coinCD.market_data.total_supply)
         binding.tvTradingVolume.text =
             Extras.getFormattedDoubleCurr(coinCD.market_data.total_volume[curr], curr, suffix = "")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            binding.tvAboutCoin.text = Html.fromHtml(
+                coinCD.description["en"],
+                Html.FROM_HTML_MODE_COMPACT
+            )
+        } else {
+            binding.tvAboutCoin.text = Html.fromHtml(coinCD.description["en"])
+        }
+        Linkify.addLinks(binding.tvAboutCoin, Linkify.PHONE_NUMBERS or Linkify.WEB_URLS)
     }
 }

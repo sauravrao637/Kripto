@@ -7,7 +7,7 @@ import com.camo.kripto.remote.model.CoinMarket
 import com.camo.kripto.repos.Repository
 import timber.log.Timber
 
-class MarketCapPS(
+class CryptocurrenciesMarketCapPS(
     private val backend: Repository,
     private val curr: String?,
     private val order: String?,

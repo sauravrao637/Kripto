@@ -3,6 +3,8 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id "androidx.navigation.safeargs.kotlin"
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -11,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "com.camo.kripto"
-        minSdkVersion 28
+        minSdkVersion 24
         targetSdkVersion 30
         versionCode 2
         versionName "0.4.0"
@@ -116,5 +118,13 @@ dependencies {
     androidTestImplementation "androidx.work:work-testing:$work_version"
     // optional - Multiprocess support
     implementation "androidx.work:work-multiprocess:$work_version"
+
+    //Navigation
+    def nav_version = "2.3.5"
+    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
+    implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+    // Feature module Support
+    implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
+    androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
 
 }

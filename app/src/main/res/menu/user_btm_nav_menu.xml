@@ -1,23 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item android:id="@+id/menu_fav"
-        android:title="@string/favourites"
+    <item
+        android:id="@+id/fragMarketFav"
         android:icon="@drawable/ic_star"
-        />
-
-    <item android:id="@+id/menu_cryptocurrencies"
-        android:title="@string/Cryptocurrencies"
+        android:title="@string/favourites" />
+    <item
+        android:id="@+id/fragMarkets"
         android:icon="@drawable/ic_trending_up"
-        />
-    <item android:id="@+id/menu_exchanges"
-        android:title="@string/exchanges"
-        android:icon="@drawable/ic_trending_up"
-        />
-    <item android:id="@+id/menu_more"
-        android:title="@string/more"
+        android:title="@string/markets" />
+    <item
+        android:id="@+id/fragMore"
         android:icon="@drawable/ic_dots_hor"
-        />
-
-
+        android:title="@string/more" />
 </menu>

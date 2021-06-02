@@ -3,14 +3,14 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimaryVariant">@color/primaryLightColorRed</item>
-        <item name="colorPrimary">@color/primaryColorRed</item>
-        <item name="colorPrimaryDark">@color/primaryDarkColorRed</item>
-        <item name="colorSecondaryVariant">@color/secondaryLightColorRed</item>
-        <item name="colorSecondary">@color/secondaryColorRed</item>
-        <item name="colorAccent">@color/secondaryDarkColorRed</item>
-        <item name="colorOnPrimary">@color/primaryTextColorRed</item>
-        <item name="colorOnSecondary">@color/secondaryTextColorRed</item>
+        <item name="colorPrimaryVariant">@color/primaryLightColorBlueGray</item>
+        <item name="colorPrimary">@color/primaryColorBlueGray</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColorBlueGray</item>
+        <item name="colorSecondaryVariant">@color/secondaryLightColorBlueGray</item>
+        <item name="colorSecondary">@color/secondaryColorBlueGray</item>
+        <item name="colorAccent">@color/secondaryDarkColorBlueGray</item>
+        <item name="colorOnPrimary">@color/primaryTextColorBlueGray</item>
+        <item name="colorOnSecondary">@color/secondaryTextColorBlueGray</item>
     </style>
 
     <style name="AppTheme.ActionBar">

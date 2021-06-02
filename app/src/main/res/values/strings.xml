@@ -79,6 +79,15 @@
     <string name="pref_theme">Theme</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+    <string name="key_internet_error">No Connection</string>
+    <string name="key_error">Error</string>
+    <string name="error_image">Error Image</string>
+    <string name="key_server_error">Server Error</string>
+    <string name="app_ui_crash">UI Crash</string>
+    <string name="error_unable_to_load_graph">Unable to load graph</string>
+    <string name="general_error">Error</string>
+    <string name="error_snackbar_action">Report</string>
+    <string name="error_snackbar_message">Sorry, something went wrong.</string>
 
 
 </resources>

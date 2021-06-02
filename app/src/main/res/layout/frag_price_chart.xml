@@ -8,13 +8,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:padding="8dp">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/tv_current_price"
@@ -45,7 +44,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="4dp"
             android:orientation="horizontal">
 
             <TextView
@@ -71,7 +69,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="4dp"
             android:orientation="horizontal">
 
             <TextView
@@ -214,7 +211,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="4dp"
             android:orientation="horizontal">
 
             <TextView
@@ -235,7 +231,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="4dp"
             android:orientation="horizontal">
 
             <TextView
@@ -256,7 +251,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="4dp"
             android:orientation="horizontal">
 
             <TextView
@@ -277,7 +271,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="4dp"
             android:orientation="horizontal">
 
             <TextView
@@ -298,7 +291,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="4dp"
             android:orientation="horizontal">
 
             <TextView
@@ -319,7 +311,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="4dp"
             android:orientation="horizontal">
 
             <TextView
@@ -340,7 +331,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="4dp"
             android:orientation="horizontal">
 
             <TextView
@@ -363,7 +353,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="4dp"
             android:orientation="horizontal">
 
             <TextView
@@ -386,7 +375,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="4dp"
             android:orientation="horizontal">
 
             <TextView
@@ -409,7 +397,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="4dp"
             android:orientation="horizontal">
 
             <TextView
@@ -428,6 +415,14 @@
                 android:textColor="@android:color/holo_red_dark"
                 tools:text="1" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_about_coin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:autoLink="web"
+            tools:text="dadsda" />
 
     </LinearLayout>
 </ScrollView>

@@ -21,7 +21,8 @@ class CGApiHelper @Inject constructor(private val cgService: CGService) : CGApiH
         ids: List<CoinIdName>?
     ): List<CoinMarket.CoinMarketItem> {
         var s = ""
-        if (ids != null && ids.isNotEmpty()) {
+        if (ids != null) {
+            if(ids.isEmpty()) return listOf()
             for (i in ids) {
                 s += i.id + ","
             }

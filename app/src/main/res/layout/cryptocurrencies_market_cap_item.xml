@@ -68,7 +68,7 @@
                 tools:text='"$2486732482648"' />
 
             <TextView
-                android:id="@+id/tv_dur"
+                android:id="@+id/tv_cryprocurrencies_market_cap_item_per_change"
                 style="@style/Text.Small"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

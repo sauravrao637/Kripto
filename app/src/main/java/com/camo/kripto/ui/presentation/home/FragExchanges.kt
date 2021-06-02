@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.camo.kripto.R
 import com.camo.kripto.databinding.FragExchangesBinding
 import com.camo.kripto.ui.adapter.ExchangesAdapter
-import com.camo.kripto.ui.adapter.MCLoadStateAdapter
+import com.camo.kripto.ui.adapter.CMCLoadStateAdapter
 import com.camo.kripto.ui.viewModel.MarketCapVM
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -37,8 +37,6 @@ class FragExchanges : Fragment() {
         binding = FragExchangesBinding.inflate(LayoutInflater.from(context))
         (activity as MainActivity).supportActionBar?.title =
             context?.resources?.getString(R.string.exchanges)
-
-        setupVM()
         setupUI()
         getExchanges()
         return binding.root
@@ -49,7 +47,7 @@ class FragExchanges : Fragment() {
         adapter = ExchangesAdapter(ExchangesAdapter.Comparator)
         initAdapters()
         binding.rvFragExchanges1.adapter =
-            adapter.withLoadStateFooter(footer = MCLoadStateAdapter { adapter.retry() })
+            adapter.withLoadStateFooter(footer = CMCLoadStateAdapter { adapter.retry() })
         binding.root.setOnRefreshListener {
             refresh()
             binding.root.isRefreshing = false
@@ -58,9 +56,6 @@ class FragExchanges : Fragment() {
 
     private fun refresh() {
         getExchanges()
-    }
-
-    private fun setupVM() {
     }
 
     private fun showEmptyList(show: Boolean) {

@@ -13,6 +13,7 @@ import com.camo.kripto.local.model.FavCoin
 import com.camo.kripto.databinding.ActivityCoinBinding
 import com.camo.kripto.ui.presentation.settings.SettingsActivity
 import com.camo.kripto.ui.adapter.CoinActivityTabAdapter
+import com.camo.kripto.ui.presentation.BaseActivity
 import com.camo.kripto.ui.viewModel.CoinActivityVM
 import com.camo.kripto.utils.Status
 import com.camo.kripto.utils.ThemeUtil
@@ -24,19 +25,15 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CoinActivity : AppCompatActivity() {
+class CoinActivity : BaseActivity() {
 
     private lateinit var binding: ActivityCoinBinding
     private val viewModel by viewModels<CoinActivityVM>()
     private var id: String? = null
     private var toast: Toast? = null
-    @Inject
-    lateinit var sharedPreferences: SharedPreferences
-    override fun onCreate(savedInstanceState: Bundle?) {
 
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val theme: Int = ThemeUtil.getThemeId(sharedPreferences.getString("pref_theme", ThemeUtil.THEME_RED))
-        setTheme(theme)
         binding = ActivityCoinBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

@@ -16,6 +16,7 @@ open class BaseActivity : AppCompatActivity() {
         val theme: Int =
             ThemeUtil.getThemeId(sharedPreferences.getString("pref_theme", ThemeUtil.THEME_RED))
         setTheme(theme)
+        supportActionBar?.elevation = 0f
 
     }
 }

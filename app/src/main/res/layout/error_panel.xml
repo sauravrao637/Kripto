@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/error_message_view"
+        style="@style/Text.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/general_error"
+        android:textStyle="bold"
+        tools:text="Network error" />
+
+    <Button
+        android:id="@+id/error_button_action"
+        style="@style/Buton.Borderless.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/error_snackbar_action"
+        android:textAlignment="center"
+        android:textAllCaps="true" />
+
+    <Button
+        android:id="@+id/error_button_retry"
+        style="@style/Buton.Borderless.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/retry"
+        android:textAlignment="center"
+        android:textAllCaps="true" />
+</LinearLayout>

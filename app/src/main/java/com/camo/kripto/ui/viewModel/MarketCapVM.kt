@@ -13,17 +13,20 @@ import com.camo.kripto.remote.model.Trending
 import com.camo.kripto.local.model.CoinIdName
 import com.camo.kripto.repos.Repository
 import com.camo.kripto.ui.pager.ExchangesPS
-import com.camo.kripto.ui.pager.MarketCapPS
+import com.camo.kripto.ui.pager.CryptocurrenciesMarketCapPS
 import com.camo.kripto.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MarketCapVM @Inject constructor(
-    private val cgRepo:Repository
+    private val repo: Repository
 ) : ViewModel() {
+
     var intialized = false
     var arr: Array<String>? = null
     var prefCurrency: MutableLiveData<String> = MutableLiveData<String>()
@@ -32,9 +35,11 @@ class MarketCapVM @Inject constructor(
     var trending: MutableLiveData<Resource<Trending>> = MutableLiveData()
     var currentFrag: Int? = null
 
-    fun setValues(prefCurr: String,
-                  dur: String,
-                  prefOrder: String){
+    fun setValues(
+        prefCurr: String,
+        dur: String,
+        prefOrder: String
+    ) {
         orderby.postValue(prefOrder)
         duration.postValue(dur)
         prefCurrency.postValue(prefCurr)
@@ -49,7 +54,7 @@ class MarketCapVM @Inject constructor(
         return Pager(
             PagingConfig(pageSize = 25)
         ) {
-            MarketCapPS(cgRepo,currency, order, dur, coins)
+            CryptocurrenciesMarketCapPS(repo, currency, order, dur, coins)
         }.flow.cachedIn(viewModelScope)
     }
 
@@ -57,7 +62,7 @@ class MarketCapVM @Inject constructor(
         return flow {
             emit(Resource.loading(data = null))
             try {
-                emit(Resource.success(data = cgRepo.getTrending()))
+                emit(Resource.success(data = repo.getTrending()))
             } catch (exception: Exception) {
                 exception.printStackTrace()
                 emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
@@ -69,7 +74,7 @@ class MarketCapVM @Inject constructor(
         return Pager(
             PagingConfig(pageSize = 25)
         ) {
-            ExchangesPS(cgRepo)
+            ExchangesPS(repo)
         }.flow.cachedIn(viewModelScope)
     }
 
@@ -78,6 +83,13 @@ class MarketCapVM @Inject constructor(
             var i = arr!!.indexOf(duration.value)
             i = (i + 1) % 7
             duration.postValue(arr!![i])
+        }
+    }
+
+    fun unFav(coin: CoinMarket.CoinMarketItem?) {
+        if(coin == null) return
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.removeFavCoin(coin.id)
         }
     }
 }

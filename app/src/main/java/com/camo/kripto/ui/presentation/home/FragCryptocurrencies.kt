@@ -9,14 +9,19 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.camo.kripto.R
 import com.camo.kripto.local.model.CoinIdName
-import com.camo.kripto.databinding.FragMarketBinding
+import com.camo.kripto.databinding.FragCryptocurrenciesBinding
 import com.camo.kripto.repos.Repository
-import com.camo.kripto.ui.adapter.MCLoadStateAdapter
-import com.camo.kripto.ui.adapter.MarketCapAdapter
+import com.camo.kripto.ui.adapter.CMCLoadStateAdapter
+import com.camo.kripto.ui.adapter.CryptocurrenciesMarketCapAdapter
 import com.camo.kripto.ui.viewModel.MarketCapVM
+import com.camo.kripto.utils.SwipeToDeleteCallback
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -26,13 +31,15 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
-@AndroidEntryPoint
-class FragMarket : Fragment() {
+private const val FRAG_KEY = "key"
 
-    private lateinit var adapter: MarketCapAdapter
-    private lateinit var binding: FragMarketBinding
+@AndroidEntryPoint
+class FragCryptocurrencies : Fragment() {
+
+    private lateinit var adapterCryptocurrencies: CryptocurrenciesMarketCapAdapter
+    private lateinit var binding: FragCryptocurrenciesBinding
     private val viewModel by activityViewModels<MarketCapVM>()
-    private lateinit var key: String
+    private var key: String? = null
 
     @Inject
     lateinit var repo: Repository
@@ -42,27 +49,24 @@ class FragMarket : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        key = arguments?.getString("key") ?: KEY_ALL
-        binding = FragMarketBinding.inflate(LayoutInflater.from(context))
-
-        setupVM()
+        key = arguments?.getString(FRAG_KEY) ?: KEY_ALL
+        binding = FragCryptocurrenciesBinding.inflate(LayoutInflater.from(context))
         setupUI()
-        setupObservers()
-
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupObservers()
     }
 
     private fun setupObservers() {
         viewModel.prefCurrency.observe(viewLifecycleOwner) {
-
             getNewData(it, viewModel.orderby.value, viewModel.duration.value)
-            adapter.curr = it
-
+            adapterCryptocurrencies.curr = it
         }
         viewModel.orderby.observe(viewLifecycleOwner) {
-
             getNewData(viewModel.prefCurrency.value, it, viewModel.duration.value)
-
         }
         viewModel.duration.observe(viewLifecycleOwner) {
             binding.tvDuration.text = it
@@ -70,39 +74,46 @@ class FragMarket : Fragment() {
         }
     }
 
-    private fun setupVM() {
-    }
-
     private fun setupUI() {
         binding.rvMarketCap.layoutManager = LinearLayoutManager(context)
-        adapter =
-            MarketCapAdapter(viewModel.prefCurrency.value ?: "inr", MarketCapAdapter.Comparator)
-
-//        binding.rvMarketCap.addItemDecoration(
-//            DividerItemDecoration(
-//                binding.rvMarketCap.context,
-//                (binding.rvMarketCap.layoutManager as LinearLayoutManager).orientation
-//            )
-//        )
-
+        adapterCryptocurrencies =
+            CryptocurrenciesMarketCapAdapter(
+                viewModel.prefCurrency.value ?: "inr",
+                CryptocurrenciesMarketCapAdapter.Comparator
+            )
+        if (key == KEY_FAV) {
+            val swipeHandler = object : SwipeToDeleteCallback(requireContext()) {
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    viewModel.unFav(adapterCryptocurrencies.getCoin(viewHolder.bindingAdapterPosition))
+                    refresh()
+//                    adapterCryptocurrencies.notifyDataSetChanged()
+                }
+            }
+            val itemTouchHelper = ItemTouchHelper(swipeHandler)
+            itemTouchHelper.attachToRecyclerView(binding.rvMarketCap)
+        }
         binding.root.setOnRefreshListener {
             refresh()
-            binding.root.isRefreshing = false
         }
-
-        binding.retryButton.setOnClickListener { adapter.retry() }
+        binding.retryButton.setOnClickListener { adapterCryptocurrencies.retry() }
         initAdapters()
-        binding.rvMarketCap.adapter =
-            adapter.withLoadStateFooter(footer = MCLoadStateAdapter { adapter.retry() })
-
-
+        binding.rvMarketCap.adapter = adapterCryptocurrencies.withLoadStateFooter(
+            footer = CMCLoadStateAdapter { adapterCryptocurrencies.retry() })
         binding.tvDuration.setOnClickListener {
             viewModel.toggleDuration()
+        }
+        if (key == KEY_FAV) {
+            binding.emptyList.text = "Found None, Add Some?"
+            binding.emptyList.setOnClickListener {
+                findNavController().navigate(R.id.fragMarkets)
+            }
         }
     }
 
     private fun refresh() {
         getNewData(viewModel.prefCurrency.value, viewModel.orderby.value, viewModel.duration.value)
+        adapterCryptocurrencies.notifyDataSetChanged()
+        binding.root.isRefreshing = false
     }
 
     private fun showEmptyList(show: Boolean) {
@@ -117,9 +128,9 @@ class FragMarket : Fragment() {
 
     private fun initAdapters() {
 //        TODO set able to order in fragment
-
-        adapter.addLoadStateListener { loadState ->
-            val isListEmpty = loadState.refresh is LoadState.NotLoading && adapter.itemCount == 0
+        adapterCryptocurrencies.addLoadStateListener { loadState ->
+            val isListEmpty =
+                loadState.refresh is LoadState.NotLoading && adapterCryptocurrencies.itemCount == 0
             showEmptyList(isListEmpty)
             binding.rvMarketCap.isVisible = loadState.source.refresh is LoadState.NotLoading
             binding.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
@@ -150,7 +161,7 @@ class FragMarket : Fragment() {
                 coins = withContext(Dispatchers.IO) { repo.getFavCoins() }
             }
             viewModel.getMarketCap(it, order, dur, coins).collectLatest { pagingData ->
-                adapter.submitData(pagingData)
+                adapterCryptocurrencies.submitData(pagingData)
             }
         }
     }
@@ -159,12 +170,12 @@ class FragMarket : Fragment() {
         const val KEY_ALL = "all"
         const val KEY_FAV = "fav"
 
-        fun getInst(data: String): FragMarket {
-            val myFragment = FragMarket()
-            val args = Bundle()
-            args.putString("key", data)
-            myFragment.arguments = args
-            return myFragment
-        }
+        @JvmStatic
+        fun newInstance(key: String) =
+            FragCryptocurrencies().apply {
+                arguments = Bundle().apply {
+                    putString(FRAG_KEY, key)
+                }
+            }
     }
 }

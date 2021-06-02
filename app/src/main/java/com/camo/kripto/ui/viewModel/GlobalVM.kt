@@ -1,52 +1,82 @@
 package com.camo.kripto.ui.viewModel
 
+import android.content.SharedPreferences
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.camo.kripto.remote.model.Global
 import com.camo.kripto.remote.model.GlobalDefi
 import com.camo.kripto.repos.Repository
 import com.camo.kripto.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class GlobalVM @Inject constructor(private val cgRepo: Repository) : ViewModel() {
-
+class GlobalVM @Inject constructor(
+    private val cgRepo: Repository,
+    sharedPreferences: SharedPreferences
+) : ViewModel() {
     var initialized = false
-    var title: MutableLiveData<String> = MutableLiveData("Global")
-    var globalCrypto: MutableLiveData<Resource<Global>> = MutableLiveData()
-    var globalDefi: MutableLiveData<Resource<GlobalDefi>> = MutableLiveData()
-    var prefCurrency: MutableLiveData<String> = MutableLiveData<String>()
-    var refreshed: MutableLiveData<Boolean> = MutableLiveData(false)
+    private var _globalCrypto: MutableLiveData<Resource<Global>> = MutableLiveData()
+    val globalCrypto = _globalCrypto
+    private var _globalDefi: MutableLiveData<Resource<GlobalDefi>> = MutableLiveData()
+    val globalDefi = _globalDefi
+    private var _prefCurrency: MutableLiveData<String> = MutableLiveData<String>()
+    val prefCurrency = _prefCurrency
 
-    //    var globalDefi: MutableLiveData<Resource<GlobalDefi>> = MutableLiveData()
-    fun setValues(curr: String?) {
-        prefCurrency.postValue(curr)
+    init {
+        setValues(sharedPreferences.getString("pref_currency", "inr") ?: "inr")
+        getGlobal()
+        getGlobalDefi()
     }
 
-    fun getGlobal(): Flow<Resource<Global>> {
-        return flow {
-            emit(Resource.loading(data = null))
-            try {
-                emit(Resource.success(data = cgRepo.getGlobal()))
-            } catch (exception: Exception) {
-                exception.printStackTrace()
-                emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
+    //    var globalDefi: MutableLiveData<Resource<GlobalDefi>> = MutableLiveData()
+    private fun setValues(curr: String) {
+        _prefCurrency.postValue(curr)
+    }
+
+    private var getGlobalJob: Job? = null
+    fun getGlobal() {
+        _globalCrypto.postValue(Resource.loading(data = null))
+        try {
+            getGlobalJob?.cancel()
+            getGlobalJob = viewModelScope.launch(Dispatchers.IO) {
+                Timber.d("called")
+                _globalCrypto.postValue(Resource.success(data = cgRepo.getGlobal()))
             }
+        } catch (exception: Exception) {
+            exception.printStackTrace()
+            _globalCrypto.postValue(
+                Resource.error(
+                    data = null,
+                    message = exception.message ?: "Error Occurred!"
+                )
+            )
         }
     }
 
-    fun getGlobalDefi(): Flow<Resource<GlobalDefi>> {
-        return flow {
-            emit(Resource.loading(data = null))
-            try {
-                emit(Resource.success(data = cgRepo.getGlobalDefi()))
-            } catch (exception: Exception) {
-                exception.printStackTrace()
-                emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
+    private var getGlobalDefiJob: Job? = null
+    fun getGlobalDefi() {
+        _globalDefi.postValue(Resource.loading(data = null))
+        try {
+            getGlobalDefiJob?.cancel()
+            getGlobalDefiJob = viewModelScope.launch(Dispatchers.IO) {
+                _globalDefi.postValue(Resource.success(data = cgRepo.getGlobalDefi()))
             }
+        } catch (exception: Exception) {
+            Timber.d(exception)
+            _globalDefi.postValue(
+                Resource.error(
+                    data = null,
+                    message = exception.message ?: "Error Occurred!"
+                )
+            )
         }
     }
 }

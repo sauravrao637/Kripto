@@ -10,22 +10,22 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.camo.kripto.remote.model.CoinMarket
-import com.camo.kripto.databinding.MarketCapItemBinding
+import com.camo.kripto.databinding.CryptocurrenciesMarketCapItemBinding
 import com.camo.kripto.ui.presentation.coin.CoinActivity
 import com.camo.kripto.utils.Extras
 import timber.log.Timber
 
-class MarketCapAdapter(
+class CryptocurrenciesMarketCapAdapter(
     var curr: String,
     diffCallback: DiffUtil.ItemCallback<CoinMarket.CoinMarketItem>
 ) :
-    PagingDataAdapter<CoinMarket.CoinMarketItem, MarketCapAdapter.DataHolder>(diffCallback) {
+    PagingDataAdapter<CoinMarket.CoinMarketItem, CryptocurrenciesMarketCapAdapter.DataHolder>(diffCallback) {
 
     lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataHolder {
         this.context = parent.context
-        return DataHolder(MarketCapItemBinding.inflate(LayoutInflater.from(context),parent,false))
+        return DataHolder(CryptocurrenciesMarketCapItemBinding.inflate(LayoutInflater.from(context),parent,false))
     }
 
     override fun onBindViewHolder(holder: DataHolder, position: Int) {
@@ -33,31 +33,31 @@ class MarketCapAdapter(
 
         if (coinMarketItem != null) {
 
-            Glide.with(holder.root.context)
+            Glide.with(holder.binding.root.context)
                 .load(coinMarketItem.image)
                 .fitCenter()
-                .into(holder.coinIv)
+                .into(holder.binding.ivCoin)
 
-            holder.coinName.text = coinMarketItem.symbol
-            holder.currPrice.text = Extras.getFormattedDoubleCurr(
+            holder.binding.tvCoinName.text = coinMarketItem.symbol
+            holder.binding.tvCurrentPrice.text = Extras.getFormattedDoubleCurr(
                 coinMarketItem.current_price,
                 curr,
                 suffix = ""
             )
-            holder.marketCap.text = Extras.getFormattedDoubleCurr(
+            holder.binding.tvMarketCap.text = Extras.getFormattedDoubleCurr(
                 coinMarketItem.market_cap,
                 curr,
                 suffix = ""
             )
 
             val perChange = coinMarketItem.market_cap_change
-            if(perChange>=0) holder.priceChangePercentage.setTextColor(Color.GREEN)
+            if(perChange>=0) holder.binding.tvCryprocurrenciesMarketCapItemPerChange.setTextColor(Color.GREEN)
             else{
-                holder.priceChangePercentage.setTextColor(Color.RED)
+                holder.binding.tvCryprocurrenciesMarketCapItemPerChange.setTextColor(Color.RED)
             }
-            holder.priceChangePercentage.text = Extras.getFormattedPerChange(perChange)
+            holder.binding.tvCryprocurrenciesMarketCapItemPerChange.text = Extras.getFormattedPerChange(perChange)
 
-            holder.root.setOnClickListener {
+            holder.binding.root.setOnClickListener {
                 launchActivity(coinMarketItem.id,curr)
             }
         } else {
@@ -73,14 +73,12 @@ class MarketCapAdapter(
         context.startActivity(intent)
     }
 
-    class DataHolder(marketCapItemBinding: MarketCapItemBinding) :
-        RecyclerView.ViewHolder(marketCapItemBinding.root) {
-        val root = marketCapItemBinding.root
-        val coinIv = marketCapItemBinding.ivCoin
-        val coinName = marketCapItemBinding.tvCoinName
-        val currPrice = marketCapItemBinding.tvCurrentPrice
-        val marketCap = marketCapItemBinding.tvMarketCap
-        val priceChangePercentage = marketCapItemBinding.tvDur
+    fun getCoin(bindingAdapterPosition: Int): CoinMarket.CoinMarketItem? {
+        return getItem(bindingAdapterPosition)
+    }
+
+    class DataHolder(val binding: CryptocurrenciesMarketCapItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
     }
 
     object Comparator : DiffUtil.ItemCallback<CoinMarket.CoinMarketItem>() {

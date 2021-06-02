@@ -7,7 +7,11 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
@@ -63,8 +67,7 @@ class MainActivity : BaseActivity() {
                 try {
                     if (repository.pingCG().code() == 200) {
                         setupForFirstTime()
-                    }
-                    else {
+                    } else {
                         //TODO show error nicely
                         withContext(Dispatchers.Main) {
                             Toast.makeText(
@@ -154,7 +157,6 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupVM() {
-
         if (!viewModel.intialized) {
             val curr = sharedPreferences.getString("pref_currency", "inr") ?: "inr"
             val prefDur = sharedPreferences.getString("pref_per_change_dur", "1h") ?: "1h"
@@ -170,79 +172,52 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupUI() {
-//        setting up bottomnavigation bar
-        binding?.bottomNav?.setOnNavigationItemSelectedListener {
-            when (it.itemId) {
-                R.id.menu_fav -> {
-                    viewModel.currentFrag = it.itemId
-                    actionBar?.title = resources.getString(R.string.favourites)
-                    supportFragmentManager.beginTransaction().apply {
-                        replace(R.id.fl_frag_holder, FragMarket.getInst(FragMarket.KEY_FAV))
-                        commit()
+        if (binding != null) {
+            val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            val navController = navHostFragment.navController
+            val appBarConfiguration = AppBarConfiguration(
+                topLevelDestinationIds = setOf(
+                    R.id.fragMarketFav,
+                    R.id.fragMarkets,
+                    R.id.fragMore
+                )
+            )
+            binding!!.bottomNav.setupWithNavController(navController)
+            setupActionBarWithNavController(navController, appBarConfiguration)
+            if (viewModel.currentFrag == null) {
+                when (sharedPreferences.getString("pref_def_frag", "1")) {
+                    "0" -> {
+                        navController.navigate(R.id.fragMarketFav)
                     }
-                    true
-                }
-                R.id.menu_cryptocurrencies -> {
-                    viewModel.currentFrag = it.itemId
-                    actionBar?.title = resources.getString(R.string.Cryptocurrencies)
-
-                    supportFragmentManager.beginTransaction().apply {
-                        replace(R.id.fl_frag_holder, FragMarket.getInst(FragMarket.KEY_ALL))
-                        commit()
+                    "1" -> {
+                        navController.navigate(R.id.fragMarkets)
                     }
-                    true
                 }
-                R.id.menu_more -> {
-                    viewModel.currentFrag = it.itemId
-                    supportFragmentManager.beginTransaction().apply {
-                        replace(R.id.fl_frag_holder, FragMore())
-                        commit()
-                    }
-                    true
-                }
-                R.id.menu_exchanges -> {
-                    viewModel.currentFrag = it.itemId
-                    supportFragmentManager.beginTransaction().apply {
-                        replace(R.id.fl_frag_holder, FragExchanges())
-                        commit()
-                    }
-                    true
-                }
-                else -> false
+            } else {
+                binding!!.bottomNav.selectedItemId = viewModel.currentFrag!!
             }
+            val destinationListener =
+                NavController.OnDestinationChangedListener { controller, destination, bundle ->
+                    viewModel.currentFrag = destination.id
+                }
+            navController.addOnDestinationChangedListener(destinationListener)
         }
 //        set view to default//curr fragment
-        if (viewModel.currentFrag == null) {
-            when {
-                sharedPreferences.getString("pref_def_frag", "0").equals("0") -> {
-                    binding?.bottomNav?.selectedItemId = R.id.menu_fav
-                }
-                sharedPreferences.getString("pref_def_frag", "0").equals("1") -> {
-                    binding?.bottomNav?.selectedItemId = R.id.menu_cryptocurrencies
-                }
-                sharedPreferences.getString("pref_def_frag", "0").equals("2") -> {
-                    binding?.bottomNav?.selectedItemId = R.id.menu_exchanges
-                }
-            }
-        } else {
-            binding?.bottomNav?.selectedItemId = viewModel.currentFrag!!
-        }
 
+/*
 //        setting up trending coins rv
         trendingAdapter = TrendingAdapter()
 
         binding?.rvTrending?.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding?.rvTrending?.adapter = trendingAdapter
-        // add the decoration. done.
-        // add the decoration. done.
         trendingAdapter?.curr = viewModel.prefCurrency.value ?: "inr"
         getTrending()
 
         binding?.btnRefreshTrending?.setOnClickListener {
             getTrending()
         }
-
+*/
     }
 
     private var getTrendingJob: Job? = null

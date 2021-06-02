@@ -7,11 +7,11 @@ import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.camo.kripto.R
-import com.camo.kripto.databinding.LoadMarketCapFooterViewItemBinding
+import com.camo.kripto.databinding.LoadFooterViewItemBinding
 import timber.log.Timber
 
-class MCLoadStateAdapter(private val retry: () -> Unit) :
-    LoadStateAdapter<MCLoadStateAdapter.MCLoadStateViewHolder>() {
+class CMCLoadStateAdapter(private val retry: () -> Unit) :
+    LoadStateAdapter<CMCLoadStateAdapter.MCLoadStateViewHolder>() {
 
     override fun onBindViewHolder(holder: MCLoadStateViewHolder, loadState: LoadState) {
         holder.bind(loadState)
@@ -25,7 +25,7 @@ class MCLoadStateAdapter(private val retry: () -> Unit) :
     }
 
     class MCLoadStateViewHolder(
-        private val binding: LoadMarketCapFooterViewItemBinding,
+        private val binding: LoadFooterViewItemBinding,
         retry: () -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -35,7 +35,7 @@ class MCLoadStateAdapter(private val retry: () -> Unit) :
 
         fun bind(loadState: LoadState) {
             if (loadState is LoadState.Error) {
-                binding.errorMsg.text = "some error"
+                binding.errorMsg.text = "Some Error :("
                 Timber.d(loadState.error.localizedMessage?:"error")
             }
             binding.progressBar.isVisible = loadState is LoadState.Loading
@@ -46,8 +46,8 @@ class MCLoadStateAdapter(private val retry: () -> Unit) :
         companion object {
             fun create(parent: ViewGroup, retry: () -> Unit): MCLoadStateViewHolder {
                 val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.load_market_cap_footer_view_item, parent, false)
-                val binding = LoadMarketCapFooterViewItemBinding.bind(view)
+                    .inflate(R.layout.load_footer_view_item, parent, false)
+                val binding = LoadFooterViewItemBinding.bind(view)
                 return MCLoadStateViewHolder(binding, retry)
             }
         }

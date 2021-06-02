@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph.xml"
+    app:startDestination="@id/fragMarketFav">
+
+    <fragment
+        android:id="@+id/fragMarketFav"
+        android:name="com.camo.kripto.ui.presentation.home.FragCryptocurrencies"
+        android:label="@string/favourites">
+        <argument
+            android:name="key"
+            android:defaultValue="fav" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragMore"
+        android:name="com.camo.kripto.ui.presentation.home.FragMore"
+        android:label="@string/more" />
+    <fragment
+        android:id="@+id/fragMarkets"
+        android:name="com.camo.kripto.ui.presentation.home.FragMarkets"
+        android:label="FragMarkets" />
+</navigation>

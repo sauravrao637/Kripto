@@ -7,9 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.preference.PreferenceManager
-import com.camo.kripto.remote.model.GlobalDefi
 import com.camo.kripto.databinding.FragGlobalDefiBinding
+import com.camo.kripto.remote.model.GlobalDefi
 import com.camo.kripto.ui.viewModel.GlobalVM
 import com.camo.kripto.utils.Extras
 import com.camo.kripto.utils.Status
@@ -18,6 +17,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
+
 @AndroidEntryPoint
 class FragGlobalDefi : Fragment() {
 
@@ -30,70 +30,74 @@ class FragGlobalDefi : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragGlobalDefiBinding.inflate(LayoutInflater.from(context), container, false)
-        binding.root.visibility = View.VISIBLE
-
-        setupVM()
-        setupUI()
-        setupObservers()
-
         return binding.root
     }
 
-    private fun setupVM() {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        sharedPreferences.getString("pref_currency", "inr") ?: "inr"
-    }
-
-    private fun setupUI() {
-        getGlobalDefi()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupObservers()
     }
 
     private fun setupObservers() {
         viewModel.globalDefi.observe(viewLifecycleOwner, {
             when (it.status) {
                 Status.ERROR -> {
-                    binding.pbFragGlobalDefi.visibility = View.GONE
+                    showErrorUI()
                     Timber.d(it.message ?: "some error")
                 }
                 Status.LOADING -> {
-                    binding.pbFragGlobalDefi.visibility = View.VISIBLE
+                    showLoadingUI()
                 }
                 Status.SUCCESS -> {
-                    binding.pbFragGlobalDefi.visibility = View.GONE
-                    if (it.data != null) updateView(it.data)
+                    if (it.data != null) {
+                        binding.pbFragGlobalDefi.visibility = View.GONE
+                        binding.groupFragGlobalDefi.visibility = View.VISIBLE
+                        binding.errorPanel.root.visibility = View.GONE
+                        updateView(it.data)
+                    } else {
+                        showErrorUI()
+                        Timber.d("null Defi data on success!!")
+                    }
                 }
             }
         })
-        viewModel.refreshed.observe(viewLifecycleOwner,{
-            if(it){
-                refresh()
-            }
-        })
+
+        binding.root.setOnRefreshListener {
+            refresh()
+            binding.root.isRefreshing = false
+        }
+    }
+
+    private fun showLoadingUI() {
+        binding.pbFragGlobalDefi.visibility = View.VISIBLE
+        binding.groupFragGlobalDefi.visibility = View.GONE
+        binding.errorPanel.root.visibility = View.GONE
+    }
+
+    private fun showErrorUI() {
+        binding.pbFragGlobalDefi.visibility = View.GONE
+        binding.groupFragGlobalDefi.visibility = View.GONE
+        binding.errorPanel.root.visibility = View.VISIBLE
+        //TODO show error using errorPanelHelper
     }
 
     private fun refresh() {
-        getGlobalDefi()
+        viewModel.getGlobalDefi()
     }
 
     private fun updateView(globalDefi: GlobalDefi) {
-        binding.tvFragGlobalDefiMarketCap.text = Extras.getFormattedDoubleCurr(globalDefi.data.defi_market_cap.toDouble(),"usd")
-        binding.tvFragGlobalDefiEthMarketCap.text = Extras.getFormattedDoubleCurr(globalDefi.data.eth_market_cap.toDouble(),"usd")
-        binding.tvFragGlobalDefiDefitoeth.text = Extras.getFormattedDouble(globalDefi.data.defi_to_eth_ratio.toDouble())
-        binding.tvFragGlobalDefiTv24h.text = Extras.getFormattedDoubleCurr(globalDefi.data.trading_volume_24h.toDouble(),"usd")
-        binding.tvFragGlobalDefiDefidominance.text = Extras.getFormattedDouble(globalDefi.data.defi_dominance.toDouble())
+        binding.tvFragGlobalDefiMarketCap.text =
+            Extras.getFormattedDoubleCurr(globalDefi.data.defi_market_cap.toDouble(), "usd")
+        binding.tvFragGlobalDefiEthMarketCap.text =
+            Extras.getFormattedDoubleCurr(globalDefi.data.eth_market_cap.toDouble(), "usd")
+        binding.tvFragGlobalDefiDefitoeth.text =
+            Extras.getFormattedDouble(globalDefi.data.defi_to_eth_ratio.toDouble())
+        binding.tvFragGlobalDefiTv24h.text =
+            Extras.getFormattedDoubleCurr(globalDefi.data.trading_volume_24h.toDouble(), "usd")
+        binding.tvFragGlobalDefiDefidominance.text =
+            Extras.getFormattedDouble(globalDefi.data.defi_dominance.toDouble())
         binding.tvFragGlobalDefiTopcoin.text = globalDefi.data.top_coin_name
         binding.tvFragGlobalDefiTopcoindom.text =
             Extras.getFormattedDouble(globalDefi.data.top_coin_defi_dominance)
-
-    }
-
-    private var globalDefiJob: Job? = null
-    private fun getGlobalDefi() {
-        globalDefiJob?.cancel()
-        globalDefiJob = lifecycleScope.launch {
-            viewModel.getGlobalDefi().collect {
-                viewModel.globalDefi.postValue(it)
-            }
-        }
     }
 }
