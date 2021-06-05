@@ -14,10 +14,10 @@ class SyncLocalWorker(private val appContext: Context, workerParams: WorkerParam
 
     lateinit var repository: Repository
     override suspend fun doWork(): Result {
-        var isSuccess: Boolean = true
+        var isSuccess = true
         withContext(Dispatchers.IO){
             repository = CGModule.getRepo(appContext)
-            val currencyLoaded = async{ repository.lIRcurrencies().data }
+            val currencyLoaded = async{ repository.lIRCurrencies().data }
             val coinsLoaded = async{repository.lIRCoins().data}
             if (currencyLoaded.await() == true && coinsLoaded.await() == true) {
                 Timber.d("yup success")

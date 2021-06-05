@@ -42,7 +42,6 @@ class CoinMarket : ArrayList<CoinMarket.CoinMarketItem>() {
         val market_cap_change: Double
     ) {
 
-
         data class Roi(
             val times: Double,
             val currency: String,

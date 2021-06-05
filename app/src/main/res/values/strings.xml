@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Kripto</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="pref_market">Market</string>
@@ -70,11 +69,26 @@
     <string name="app_tagline">A Cryptocurrency app for Android</string>
     <string name="contributing">Contributing</string>
     <string name="view_on_github">View on Github</string>
-    <string name="sync_wtih_server">Sync wtih Server</string>
+    <string name="sync_with_server">Sync with Server</string>
     <string name="contribution_text">Got some ideas or suggestions? feel free to contribute :) The more is done the better it gets!</string>
     <string name="percent">%</string>
     <string name="error">Error</string>
     <string name="search">Search</string>
+    <string name="general">General</string>
+    <string name="pref_theme">Theme</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="key_internet_error">No Connection</string>
+    <string name="key_error">Error</string>
+    <string name="error_image">Error Image</string>
+    <string name="key_server_error">Server Error</string>
+    <string name="app_ui_crash">UI Crash</string>
+    <string name="error_unable_to_load_graph">Unable to load graph</string>
+    <string name="general_error">Error</string>
+    <string name="error_snackbar_action">Report</string>
+    <string name="error_snackbar_message">Sorry, something went wrong.</string>
+    <string name="remove_favourite">Remove favourite</string>
+    <string name="first_time_setup_text">Hold on setting up Kripto !</string>
 
 
 </resources>

@@ -15,7 +15,6 @@ class UrlAdapter(private val dataSet: List<String?>?) :
 
     }
 
-
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
 
         val view = LayoutInflater.from(viewGroup.context)
@@ -24,7 +23,6 @@ class UrlAdapter(private val dataSet: List<String?>?) :
         return ViewHolder(view)
     }
 
-
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
 
         //TODO diable view binding for url_item
@@ -32,5 +30,4 @@ class UrlAdapter(private val dataSet: List<String?>?) :
     }
 
     override fun getItemCount() = dataSet?.size?:0
-
 }

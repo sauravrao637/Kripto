@@ -3,6 +3,7 @@ package com.camo.kripto.utils
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.widget.Toast
 import com.camo.kripto.Constants
@@ -101,5 +102,12 @@ object Extras {
         intent.putExtra(Intent.EXTRA_TEXT, "Hey Check out this Great app: ${Constants.GH_URL}")
         intent.type = "text/plain"
         context.startActivity(Intent.createChooser(intent, "Share To:"))
+    }
+
+    fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+        val activeNetworkInfo = connectivityManager!!.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
 }

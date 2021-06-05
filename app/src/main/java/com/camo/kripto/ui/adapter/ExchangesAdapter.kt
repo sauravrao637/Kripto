@@ -1,8 +1,6 @@
 package com.camo.kripto.ui.adapter
 
-import android.R.color
 import android.content.Context
-import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.view.LayoutInflater
@@ -34,7 +32,7 @@ class ExchangesAdapter(diffCallback: DiffUtil.ItemCallback<Exchanges.ExchangesIt
             holder.binding.tvExchangesTrust.text = item.trust_score.toString()
             if (item.trust_score < 5) {
                 val color = R.color.primaryColorRed
-                for (drawable in holder.binding.tvExchangesTrust.getCompoundDrawablesRelative()) {
+                for (drawable in holder.binding.tvExchangesTrust.compoundDrawablesRelative) {
                     if (drawable != null) {
                         drawable.colorFilter =
                             PorterDuffColorFilter(

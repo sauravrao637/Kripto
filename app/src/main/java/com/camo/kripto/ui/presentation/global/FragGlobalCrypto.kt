@@ -7,8 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.preference.PreferenceManager
 import com.camo.kripto.databinding.FragGlobalCryptoBinding
 import com.camo.kripto.remote.model.Global
 import com.camo.kripto.ui.viewModel.GlobalVM
@@ -23,15 +21,11 @@ import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.github.mikephil.charting.utils.MPPointF
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
 //Fragment for global data for cryptocurrency
 class FragGlobalCrypto : Fragment() {
-
 
     private lateinit var binding: FragGlobalCryptoBinding
     private val viewModel by activityViewModels<GlobalVM>()
@@ -42,48 +36,51 @@ class FragGlobalCrypto : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragGlobalCryptoBinding.inflate(LayoutInflater.from(context), container, false)
-        binding.root.visibility = View.VISIBLE
-
-        setupVM()
-        setupUI()
-        setupObservers()
-
+        updateChart()
         return binding.root
     }
 
-    private fun setupVM() {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val curr = sharedPreferences.getString("pref_currency", "inr") ?: "inr"
-
-
-    }
-
-    private fun setupUI() {
-        getGlobal()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupObservers()
     }
 
     private fun setupObservers() {
         viewModel.globalCrypto.observe(viewLifecycleOwner, {
             when (it.status) {
                 Status.ERROR -> {
-                    binding.pbFragGlobal.visibility = View.GONE
-                    Timber.d(it.message ?: "some error")
+                    showErrorUI()
+                    Timber.d(it.errorInfo?.messageStringId.toString())
                 }
                 Status.LOADING -> {
-                    binding.pbFragGlobal.visibility = View.VISIBLE
+                    showLoadingUI()
                 }
                 Status.SUCCESS -> {
                     binding.pbFragGlobal.visibility = View.GONE
+                    binding.groupFragGlobalCrypto.visibility = View.VISIBLE
+                    binding.errorPanel.root.visibility = View.GONE
                     if (it.data != null) updateView(it.data)
                 }
             }
         })
 
-        viewModel.refreshed.observe(viewLifecycleOwner,{
-            if(it){
-                refresh()
-            }
-        })
+        binding.root.setOnRefreshListener {
+            refresh()
+            binding.root.isRefreshing = false
+        }
+    }
+
+    private fun showLoadingUI() {
+        binding.pbFragGlobal.visibility = View.VISIBLE
+        binding.groupFragGlobalCrypto.visibility = View.GONE
+        binding.errorPanel.root.visibility = View.GONE
+    }
+
+    private fun showErrorUI() {
+        //TODO show error using errorPanelHelper
+        binding.errorPanel.root.visibility = View.VISIBLE
+        binding.groupFragGlobalCrypto.visibility = View.GONE
+        binding.pbFragGlobal.visibility = View.GONE
     }
 
     private fun updateView(global: Global) {
@@ -104,8 +101,6 @@ class FragGlobalCrypto : Fragment() {
             curr,
             suffix = ""
         )
-
-        updateChart()
         setData(global.data.market_cap_percentage)
     }
 
@@ -138,7 +133,6 @@ class FragGlobalCrypto : Fragment() {
         chart.isRotationEnabled = true
         chart.isHighlightPerTapEnabled = true
 
-
         chart.animateY(1000, Easing.EaseInOutQuad)
 
         val l: Legend = chart.legend
@@ -159,20 +153,9 @@ class FragGlobalCrypto : Fragment() {
         chart.setEntryLabelTextSize(14f)
     }
 
-    private fun refresh(){
-        getGlobal()
+    private fun refresh() {
+        viewModel.getGlobal()
     }
-
-    private var globalJob: Job? = null
-    private fun getGlobal() {
-        globalJob?.cancel()
-        globalJob = lifecycleScope.launch {
-            viewModel.getGlobal().collect {
-                viewModel.globalCrypto.postValue(it)
-            }
-        }
-    }
-
 
     private fun setData(graphData: Map<String, Double>) {
         val chart = binding.pieChart
@@ -190,7 +173,7 @@ class FragGlobalCrypto : Fragment() {
                 )
             )
         }
-        val dataSet = PieDataSet(entries,"")
+        val dataSet = PieDataSet(entries, "")
         dataSet.setDrawIcons(true)
         dataSet.sliceSpace = 3f
         dataSet.iconsOffset = MPPointF(0F, 40F)
@@ -215,5 +198,4 @@ class FragGlobalCrypto : Fragment() {
         chart.highlightValues(null)
         chart.invalidate()
     }
-
 }

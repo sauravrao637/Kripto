@@ -3,6 +3,8 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id "androidx.navigation.safeargs.kotlin"
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -11,10 +13,10 @@ android {
 
     defaultConfig {
         applicationId "com.camo.kripto"
-        minSdkVersion 28
+        minSdkVersion 24
         targetSdkVersion 30
-        versionCode 2
-        versionName "0.4.0"
+        versionCode 10
+        versionName "0.5.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -22,15 +24,35 @@ android {
                                       "$projectDir/schemas".toString()]
             }
         }
+        setProperty("archivesBaseName", "app")
+
     }
 
     buildTypes {
+        debug {
+            debuggable true
+//            // suffix the app id and the app name with git branch name
+            def workingBranch = getGitWorkingBranch()
+            def normalizedWorkingBranch = workingBranch.replaceFirst("^[^A-Za-z]+", "").replaceAll("[^0-9A-Za-z]+", "")
+            if (normalizedWorkingBranch.isEmpty() || workingBranch == "master" || workingBranch == "dev") {
+                // default values when branch name could not be determined or is master or dev
+                applicationIdSuffix ".debug"
+                resValue "string", "app_name", "Kript Debug"
+            } else {
+                applicationIdSuffix ".debug." + normalizedWorkingBranch
+                resValue "string", "app_name", "Kripto " + workingBranch
+                archivesBaseName = 'Kripto_' + normalizedWorkingBranch
+            }
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            resValue "string", "app_name", "Kripto"
+            archivesBaseName = 'app'
         }
-
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -45,7 +67,6 @@ android {
         generateStubs = true
     }
 }
-
 dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -78,7 +99,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.12.0'
 
     //preferenceFragment
-    implementation( 'androidx.preference:preference-ktx:1.1.1')
+    implementation('androidx.preference:preference-ktx:1.1.1')
     androidTestImplementation 'androidx.test:rules:1.4.0-alpha06'
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.4.0-alpha06'
 
@@ -117,4 +138,27 @@ dependencies {
     // optional - Multiprocess support
     implementation "androidx.work:work-multiprocess:$work_version"
 
+    //Navigation
+    def nav_version = "2.3.5"
+    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
+    implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+    // Feature module Support
+    implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
+    androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
+
+}
+static String getGitWorkingBranch() {
+    try {
+        def gitProcess = "git rev-parse --abbrev-ref HEAD".execute()
+        gitProcess.waitFor()
+        if (gitProcess.exitValue() == 0) {
+            return gitProcess.text.trim()
+        } else {
+            // not a git repository
+            return ""
+        }
+    } catch (IOException ignored) {
+        // git was not found
+        return ""
+    }
 }

@@ -8,87 +8,85 @@ import java.util.ArrayList;
  */
 
 public class ThemeUtil {
-    public static final int THEME_RED = 0;
-    public static final int THEME_PINK = 1;
-    public static final int THEME_PURPLE = 2;
-    public static final int THEME_DEEPPURPLE = 3;
-    public static final int THEME_INDIGO = 4;
-    public static final int THEME_BLUE = 5;
-    public static final int THEME_LIGHTBLUE = 6;
-    public static final int THEME_CYAN = 7;
-    public static final int THEME_TEAL = 8;
-    public static final int THEME_GREEN = 9;
-    public static final int THEME_LIGHTGREEN = 10;
-    public static final int THEME_LIME = 11;
-    public static final int THEME_YELLOW = 12;
-    public static final int THEME_AMBER = 13;
-    public static final int THEME_ORANGE = 14;
-    public static final int THEME_DEEPORANGE = 15;
-    public static final int THEME_BROWN = 16;
-    public static final int THEME_GRAY = 17;
-    public static final int THEME_BLUEGRAY = 18;
+    public static final String THEME_RED = "THEME_RED";
+    public static final String THEME_PINK = "THEME_PINK";
+    public static final String THEME_PURPLE = "THEME_PURPLE";
+    public static final String THEME_DEEPPURPLE = "THEME_DEEPPURPLE";
+    public static final String THEME_INDIGO = "THEME_INDIGO";
+    public static final String THEME_BLUE = "THEME_BLUE";
+    public static final String THEME_LIGHTBLUE = "THEME_LIGHTBLUE";
+    public static final String THEME_CYAN = "THEME_CYAN";
+    public static final String THEME_TEAL = "THEME_TEAL";
+    public static final String THEME_GREEN = "THEME_GREEN";
+    public static final String THEME_LIGHTGREEN = "THEME_LIGHTGREEN";
+    public static final String THEME_LIME = "THEME_LIME";
+    public static final String THEME_YELLOW = "THEME_YELLOW";
+    public static final String THEME_AMBER = "THEME_AMBER";
+    public static final String THEME_ORANGE = "THEME_ORANGE";
+    public static final String THEME_DEEPORANGE = "THEME_DEEPORANGE";
+    public static final String THEME_BROWN = "THEME_BROWN";
+    public static final String THEME_GRAY = "THEME_GRAY";
+    public static final String THEME_BLUEGRAY = "THEME_BLUEGRAY";
 
-    public static int getThemeId(int theme){
-        int themeId=0;
+    public static int getThemeId(String theme){
+        int themeId;
         switch (theme){
-            case THEME_RED  :
-                themeId = R.style.AppTheme_RED;
+            case THEME_PINK  :
+                themeId = R.style.AppTheme_PINK;
                 break;
-//            case THEME_PINK  :
-//                themeId = R.style.AppTheme_PINK;
-//                break;
-//            case THEME_PURPLE  :
-//                themeId = R.style.AppTheme_PURPLE;
-//                break;
-//            case THEME_DEEPPURPLE  :
-//                themeId = R.style.AppTheme_DEEPPURPLE;
-//                break;
-//            case THEME_INDIGO  :
-//                themeId = R.style.AppTheme_INDIGO;
-//                break;
-//            case THEME_BLUE  :
-//                themeId = R.style.AppTheme_BLUE;
-//                break;
-//            case THEME_LIGHTBLUE  :
-//                themeId = R.style.AppTheme_LIGHTBLUE;
-//                break;
-//            case THEME_CYAN  :
-//                themeId = R.style.AppTheme_CYAN;
-//                break;
-//            case THEME_TEAL  :
-//                themeId = R.style.AppTheme_TEAL;
-//                break;
-//            case THEME_GREEN  :
-//                themeId = R.style.AppTheme_GREEN;
-//                break;
-//            case THEME_LIGHTGREEN  :
-//                themeId = R.style.AppTheme_LIGHTGREEN;
-//                break;
-//            case THEME_LIME  :
-//                themeId = R.style.AppTheme_LIME;
-//                break;
-//            case THEME_YELLOW  :
-//                themeId = R.style.AppTheme_YELLOW;
-//                break;
-//            case THEME_AMBER  :
-//                themeId = R.style.AppTheme_AMBER;
-//                break;
-//            case THEME_ORANGE  :
-//                themeId = R.style.AppTheme_ORANGE;
-//                break;
-//            case THEME_DEEPORANGE  :
-//                themeId = R.style.AppTheme_DEEPORANGE;
-//                break;
-//            case THEME_BROWN  :
-//                themeId = R.style.AppTheme_BROWN;
-//                break;
-//            case THEME_GRAY  :
-//                themeId = R.style.AppTheme_GRAY;
-//                break;
-//            case THEME_BLUEGRAY  :
-//                themeId = R.style.AppTheme_BLUEGRAY;
-//                break;
+            case THEME_PURPLE  :
+                themeId = R.style.AppTheme_PURPLE;
+                break;
+            case THEME_DEEPPURPLE  :
+                themeId = R.style.AppTheme_DEEPPURPLE;
+                break;
+            case THEME_INDIGO  :
+                themeId = R.style.AppTheme_INDIGO;
+                break;
+            case THEME_BLUE  :
+                themeId = R.style.AppTheme_BLUE;
+                break;
+            case THEME_LIGHTBLUE  :
+                themeId = R.style.AppTheme_LIGHTBLUE;
+                break;
+            case THEME_CYAN  :
+                themeId = R.style.AppTheme_CYAN;
+                break;
+            case THEME_TEAL  :
+                themeId = R.style.AppTheme_TEAL;
+                break;
+            case THEME_GREEN  :
+                themeId = R.style.AppTheme_GREEN;
+                break;
+            case THEME_LIGHTGREEN  :
+                themeId = R.style.AppTheme_LIGHTGREEN;
+                break;
+            case THEME_LIME  :
+                themeId = R.style.AppTheme_LIME;
+                break;
+            case THEME_YELLOW  :
+                themeId = R.style.AppTheme_YELLOW;
+                break;
+            case THEME_AMBER  :
+                themeId = R.style.AppTheme_AMBER;
+                break;
+            case THEME_ORANGE  :
+                themeId = R.style.AppTheme_ORANGE;
+                break;
+            case THEME_DEEPORANGE  :
+                themeId = R.style.AppTheme_DEEPORANGE;
+                break;
+            case THEME_BROWN  :
+                themeId = R.style.AppTheme_BROWN;
+                break;
+            case THEME_GRAY  :
+                themeId = R.style.AppTheme_GRAY;
+                break;
+            case THEME_BLUEGRAY  :
+                themeId = R.style.AppTheme_BLUEGRAY;
+                break;
             default:
+                themeId = R.style.AppTheme_RED;
                 break;
         }
         return themeId;

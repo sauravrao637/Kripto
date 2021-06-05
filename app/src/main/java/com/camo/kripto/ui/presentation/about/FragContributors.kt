@@ -41,10 +41,16 @@ class FragContributors : Fragment() {
         contributorJob = CoroutineScope(Dispatchers.IO).launch {
             var contributors: Contributors? = null
             try {
-                contributors = ghApiHelper?.getContributors()
+                contributors = ghApiHelper.getContributors()
             } catch (e: Exception) {
                 Timber.d(e)
-                Toast.makeText(context, "Ooops Something went wrong", Toast.LENGTH_SHORT).show()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        context,
+                        "Ooops Something went wrong",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
             withContext(Dispatchers.Main) { adapter.setData(contributors) }
         }

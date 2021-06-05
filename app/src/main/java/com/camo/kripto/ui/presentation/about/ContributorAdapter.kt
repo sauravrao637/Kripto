@@ -13,9 +13,7 @@ class ContributorAdapter : RecyclerView.Adapter<ContributorAdapter.ContributorVH
     private lateinit var context: Context
     private var contributors: Contributors? = null
 
-    class ContributorVH(val binding: ContributorBinding) : RecyclerView.ViewHolder(binding.root) {
-
-    }
+    class ContributorVH(val binding: ContributorBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContributorVH {
         this.context = parent.context
@@ -52,6 +50,5 @@ class ContributorAdapter : RecyclerView.Adapter<ContributorAdapter.ContributorVH
     fun setData(contributors: Contributors?) {
         this.contributors = contributors
         notifyDataSetChanged()
-
     }
 }

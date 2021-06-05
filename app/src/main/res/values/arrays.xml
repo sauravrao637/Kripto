@@ -2,13 +2,11 @@
 <resources>
     <string-array name="start_screens_array" >
         <item>@string/favourites</item>
-        <item>@string/Cryptocurrencies</item>
-        <item>@string/exchanges</item>
+        <item>@string/markets</item>
     </string-array>
     <string-array name="start_screens_values">
         <item>0</item>
         <item>1</item>
-        <item>2</item>
     </string-array>
 
     <string-array name="order_by_array">
@@ -29,5 +27,48 @@
         <item>30d</item>
         <item>200d</item>
         <item>1y</item>
+    </string-array>
+
+    <string-array name="theme_array">
+        <item>RED</item>
+        <item>PINK</item>
+        <item>PURPLE</item>
+        <item>DEEP PURPLE</item>
+        <item>INDIGO</item>
+        <item>BLUE</item>
+        <item>LIGHT BLUE</item>
+        <item>CYAN</item>
+        <item>TEAL</item>
+        <item>GREEN</item>
+        <item>LIGHT GREEN</item>
+        <item>LIME</item>
+        <item>YELLOW</item>
+        <item>AMBER</item>
+        <item>ORANGE</item>
+        <item>DEEP ORANGE</item>
+        <item>BROWN</item>
+        <item>GRAY</item>
+        <item>BLUE GRAY</item>
+    </string-array>
+    <string-array name="theme_array_values">
+        <item>THEME_RED</item>
+        <item>THEME_PINK</item>
+        <item>THEME_PURPLE</item>
+        <item>THEME_DEEPPURPLE</item>
+        <item>THEME_INDIGO</item>
+        <item>THEME_BLUE</item>
+        <item>THEME_LIGHTBLUE</item>
+        <item>THEME_CYAN</item>
+        <item>THEME_TEAL</item>
+        <item>THEME_GREEN</item>
+        <item>THEME_LIGHTGREEN</item>
+        <item>THEME_LIME</item>
+        <item>THEME_YELLOW</item>
+        <item>THEME_AMBER</item>
+        <item>THEME_ORANGE</item>
+        <item>THEME_DEEPORANGE</item>
+        <item>THEME_BROWN</item>
+        <item>THEME_GRAY</item>
+        <item>THEME_BLUEGRAY</item>
     </string-array>
 </resources>

@@ -2,7 +2,7 @@
     xmlns:aapt="http://schemas.android.com/aapt"
     android:width="108dp"
     android:height="108dp"
-    android:autoMirrored="true"
+    android:autoMirrored="false"
     android:viewportWidth="108"
     android:viewportHeight="108">
     <path android:pathData="M87,54C87,72.21 72.21,87 54,87C35.79,87 21,72.21 21,54C21,35.79 35.79,21 54,21C72.21,21 87,35.79 87,54Z">

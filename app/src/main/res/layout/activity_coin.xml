@@ -6,15 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".ui.presentation.coin.CoinActivity">
 
-    <TextView
-        android:id="@+id/tv_error_msg"
+    <include
+        android:id="@+id/error_panel"
+        layout="@layout/error_panel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/error"
-        android:textColor="?attr/colorAccent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pb" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/pb"
@@ -26,6 +27,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_activity_coin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="tabLayout,viewPager" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"

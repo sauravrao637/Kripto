@@ -2,6 +2,7 @@ package com.camo.kripto.remote.api
 
 import com.camo.kripto.local.model.Coin
 import com.camo.kripto.remote.model.*
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -40,7 +41,7 @@ interface CGService {
         @Query("vs_currency") curr: String,
         @Query("days")days: String,
 
-    ): MarketChart
+    ): Response<MarketChart>
 
     @GET("search/trending")
     suspend fun getTrending(): Trending
@@ -56,4 +57,7 @@ interface CGService {
 
     @GET("global/decentralized_finance_defi")
     suspend fun getGlobalDefi(): GlobalDefi
+
+    @GET("ping")
+    suspend fun ping(): Response<Any>
 }

@@ -20,7 +20,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object CGModule {
 
-
     @Singleton
     @Provides
     fun getRetrofit(): Retrofit {

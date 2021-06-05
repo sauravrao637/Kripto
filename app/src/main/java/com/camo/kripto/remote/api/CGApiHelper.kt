@@ -4,13 +4,16 @@ import com.camo.kripto.remote.model.CoinCD
 import com.camo.kripto.remote.model.CoinMarket
 import com.camo.kripto.remote.model.MarketChart
 import com.camo.kripto.local.model.CoinIdName
+import retrofit2.Response
 import javax.inject.Inject
 
 class CGApiHelper @Inject constructor(private val cgService: CGService) : CGApiHelperIF {
 
     //    id_asc, id_desc
     override suspend fun getCoins() = cgService.getCoins()
+
     override suspend fun getSupportedCurr() = cgService.getSupportedCurr()
+
     override suspend fun getMarketCap(
         curr: String?,
         page: Int,
@@ -18,14 +21,13 @@ class CGApiHelper @Inject constructor(private val cgService: CGService) : CGApiH
         duration: String?,
         ids: List<CoinIdName>?
     ): List<CoinMarket.CoinMarketItem> {
-
         var s = ""
-        if (ids != null && ids.isNotEmpty()) {
+        if (ids != null) {
+            if(ids.isEmpty()) return listOf()
             for (i in ids) {
                 s += i.id + ","
             }
         }
-
         return cgService.getMarketCap(
             curr ?: "inr",
             25,
@@ -43,7 +45,7 @@ class CGApiHelper @Inject constructor(private val cgService: CGService) : CGApiH
         )
     }
 
-    override suspend fun getMarketChart(id: String, curr: String, days: String): MarketChart {
+    override suspend fun getMarketChart(id: String, curr: String, days: String): Response<MarketChart> {
         return cgService.getCoinMarketChart(id, curr, days)
     }
 
@@ -54,4 +56,6 @@ class CGApiHelper @Inject constructor(private val cgService: CGService) : CGApiH
     override suspend fun getExchanges(page: Int) = cgService.getExchanges(25, page)
 
     override suspend fun getGlobalDefi() = cgService.getGlobalDefi()
+
+    override suspend fun ping() = cgService.ping()
 }

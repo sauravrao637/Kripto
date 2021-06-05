@@ -3,9 +3,8 @@ package com.camo.kripto.ui.presentation.about
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.camo.kripto.remote.api.GHApiHelper
 
-class AboutTabAdapter(fragmentActivity: FragmentActivity, private val ghApiHelper: GHApiHelper?) :
+class AboutTabAdapter(fragmentActivity: FragmentActivity) :
     FragmentStateAdapter(fragmentActivity) {
     companion object {
         private const val TOTAL_TABS = 2
