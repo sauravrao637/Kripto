@@ -3,12 +3,9 @@ package com.camo.kripto.ui.presentation.global
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
-import androidx.activity.viewModels
-import androidx.preference.PreferenceManager
 import com.camo.kripto.databinding.ActivityGlobalBinding
 import com.camo.kripto.ui.adapter.GlobalActivityTabAdapter
 import com.camo.kripto.ui.presentation.BaseActivity
-import com.camo.kripto.ui.viewModel.GlobalVM
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,7 +23,7 @@ class GlobalActivity : BaseActivity() {
     }
 
     private fun setupUI() {
-        val adapter = GlobalActivityTabAdapter(this)
+        val adapter = GlobalActivityTabAdapter(this@GlobalActivity)
         binding.viewPagerGlobalActivity.adapter = adapter
         TabLayoutMediator(
             binding.tabLayoutGlobalActivity,

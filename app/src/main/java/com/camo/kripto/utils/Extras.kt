@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import com.camo.kripto.Constants
 import timber.log.Timber
 import java.text.DateFormat

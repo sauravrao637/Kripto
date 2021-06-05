@@ -8,5 +8,4 @@ import androidx.room.PrimaryKey
 class Coin( @PrimaryKey
             override val id: String,
             override val name: String,
-            val symbol: String) : CoinIdName{
-}
+            val symbol: String) : CoinIdName

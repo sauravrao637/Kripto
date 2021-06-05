@@ -9,7 +9,7 @@ import com.camo.kripto.databinding.FragMarketsBinding
 import com.camo.kripto.ui.adapter.MarketsTabAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 
-class FragMarkets: Fragment() {
+class FragMarkets : Fragment() {
     private lateinit var binding: FragMarketsBinding
 
     override fun onCreateView(
@@ -17,25 +17,22 @@ class FragMarkets: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragMarketsBinding.inflate(inflater,container,false)
+        binding = FragMarketsBinding.inflate(inflater, container, false)
         setupUI()
-
         return binding.root
     }
 
     private fun setupUI() {
-        val adapter = activity?.let {
-            MarketsTabAdapter(
-                it
-            )
-        }
-        binding.vpFragMarkets1.adapter = adapter
+        if (activity != null) {
+            val adapter = MarketsTabAdapter(requireActivity())
+            binding.vpFragMarkets1.adapter = adapter
 
-        TabLayoutMediator(binding.tlFragMarkets1, binding.vpFragMarkets1) { tab, position ->
-            when (position) {
-                0 -> tab.text = "Cryptocurrencies"
-                1 -> tab.text = "Exchanges"
-            }
-        }.attach()
+            TabLayoutMediator(binding.tlFragMarkets1, binding.vpFragMarkets1) { tab, position ->
+                when (position) {
+                    0 -> tab.text = "Cryptocurrencies"
+                    1 -> tab.text = "Exchanges"
+                }
+            }.attach()
+        }
     }
 }

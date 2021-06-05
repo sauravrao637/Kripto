@@ -3,8 +3,6 @@ package com.camo.kripto.ui.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.camo.kripto.ui.presentation.coin.FragCoinInfo
-import com.camo.kripto.ui.presentation.coin.FragPriceChart
 import com.camo.kripto.ui.presentation.home.FragCryptocurrencies
 import com.camo.kripto.ui.presentation.home.FragExchanges
 

@@ -41,7 +41,7 @@ interface CGService {
         @Query("vs_currency") curr: String,
         @Query("days")days: String,
 
-    ): MarketChart
+    ): Response<MarketChart>
 
     @GET("search/trending")
     suspend fun getTrending(): Trending

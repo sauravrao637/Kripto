@@ -1,5 +1,7 @@
 package com.camo.kripto.repos
 
+import com.camo.kripto.error.ErrorInfo
+import com.camo.kripto.error.ErrorCause
 import com.camo.kripto.local.AppDb
 import com.camo.kripto.local.model.Coin
 import com.camo.kripto.local.model.CoinIdName
@@ -7,8 +9,11 @@ import com.camo.kripto.local.model.Currency
 import com.camo.kripto.local.model.FavCoin
 import com.camo.kripto.remote.api.CGApiHelper
 import com.camo.kripto.remote.model.CoinMarket
+import com.camo.kripto.remote.model.MarketChart
 import com.camo.kripto.utils.Resource
-import com.camo.kripto.utils.Status
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import retrofit2.Response
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -20,7 +25,7 @@ class Repository @Inject constructor(private val db: AppDb, private val cgApiHel
 
     suspend fun getFavCoins(): List<FavCoin> = db.favCoinDao().getFavCoins()
 
-    suspend fun count(id: String): Int = db.favCoinDao().count(id)
+    suspend fun coinCountByID(id: String): Int = db.favCoinDao().count(id)
 
     suspend fun addCurrencies(currencies: List<Currency>) {
         db.currencyDao().deleteAllCurrencies()
@@ -29,7 +34,7 @@ class Repository @Inject constructor(private val db: AppDb, private val cgApiHel
 
     suspend fun getCurrencies(): List<Currency> = db.currencyDao().getCurrencies()
 
-    suspend fun lIRcurrencies(): Resource<Boolean> {
+    suspend fun lIRCurrencies(): Resource<Boolean> {
         val curr = ArrayList<Currency>()
         return try {
             val strings = getSupportedCurr()
@@ -38,11 +43,10 @@ class Repository @Inject constructor(private val db: AppDb, private val cgApiHel
             }
             clearCurrencies()
             addCurrencies(curr)
-            Resource(Status.SUCCESS, true, "success")
+            Resource.success(true)
         } catch (e: Exception) {
             Timber.d(e.message.toString())
-            Resource(Status.ERROR, false, e.message)
-
+            Resource.error(false, ErrorInfo(e, ErrorCause.LOAD_IN_ROOM_CURRENCIES))
         }
     }
 
@@ -52,10 +56,10 @@ class Repository @Inject constructor(private val db: AppDb, private val cgApiHel
             coins = getCoins()
             clearCoins()
             addCoins(coins)
-            Resource(Status.SUCCESS, true, "success")
+            Resource.success(true)
         } catch (e: Exception) {
             Timber.d(e.message.toString())
-            Resource(Status.ERROR, false, e.message)
+            Resource.error(false, ErrorInfo(e, ErrorCause.LOAD_IN_ROOM_COINS))
         }
     }
 
@@ -73,14 +77,42 @@ class Repository @Inject constructor(private val db: AppDb, private val cgApiHel
 
     suspend fun getCoins() = cgApiHelper.getCoins()
 
-    suspend fun getCoinFilterByName(name: String) = db.coinDao().getCoinFilterByName("%$name%")
+    suspend fun getCoinFilterByName(name: String): List<CoinWithFavStatus> {
+        val list = ArrayList<CoinWithFavStatus>()
+        for (coin in db.coinDao().getCoinFilterByName("%$name%")) {
+            if(coinCountByID(coin.id)>0)list.add(CoinWithFavStatus(coin,true))
+            else list.add(CoinWithFavStatus(coin,false))
+        }
+        return list
+    }
+
+    class CoinWithFavStatus(val coin: Coin, var isFav: Boolean)
 
     suspend fun getCurrentData(id: String) = cgApiHelper.getCurrentData(id)
 
     suspend fun getSupportedCurr() = cgApiHelper.getSupportedCurr()
 
-    suspend fun getMarketChart(id: String, curr: String, days: String) =
-        cgApiHelper.getMarketChart(id, curr, days)
+    suspend fun getMarketChart(
+        id: String,
+        curr: String,
+        days: String
+    ): Flow<Resource<MarketChart>> {
+        return flow {
+            emit(Resource.loading(null))
+            try {
+                val res = cgApiHelper.getMarketChart(id, curr, days)
+                if (res.isSuccessful && res.code() == 200) {
+                    if (res.body() != null) emit(Resource.success(res.body()!!))
+                    else emit(Resource.error(null, ErrorInfo(null, ErrorCause.GET_MARKET_CHART)))
+                } else {
+                    emit(Resource.error(null, ErrorInfo(null, ErrorCause.GET_MARKET_CHART)))
+                }
+            } catch (e: java.lang.Exception) {
+                Timber.d(e)
+                emit(Resource.error(null, ErrorInfo(e, ErrorCause.GET_MARKET_CHART)))
+            }
+        }
+    }
 
     suspend fun getMarketCap(
         curr: String?,
@@ -101,5 +133,17 @@ class Repository @Inject constructor(private val db: AppDb, private val cgApiHel
 
     suspend fun getGlobalDefi() = cgApiHelper.getGlobalDefi()
 
-    suspend fun pingCG() = cgApiHelper.ping()
+    suspend fun pingCG(): Flow<Resource<Response<Any>>> {
+        return flow {
+            emit(Resource.loading(data = null))
+            try {
+                val res = cgApiHelper.ping()
+                if (res.isSuccessful && res.code() == 200) emit(Resource.success(res))
+                else emit(Resource.error(res, ErrorInfo(null, ErrorCause.PING_CG)))
+            } catch (e: Exception) {
+                Timber.d(e)
+                emit(Resource.error(null, ErrorInfo(e, ErrorCause.PING_CG)))
+            }
+        }
+    }
 }

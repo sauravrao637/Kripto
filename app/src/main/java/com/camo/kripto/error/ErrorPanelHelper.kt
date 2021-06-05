@@ -5,16 +5,14 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import com.camo.kripto.R
 import com.camo.kripto.ktx.isInterruptedCaused
 import com.camo.kripto.ktx.isNetworkRelated
 import timber.log.Timber
 
 class ErrorPanelHelper(
-    private val fragment: Fragment,
-    val rootView: View,
-    val onRetry:() -> Unit
+    rootView: View,
+    val onRetry: () -> Unit
 ) {
     private val context: Context = rootView.context!!
     private val errorPanelRoot: View = rootView.findViewById(R.id.error_panel)
@@ -22,8 +20,11 @@ class ErrorPanelHelper(
     private val errorButtonAction: Button = errorPanelRoot.findViewById(R.id.error_button_action)
     private val errorButtonRetry: Button = errorPanelRoot.findViewById(R.id.error_button_retry)
 
-    fun showError(errorInfo: ErrorInfo) {
-
+    fun showError(errorInfo: ErrorInfo?) {
+        if(errorInfo == null){
+            showTextError("Error")
+            return
+        }
         if (errorInfo.throwable != null && errorInfo.throwable!!.isInterruptedCaused) {
             if (DEBUG) {
                 Timber.d(errorInfo.throwable)
@@ -78,7 +79,7 @@ class ErrorPanelHelper(
 
     companion object {
         val TAG: String = ErrorPanelHelper::class.simpleName!!
-        val DEBUG: Boolean = false
+        const val DEBUG: Boolean = false
     }
 
 }

@@ -1,14 +1,12 @@
 package com.camo.kripto.ui.presentation.settings
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.DropDownPreference
 import androidx.preference.PreferenceFragmentCompat
 import com.camo.kripto.R
 import com.camo.kripto.local.model.Currency
 import com.camo.kripto.repos.Repository
-import com.camo.kripto.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

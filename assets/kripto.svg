@@ -4,90 +4,88 @@
     <defs>
         <path
             d="M87 54C87 72.21 72.21 87 54 87C35.79 87 21 72.21 21 54C21 35.79 35.79 21 54 21C72.21 21 87 35.79 87 54Z"
-            id="b26mg2lWZV"></path>
+            id="b26mg2lWZV" />
         <linearGradient gradientUnits="userSpaceOnUse" id="gradientbfKJ1AB3Z" x1="54" x2="54"
             y1="21" y2="87">
-            <stop style="stop-color: #eaa506;stop-opacity: 1" offset="0%"></stop>
-            <stop style="stop-color: #561400;stop-opacity: 1" offset="100%"></stop>
+            <stop style="stop-color: #eaa506;stop-opacity: 1" offset="0%" />
+            <stop style="stop-color: #561400;stop-opacity: 1" offset="100%" />
         </linearGradient>
         <path
             d="M55.79 35.05L77.82 45.98L78.01 67.22L69.63 71.08L69.63 74.28L81.13 68.91L81.13 44.3L55.79 32.08L49.86 34.86L49.86 38.01L55.79 35.05Z"
-            id="c7btlTwEo"></path>
+            id="c7btlTwEo" />
         <path
             d="M58.96 75.85L36.93 64.92L36.74 43.68L45.12 39.82L45.12 36.62L33.62 41.99L33.62 66.6L58.96 78.81L64.89 76.04L64.89 72.89L58.96 75.85Z"
-            id="a27tQDxtc"></path>
-        <path d="M45.56 53.48L71.25 77.44L71.25 82L45.56 57.86L45.56 53.48Z" id="a2TsQNu0ff"></path>
-        <path d="M65.32 36.14L71.25 30.49L71.25 26L61.88 34.69L65.32 36.14Z" id="c1xVVNyx0Y"></path>
+            id="a27tQDxtc" />
+        <path d="M45.56 53.48L71.25 77.44L71.25 82L45.56 57.86L45.56 53.48Z" id="a2TsQNu0ff" />
+        <path d="M65.32 36.14L71.25 30.49L71.25 26L61.88 34.69L65.32 36.14Z" id="c1xVVNyx0Y" />
         <path
             d="M41.23 76.66L34.41 76.57L34.41 80.55L45.31 80.55L45.31 72.34L41.33 70.41L41.23 76.66Z"
-            id="b3wJIS46oO"></path>
-        <path d="M45.78 53.36L60.38 40.22L57.14 38.55L45.56 49.19L45.78 53.36Z"
-            id="a96vKuRafa"></path>
+            id="b3wJIS46oO" />
+        <path d="M45.78 53.36L60.38 40.22L57.14 38.55L45.56 49.19L45.78 53.36Z" id="a96vKuRafa" />
         <path d="M41 31.82L34.18 31.91L34.18 27.93L45.07 27.93L45.07 36.13L41.09 38.07L41 31.82Z"
-            id="aI88QnuYM"></path>
-        <path d="M41.16 63.71L45.11 65.99L45.11 40.08L40.89 42.12L41.16 63.71Z"
-            id="aGNdeoyBX"></path>
+            id="aI88QnuYM" />
+        <path d="M41.16 63.71L45.11 65.99L45.11 40.08L40.89 42.12L41.16 63.71Z" id="aGNdeoyBX" />
     </defs>
     <g>
         <g>
             <g>
-                <use fill="url(#gradientbfKJ1AB3Z)" opacity="1" xlink:href="#b26mg2lWZV"></use>
+                <use fill="url(#gradientbfKJ1AB3Z)" opacity="1" xlink:href="#b26mg2lWZV" />
             </g>
             <g>
                 <g>
-                    <use fill="#000000" fill-opacity="1" opacity="1" xlink:href="#c7btlTwEo"></use>
+                    <use fill="#000000" fill-opacity="1" opacity="1" xlink:href="#c7btlTwEo" />
                     <g>
                         <use fill-opacity="0" opacity="1" stroke="#000000" stroke-opacity="1"
-                            stroke-width="1" xlink:href="#c7btlTwEo"></use>
+                            stroke-width="1" xlink:href="#c7btlTwEo" />
                     </g>
                 </g>
                 <g>
-                    <use fill="#000000" fill-opacity="1" opacity="1" xlink:href="#a27tQDxtc"></use>
+                    <use fill="#000000" fill-opacity="1" opacity="1" xlink:href="#a27tQDxtc" />
                     <g>
                         <use fill-opacity="0" opacity="1" stroke="#000000" stroke-opacity="1"
-                            stroke-width="1" xlink:href="#a27tQDxtc"></use>
+                            stroke-width="1" xlink:href="#a27tQDxtc" />
                     </g>
                 </g>
                 <g>
-                    <use fill="#000000" fill-opacity="1" opacity="1" xlink:href="#a2TsQNu0ff"></use>
+                    <use fill="#000000" fill-opacity="1" opacity="1" xlink:href="#a2TsQNu0ff" />
                     <g>
                         <use fill-opacity="0" opacity="1" stroke="#000000" stroke-opacity="1"
-                            stroke-width="1" xlink:href="#a2TsQNu0ff"></use>
+                            stroke-width="1" xlink:href="#a2TsQNu0ff" />
                     </g>
                 </g>
                 <g>
-                    <use fill="#000000" fill-opacity="1" opacity="1" xlink:href="#c1xVVNyx0Y"></use>
+                    <use fill="#000000" fill-opacity="1" opacity="1" xlink:href="#c1xVVNyx0Y" />
                     <g>
                         <use fill-opacity="0" opacity="1" stroke="#000000" stroke-opacity="1"
-                            stroke-width="1" xlink:href="#c1xVVNyx0Y"></use>
+                            stroke-width="1" xlink:href="#c1xVVNyx0Y" />
                     </g>
                 </g>
                 <g>
-                    <use fill="#000000" fill-opacity="1" opacity="1" xlink:href="#b3wJIS46oO"></use>
+                    <use fill="#000000" fill-opacity="1" opacity="1" xlink:href="#b3wJIS46oO" />
                     <g>
                         <use fill-opacity="0" opacity="1" stroke="#000000" stroke-opacity="1"
-                            stroke-width="1" xlink:href="#b3wJIS46oO"></use>
+                            stroke-width="1" xlink:href="#b3wJIS46oO" />
                     </g>
                 </g>
                 <g>
-                    <use fill="#000000" fill-opacity="1" opacity="1" xlink:href="#a96vKuRafa"></use>
+                    <use fill="#000000" fill-opacity="1" opacity="1" xlink:href="#a96vKuRafa" />
                     <g>
                         <use fill-opacity="0" opacity="1" stroke="#000000" stroke-opacity="1"
-                            stroke-width="1" xlink:href="#a96vKuRafa"></use>
+                            stroke-width="1" xlink:href="#a96vKuRafa" />
                     </g>
                 </g>
                 <g>
-                    <use fill="#000000" fill-opacity="1" opacity="1" xlink:href="#aI88QnuYM"></use>
+                    <use fill="#000000" fill-opacity="1" opacity="1" xlink:href="#aI88QnuYM" />
                     <g>
                         <use fill-opacity="0" opacity="1" stroke="#000000" stroke-opacity="1"
-                            stroke-width="1" xlink:href="#aI88QnuYM"></use>
+                            stroke-width="1" xlink:href="#aI88QnuYM" />
                     </g>
                 </g>
                 <g>
-                    <use fill="#000000" fill-opacity="1" opacity="1" xlink:href="#aGNdeoyBX"></use>
+                    <use fill="#000000" fill-opacity="1" opacity="1" xlink:href="#aGNdeoyBX" />
                     <g>
                         <use fill-opacity="0" opacity="1" stroke="#000000" stroke-opacity="1"
-                            stroke-width="1" xlink:href="#aGNdeoyBX"></use>
+                            stroke-width="1" xlink:href="#aGNdeoyBX" />
                     </g>
                 </g>
             </g>

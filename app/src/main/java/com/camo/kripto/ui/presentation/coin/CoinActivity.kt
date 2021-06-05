@@ -1,57 +1,101 @@
 package com.camo.kripto.ui.presentation.coin
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.camo.kripto.R
-import com.camo.kripto.local.model.FavCoin
 import com.camo.kripto.databinding.ActivityCoinBinding
-import com.camo.kripto.ui.presentation.settings.SettingsActivity
+import com.camo.kripto.error.ErrorPanelHelper
 import com.camo.kripto.ui.adapter.CoinActivityTabAdapter
 import com.camo.kripto.ui.presentation.BaseActivity
+import com.camo.kripto.ui.presentation.settings.SettingsActivity
 import com.camo.kripto.ui.viewModel.CoinActivityVM
 import com.camo.kripto.utils.Status
-import com.camo.kripto.utils.ThemeUtil
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
-import timber.log.Timber
-import javax.inject.Inject
+import java.util.*
 
 @AndroidEntryPoint
 class CoinActivity : BaseActivity() {
-
+    companion object{
+        const val COIN_ID_KEY = "coinID"
+        const val COIN_NAME_KEY = "coinName"
+    }
     private lateinit var binding: ActivityCoinBinding
     private val viewModel by viewModels<CoinActivityVM>()
     private var id: String? = null
-    private var toast: Toast? = null
-
+    private var name: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCoinBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        id = intent.getStringExtra("coinId")
-        val curr = intent.getStringExtra("curr")
-
-        setupVM(curr)
+        if (id == null) {
+            id = intent.getStringExtra(COIN_ID_KEY)
+            name = intent.getStringExtra(COIN_NAME_KEY)
+            viewModel.setID(id)
+            viewModel.getCryptoCapData()
+        }
         setupUI()
-
-        getNewData(id)
-        setCurrencies()
         setupObservers()
     }
 
     private fun setupObservers() {
-        viewModel.title.observe(this, {
-            if (it != null) supportActionBar?.title = it
-        })
+        lifecycleScope.launchWhenStarted {
+            viewModel.coinData.collect { coinData ->
+                val errorPanel = ErrorPanelHelper(binding.root, ::refresh)
+                when (coinData.status) {
+                    Status.SUCCESS -> {
+                        binding.groupActivityCoin.visibility = View.VISIBLE
+                        binding.pb.visibility = View.GONE
+                        binding.errorPanel.root.visibility = View.GONE
+                        errorPanel.hide()
+                        errorPanel.dispose()
+                    }
+                    Status.ERROR -> {
+                        errorPanel.showError(coinData.errorInfo)
+                        binding.errorPanel.root.visibility = View.VISIBLE
+                        binding.pb.visibility = View.GONE
+                        binding.groupActivityCoin.visibility = View.GONE
+                    }
+                    Status.LOADING -> {
+                        binding.groupActivityCoin.visibility = View.GONE
+                        binding.pb.visibility = View.VISIBLE
+                        binding.errorPanel.root.visibility = View.GONE
+                        errorPanel.hide()
+                        errorPanel.dispose()
+                    }
+                }
+            }
+        }
+        lifecycleScope.launchWhenStarted {
+            viewModel.isFav.collect { isFav ->
+                val item = menu?.findItem(R.id.action_fav)
+                when (isFav) {
+                    null -> {
+                        item?.isVisible = false
+                    }
+                    true -> {
+                        item?.isVisible = true
+                        item?.setIcon(R.drawable.ic_star_solid)
+                        item?.setTitle(R.string.add_to_fav)
+                    }
+                    false -> {
+                        item?.isVisible = true
+                        item?.setIcon(R.drawable.ic_star)
+                        item?.setTitle(R.string.remove_favourite)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun refresh() {
+        viewModel.getCryptoCapData()
     }
 
     private fun setupUI() {
@@ -59,7 +103,7 @@ class CoinActivity : BaseActivity() {
             this
         )
         binding.viewPager.adapter = adapter
-
+        supportActionBar?.title = id?.toUpperCase(Locale.getDefault())
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             when (position) {
                 0 -> tab.text = "Price Chart"
@@ -68,128 +112,17 @@ class CoinActivity : BaseActivity() {
         }.attach()
     }
 
-    private fun setupVM(curr: String?) {
-        if(!viewModel.initialized) {
-            viewModel.setValues(curr)
-        }
-    }
-
-    private var getCurrJob: Job? = null
-    private fun setCurrencies() {
-        getCurrJob?.cancel()
-        capDataJob = lifecycleScope.launch {
-            viewModel.getSupportedCurr().collect {
-                it.let { result ->
-                    when (result.status) {
-                        Status.SUCCESS -> {
-                            binding.viewPager.visibility = View.VISIBLE
-                            binding.pb.visibility = View.GONE
-                            result.data?.let { CD ->
-                                viewModel.allCurr.postValue(CD)
-                            }
-                        }
-                        Status.ERROR -> {
-                            binding.viewPager.visibility = View.INVISIBLE
-                            binding.pb.visibility = View.GONE
-                            Toast.makeText(
-                                this@CoinActivity,
-                                "\uD83D\uDE28 Wooops" + it.message,
-                                Toast.LENGTH_LONG
-                            ).show()
-                            Timber.d(
-                                "error"
-                            )
-                        }
-                        Status.LOADING -> {
-                            binding.pb.visibility = View.VISIBLE
-                            binding.viewPager.visibility = View.INVISIBLE
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private var capDataJob: Job? = null
-    private fun getNewData(id: String?) {
-        capDataJob?.cancel()
-        Timber.d("launching capDataJob")
-        capDataJob = lifecycleScope.launch {
-            viewModel.getCurrentData(id ?: "bitcoin").collect {
-                it.let { result ->
-                    when (result.status) {
-                        Status.LOADING -> {
-                            Timber.d("coin loading")
-                            binding.pb.visibility = View.VISIBLE
-                            binding.viewPager.visibility = View.INVISIBLE
-                            binding.tabLayout.visibility = View.INVISIBLE
-                            binding.tvErrorMsg.visibility = View.INVISIBLE
-                        }
-                        Status.ERROR -> {
-                            Timber.d("coin error")
-                            binding.pb.visibility = View.INVISIBLE
-                            binding.tvErrorMsg.visibility = View.VISIBLE
-                        }
-
-                        Status.SUCCESS -> {
-                            Timber.d("coin success")
-                            binding.pb.visibility = View.GONE
-                            binding.viewPager.visibility = View.VISIBLE
-                            binding.tabLayout.visibility = View.VISIBLE
-                            binding.tvErrorMsg.visibility = View.INVISIBLE
-                            viewModel.currentCoinData.postValue(result.data)
-                            if (it.data?.id?.let { it1 ->
-                                    withContext(Dispatchers.IO) {
-                                        viewModel.getCount(
-                                            it1
-                                        )
-                                    }
-                                } != 0) setFavStatus(true)
-                        }
-                    }
-
-                }
-            }
-        }
-    }
-
-    private fun setFavStatus(boolean: Boolean, show: Boolean = false) {
-        if (menu == null) return
-        var icon = R.drawable.ic_star_solid
-        var msg = "Added"
-        if (!boolean) {
-            icon = R.drawable.ic_star
-            msg = "Removed"
-        }
-        if (show) {
-            toast?.cancel()
-            toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT)
-            toast?.show()
-        }
-        this.menu?.findItem(R.id.action_fav)?.setIcon(icon)
-    }
-
     private var menu: Menu? = null
-
-
-    private var toggleFavJob: Job? = null
-    private fun toggleFav(id: String, name: String) {
-        toggleFavJob?.cancel()
-        toggleFavJob = lifecycleScope.launch {
-            if (withContext(Dispatchers.IO) { viewModel.getCount(id) } == 0) {
-                withContext(Dispatchers.IO) { viewModel.addFavCoin(FavCoin(id, name)) }
-                setFavStatus(boolean = true, show = true)
-            } else {
-                withContext(Dispatchers.IO) { viewModel.removeFavCoin(id) }
-                setFavStatus(boolean = false, show = true)
-            }
-        }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.coin_menu, menu)
         this.menu = menu
+        if(viewModel.isFav.value == true) {
+            menu?.findItem(R.id.action_fav)?.setIcon(R.drawable.ic_star_solid)
+        }
+        else {
+            menu?.findItem(R.id.action_fav)?.setIcon(R.drawable.ic_star)
+        }
         return true
     }
 
@@ -201,12 +134,11 @@ class CoinActivity : BaseActivity() {
             true
         }
         R.id.action_refresh -> {
-            getNewData(id)
+            refresh()
             true
         }
         R.id.action_fav -> {
-            val coinCd = viewModel.currentCoinData.value
-            if (coinCd != null) toggleFav(coinCd.id, coinCd.name)
+            if (id != null && name != null) viewModel.toggleFav(id!!, name!!)
             true
         }
         android.R.id.home -> {

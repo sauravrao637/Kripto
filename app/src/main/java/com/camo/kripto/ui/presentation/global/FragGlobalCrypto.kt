@@ -7,12 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
-import com.camo.kripto.R
 import com.camo.kripto.databinding.FragGlobalCryptoBinding
-import com.camo.kripto.error.ErrorInfo
-import com.camo.kripto.error.ErrorPanelHelper
-import com.camo.kripto.error.UserAction
 import com.camo.kripto.remote.model.Global
 import com.camo.kripto.ui.viewModel.GlobalVM
 import com.camo.kripto.utils.Extras
@@ -26,10 +21,6 @@ import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.github.mikephil.charting.utils.MPPointF
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -59,7 +50,7 @@ class FragGlobalCrypto : Fragment() {
             when (it.status) {
                 Status.ERROR -> {
                     showErrorUI()
-                    Timber.d(it.message ?: "some error")
+                    Timber.d(it.errorInfo?.messageStringId.toString())
                 }
                 Status.LOADING -> {
                     showLoadingUI()

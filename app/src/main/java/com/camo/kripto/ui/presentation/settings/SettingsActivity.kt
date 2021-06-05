@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.TaskStackBuilder
 import androidx.lifecycle.Observer
 import androidx.work.*
@@ -15,10 +14,8 @@ import com.camo.kripto.R
 import com.camo.kripto.databinding.ActivitySettingsBinding
 import com.camo.kripto.ui.presentation.BaseActivity
 import com.camo.kripto.ui.presentation.home.MainActivity
-import com.camo.kripto.utils.ThemeUtil
 import com.camo.kripto.works.SyncLocalWorker
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingsActivity : BaseActivity() {

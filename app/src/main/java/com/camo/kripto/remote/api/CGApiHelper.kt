@@ -4,6 +4,7 @@ import com.camo.kripto.remote.model.CoinCD
 import com.camo.kripto.remote.model.CoinMarket
 import com.camo.kripto.remote.model.MarketChart
 import com.camo.kripto.local.model.CoinIdName
+import retrofit2.Response
 import javax.inject.Inject
 
 class CGApiHelper @Inject constructor(private val cgService: CGService) : CGApiHelperIF {
@@ -44,7 +45,7 @@ class CGApiHelper @Inject constructor(private val cgService: CGService) : CGApiH
         )
     }
 
-    override suspend fun getMarketChart(id: String, curr: String, days: String): MarketChart {
+    override suspend fun getMarketChart(id: String, curr: String, days: String): Response<MarketChart> {
         return cgService.getCoinMarketChart(id, curr, days)
     }
 

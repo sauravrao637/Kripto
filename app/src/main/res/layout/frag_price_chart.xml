@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -93,120 +94,104 @@
 
         </LinearLayout>
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="240dp"
             android:layout_margin="0dp">
 
-            <LinearLayout
+            <include
+                android:id="@+id/error_panel"
+                layout="@layout/error_panel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:orientation="vertical">
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <ProgressBar
-                    android:id="@+id/pb_chart"
-                    style="?android:attr/progressBarStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="0dp"
-                    tools:layout_marginBottom="16dp" />
-
-                <Button
-                    android:id="@+id/btn_refreshGraph"
-                    style="@style/Buton.Borderless.Colored"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/action_refresh" />
-            </LinearLayout>
+            <ProgressBar
+                android:id="@+id/pb_chart"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart"
-                android:layout_width="match_parent"
-                android:layout_height="240dp"
-                android:layout_marginBottom="2dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:isScrollContainer="true"
                 android:longClickable="true"
-                android:outlineProvider="bounds">
+                android:outlineProvider="bounds"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
             </com.github.mikephil.charting.charts.LineChart>
 
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
-            android:id="@+id/ll_duration"
+        <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="2dp"
-            android:orientation="horizontal"
-            android:padding="4dp">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-            <TextView
-                android:id="@+id/tv_24h"
+            <RadioGroup
+                android:id="@+id/radioGroup_chart_duration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="2dp"
-                android:layout_weight="1"
-                android:padding="2dp"
-                android:text="@string/_24h"
-                android:textAlignment="center" />
+                android:orientation="horizontal"
+                android:padding="2dp">
 
-            <TextView
-                android:id="@+id/tv_7d"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="2dp"
-                android:layout_weight="1"
-                android:padding="2dp"
-                android:text="@string/_7d"
-                android:textAlignment="center" />
+                <RadioButton
+                    android:id="@+id/rb_24h"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:text="@string/_24h" />
 
-            <TextView
-                android:id="@+id/tv_2w"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="2dp"
-                android:layout_weight="1"
-                android:padding="2dp"
-                android:text="@string/_2w"
-                android:textAlignment="center" />
+                <RadioButton
+                    android:id="@+id/rb_7d"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:text="@string/_7d" />
 
-            <TextView
-                android:id="@+id/tv_1m"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="2dp"
-                android:layout_weight="1"
-                android:padding="2dp"
-                android:text="@string/_1m"
-                android:textAlignment="center" />
+                <RadioButton
+                    android:id="@+id/rb_2w"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:text="@string/_2w" />
 
-            <TextView
-                android:id="@+id/tv_2m"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="2dp"
-                android:layout_weight="1"
-                android:padding="2dp"
-                android:text="@string/_2m"
-                android:textAlignment="center" />
+                <RadioButton
+                    android:id="@+id/rb_1m"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:text="@string/_1m" />
 
-            <TextView
-                android:id="@+id/tv_200d"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="2dp"
-                android:layout_weight="1"
-                android:padding="2dp"
-                android:text="@string/_200d"
-                android:textAlignment="center" />
-        </LinearLayout>
+                <RadioButton
+                    android:id="@+id/rb_2m"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:text="@string/_2m" />
+
+                <RadioButton
+                    android:id="@+id/rb_200d"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:text="@string/_200d" />
+            </RadioGroup>
+        </HorizontalScrollView>
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -21,7 +21,7 @@ interface CGApiHelperIF {
 
     suspend fun getCurrentData(id: String): CoinCD
 
-    suspend fun getMarketChart(id: String, curr: String, days: String): MarketChart
+    suspend fun getMarketChart(id: String, curr: String, days: String): Response<MarketChart>
 
     suspend fun getTrending(): Trending
 

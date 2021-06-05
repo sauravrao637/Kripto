@@ -58,7 +58,7 @@ class CryptocurrenciesMarketCapAdapter(
             holder.binding.tvCryprocurrenciesMarketCapItemPerChange.text = Extras.getFormattedPerChange(perChange)
 
             holder.binding.root.setOnClickListener {
-                launchActivity(coinMarketItem.id,curr)
+                launchActivity(coinMarketItem.id,coinMarketItem.name)
             }
         } else {
             Timber.d( "coinItem is null")
@@ -66,10 +66,10 @@ class CryptocurrenciesMarketCapAdapter(
 
     }
 
-    private fun launchActivity(id: String?, curr: String) {
+    private fun launchActivity(id: String?, name: String) {
         val intent = Intent(context, CoinActivity::class.java)
-        intent.putExtra("coinId", id)
-        intent.putExtra("curr",curr)
+        intent.putExtra(CoinActivity.COIN_ID_KEY, id)
+        intent.putExtra(CoinActivity.COIN_NAME_KEY,name)
         context.startActivity(intent)
     }
 
@@ -78,8 +78,7 @@ class CryptocurrenciesMarketCapAdapter(
     }
 
     class DataHolder(val binding: CryptocurrenciesMarketCapItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-    }
+        RecyclerView.ViewHolder(binding.root)
 
     object Comparator : DiffUtil.ItemCallback<CoinMarket.CoinMarketItem>() {
         override fun areItemsTheSame(

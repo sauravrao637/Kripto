@@ -10,33 +10,32 @@ import java.io.StringWriter
 
 @Parcelize
 class ErrorInfo(
-    val stackTraces: Array<String>,
-    val userAction: UserAction,
+    val stackTraces: Array<String>?,
+    val errorCause: ErrorCause,
     val messageStringId: Int,
     @Transient // no need to store throwable, all data for report is in other variables
     var throwable: Throwable? = null
 ) : Parcelable {
 
-    private constructor(
-        throwable: Throwable,
-        userAction: UserAction
+    constructor(
+        throwable: Throwable?,
+        errorCause: ErrorCause
     ) : this(
-        throwableToStringList(throwable),
-        userAction,
-        getMessageStringId(throwable, userAction),
+        throwable?.let { throwableToStringList(it) },
+        errorCause,
+        getMessageStringId(throwable, errorCause),
         throwable
     )
 
-    private constructor(
+    constructor(
         throwable: List<Throwable>,
-        userAction: UserAction
+        errorCause: ErrorCause
     ) : this(
         throwableListToStringList(throwable),
-        userAction,
-        getMessageStringId(throwable.firstOrNull(), userAction),
+        errorCause,
+        getMessageStringId(throwable.firstOrNull(), errorCause),
         throwable.firstOrNull()
     )
-
 
     companion object {
         private fun getStackTrace(throwable: Throwable): String {
@@ -56,12 +55,13 @@ class ErrorInfo(
         @StringRes
         private fun getMessageStringId(
             throwable: Throwable?,
-            action: UserAction
+            action: ErrorCause
         ): Int {
             return when {
                 throwable != null && throwable.isNetworkRelated -> R.string.key_internet_error
-                action == UserAction.UI_ERROR -> R.string.app_ui_crash
-                action == UserAction.REQUESTED_GRAPH -> R.string.error_unable_to_load_graph
+                action == ErrorCause.UI_ERROR -> R.string.app_ui_crash
+                action == ErrorCause.GET_MARKET_CHART -> R.string.error_unable_to_load_graph
+                action == ErrorCause.PING_CG -> R.string.key_server_error
                 else -> R.string.general_error
             }
         }

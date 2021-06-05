@@ -7,6 +7,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.camo.kripto.error.ErrorCause
 import com.camo.kripto.remote.model.CoinMarket
 import com.camo.kripto.remote.model.Exchanges
 import com.camo.kripto.remote.model.Trending
@@ -20,6 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -63,9 +65,9 @@ class MarketCapVM @Inject constructor(
             emit(Resource.loading(data = null))
             try {
                 emit(Resource.success(data = repo.getTrending()))
-            } catch (exception: Exception) {
-                exception.printStackTrace()
-                emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
+            } catch (e: Exception) {
+                Timber.d(e)
+                emit(Resource.error(data = null, com.camo.kripto.error.ErrorInfo(e,ErrorCause.GET_TRENDING)))
             }
         }
     }

@@ -7,17 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.presentation.coin.CoinActivity">
 
-    <ProgressBar
-        android:id="@+id/pb_global_activity"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout_global_activity"
         android:layout_width="match_parent"
@@ -35,8 +24,6 @@
         android:id="@+id/viewPager_global_activity"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_below="@id/tabLayout_global_activity"
-        android:layout_centerInParent="true"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

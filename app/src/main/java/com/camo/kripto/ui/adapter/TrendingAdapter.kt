@@ -23,7 +23,7 @@ class TrendingAdapter :
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val textView: TextView = view.findViewById(R.id.tv_trending_coin)
         val imageView: ImageView = view.findViewById(R.id.iv_trending)
-        val root = view.rootView
+        val root: View = view.rootView
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {

@@ -6,16 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import com.camo.kripto.databinding.FragGlobalDefiBinding
 import com.camo.kripto.remote.model.GlobalDefi
 import com.camo.kripto.ui.viewModel.GlobalVM
 import com.camo.kripto.utils.Extras
 import com.camo.kripto.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -43,7 +39,6 @@ class FragGlobalDefi : Fragment() {
             when (it.status) {
                 Status.ERROR -> {
                     showErrorUI()
-                    Timber.d(it.message ?: "some error")
                 }
                 Status.LOADING -> {
                     showLoadingUI()

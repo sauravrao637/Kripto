@@ -4,17 +4,17 @@
     <defs>
         <path
             d="M87 54C87 72.21 72.21 87 54 87C35.79 87 21 72.21 21 54C21 35.79 35.79 21 54 21C72.21 21 87 35.79 87 54Z"
-            id="bg75gooN"></path>
+            id="bg75gooN"/>
         <linearGradient gradientUnits="userSpaceOnUse" id="gradienta1sLrleU6n" x1="54" x2="54"
             y1="21" y2="87">
-            <stop style="stop-color: #eaa506;stop-opacity: 1" offset="0%"></stop>
-            <stop style="stop-color: #561400;stop-opacity: 1" offset="100%"></stop>
+            <stop style="stop-color: #eaa506;stop-opacity: 1" offset="0%"/>
+            <stop style="stop-color: #561400;stop-opacity: 1" offset="100%"/>
         </linearGradient>
     </defs>
     <g>
         <g>
             <g>
-                <use fill="url(#gradienta1sLrleU6n)" opacity="1" xlink:href="#bg75gooN"></use>
+                <use fill="url(#gradienta1sLrleU6n)" opacity="1" xlink:href="#bg75gooN"/>
             </g>
         </g>
     </g>

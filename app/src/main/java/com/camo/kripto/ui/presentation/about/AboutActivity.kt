@@ -31,7 +31,7 @@ class AboutActivity : BaseActivity() {
 
     private fun setupUI() {
         val adapter = AboutTabAdapter(
-            this, ghApiHelper
+            this
         )
         binding.viewPager.adapter = adapter
 
