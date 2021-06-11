@@ -25,8 +25,7 @@
                 android:layout_height="@dimen/size_48dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                card_view:layout_constraintBottom_toBottomOf="parent"
+                android:contentDescription="@string/exchangeplatformlogo"
                 card_view:layout_constraintStart_toStartOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@tools:sample/avatars" />
@@ -83,6 +82,35 @@
                 card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintTop_toTopOf="@+id/tv_exchanges_name"
                 card_view:srcCompat="@drawable/ic_link" />
+
+            <LinearLayout
+                android:id="@+id/details"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@id/iv_exchanges_1">
+
+                <TextView
+                    android:id="@+id/tv_country"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="India" />
+
+                <TextView
+                    android:id="@+id/tv_year_established"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="1999" />
+
+                <TextView
+                    android:id="@+id/tv_exchage_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="dsdsddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" />
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

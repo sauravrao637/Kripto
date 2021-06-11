@@ -18,7 +18,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#1f1d1c"
+            android:background="?attr/colorSecondary"
             android:orientation="horizontal">
 
             <ImageView
@@ -41,6 +41,7 @@
                 android:singleLine="true"
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="?attr/colorOnSecondary"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintStart_toStartOf="parent"

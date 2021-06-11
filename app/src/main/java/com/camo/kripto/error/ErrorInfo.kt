@@ -4,7 +4,8 @@ import android.os.Parcelable
 import androidx.annotation.StringRes
 import com.camo.kripto.R
 import com.camo.kripto.ktx.isNetworkRelated
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
+import okhttp3.ResponseBody
 import java.io.PrintWriter
 import java.io.StringWriter
 
@@ -27,6 +28,13 @@ class ErrorInfo(
         throwable
     )
 
+    constructor(res: ResponseBody?) : this(
+        null,
+        getErrorCause(res),
+        getMessageStringId(null, getErrorCause(res)),
+        null
+    )
+
     constructor(
         throwable: List<Throwable>,
         errorCause: ErrorCause
@@ -47,6 +55,11 @@ class ErrorInfo(
             }
         }
 
+        private fun getErrorCause(res: ResponseBody?): ErrorCause {
+            //TODO anaylyse res and return cause
+            return ErrorCause.GENERAL_ERROR
+        }
+
         fun throwableToStringList(throwable: Throwable) = arrayOf(getStackTrace(throwable))
 
         fun throwableListToStringList(throwable: List<Throwable>) =
@@ -62,6 +75,7 @@ class ErrorInfo(
                 action == ErrorCause.UI_ERROR -> R.string.app_ui_crash
                 action == ErrorCause.GET_MARKET_CHART -> R.string.error_unable_to_load_graph
                 action == ErrorCause.PING_CG -> R.string.key_server_error
+                action == ErrorCause.SYNC_FAILED -> R.string.key_server_error
                 else -> R.string.general_error
             }
         }

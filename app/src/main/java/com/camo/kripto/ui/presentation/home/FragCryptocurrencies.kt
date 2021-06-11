@@ -85,8 +85,7 @@ class FragCryptocurrencies : Fragment() {
             val swipeHandler = object : SwipeToDeleteCallback(requireContext()) {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     viewModel.unFav(adapterCryptocurrencies.getCoin(viewHolder.bindingAdapterPosition))
-                    refresh()
-//                    adapterCryptocurrencies.notifyDataSetChanged()
+                    adapterCryptocurrencies.notifyItemRemoved(viewHolder.bindingAdapterPosition)
                 }
             }
             val itemTouchHelper = ItemTouchHelper(swipeHandler)
@@ -103,7 +102,7 @@ class FragCryptocurrencies : Fragment() {
             viewModel.toggleDuration()
         }
         if (key == KEY_FAV) {
-            binding.emptyList.text = "Found None, Add Some?"
+            binding.emptyList.text = context?.getString(R.string.empty_favourites_msg)
             binding.emptyList.setOnClickListener {
                 findNavController().navigate(R.id.fragMarkets)
             }

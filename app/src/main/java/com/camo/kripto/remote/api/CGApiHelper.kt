@@ -4,6 +4,7 @@ import com.camo.kripto.remote.model.CoinCD
 import com.camo.kripto.remote.model.CoinMarket
 import com.camo.kripto.remote.model.MarketChart
 import com.camo.kripto.local.model.CoinIdName
+import com.camo.kripto.remote.model.ExchangeRates
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -58,4 +59,6 @@ class CGApiHelper @Inject constructor(private val cgService: CGService) : CGApiH
     override suspend fun getGlobalDefi() = cgService.getGlobalDefi()
 
     override suspend fun ping() = cgService.ping()
+
+    override suspend fun getExchangeRates(): Response<ExchangeRates> = cgService.getExchangeRates()
 }

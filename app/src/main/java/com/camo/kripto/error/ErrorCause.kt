@@ -11,5 +11,8 @@ enum class ErrorCause(val message: String) {
     GET_SUPPORTED_CURRENCIES("get supported currencies"),
     GET_GLOBAL_DATA("get global market cap data"),
     GET_GLOBAL_DEFI_DATA("get global defi data"),
-    GET_TRENDING("get trending");
+    GET_TRENDING("get trending"),
+    SYNC_FAILED("sync failed"),
+    EXCHANGE_RATE("couldn't get exchange rates"),
+    GENERAL_ERROR("testing error");
 }

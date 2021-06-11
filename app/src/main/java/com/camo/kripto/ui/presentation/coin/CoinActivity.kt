@@ -8,6 +8,8 @@ import androidx.lifecycle.lifecycleScope
 import com.camo.kripto.R
 import com.camo.kripto.databinding.ActivityCoinBinding
 import com.camo.kripto.error.ErrorPanelHelper
+import com.camo.kripto.ktx.enforceSingleScrollDirection
+import com.camo.kripto.ktx.recyclerView
 import com.camo.kripto.ui.adapter.CoinActivityTabAdapter
 import com.camo.kripto.ui.presentation.BaseActivity
 import com.camo.kripto.ui.presentation.settings.SettingsActivity
@@ -103,6 +105,7 @@ class CoinActivity : BaseActivity() {
             this
         )
         binding.viewPager.adapter = adapter
+        binding.viewPager.recyclerView.enforceSingleScrollDirection()
         supportActionBar?.title = id?.toUpperCase(Locale.getDefault())
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             when (position) {

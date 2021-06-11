@@ -7,35 +7,58 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.camo.kripto.error.ErrorCause
-import com.camo.kripto.remote.model.CoinMarket
-import com.camo.kripto.remote.model.Exchanges
-import com.camo.kripto.remote.model.Trending
+import com.bumptech.glide.load.engine.Resource
 import com.camo.kripto.local.model.CoinIdName
+import com.camo.kripto.remote.model.CoinMarket
+import com.camo.kripto.remote.model.ExchangeRates
+import com.camo.kripto.remote.model.Exchanges
 import com.camo.kripto.repos.Repository
-import com.camo.kripto.ui.pager.ExchangesPS
 import com.camo.kripto.ui.pager.CryptocurrenciesMarketCapPS
-import com.camo.kripto.utils.Resource
+import com.camo.kripto.ui.pager.ExchangesPS
+import com.camo.kripto.utils.Status
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import timber.log.Timber
+import kotlinx.coroutines.withContext
+import retrofit2.Response
 import javax.inject.Inject
+import com.camo.kripto.utils.Resource as ResourceUtil
 
 @HiltViewModel
 class MarketCapVM @Inject constructor(
     private val repo: Repository
 ) : ViewModel() {
 
+    private val _exchangeRates =
+        MutableStateFlow<ResourceUtil<Response<ExchangeRates>>>(ResourceUtil.loading(null))
+    var exchangeRates = _exchangeRates.asStateFlow()
     var intialized = false
     var arr: Array<String>? = null
     var prefCurrency: MutableLiveData<String> = MutableLiveData<String>()
     var orderby: MutableLiveData<String> = MutableLiveData<String>()
     var duration: MutableLiveData<String> = MutableLiveData<String>()
-    var trending: MutableLiveData<Resource<Trending>> = MutableLiveData()
     var currentFrag: Int? = null
+
+    init {
+        getExchangeRates()
+    }
+
+    private var exchageRatesJob: Job? = null
+    fun getExchangeRates() {
+        exchageRatesJob?.cancel()
+        exchageRatesJob = viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                repo.getExchangeRates().collect {
+                    _exchangeRates.value = it
+                }
+            }
+        }
+    }
 
     fun setValues(
         prefCurr: String,
@@ -60,18 +83,6 @@ class MarketCapVM @Inject constructor(
         }.flow.cachedIn(viewModelScope)
     }
 
-    fun getTrending(): Flow<Resource<Trending>> {
-        return flow {
-            emit(Resource.loading(data = null))
-            try {
-                emit(Resource.success(data = repo.getTrending()))
-            } catch (e: Exception) {
-                Timber.d(e)
-                emit(Resource.error(data = null, com.camo.kripto.error.ErrorInfo(e,ErrorCause.GET_TRENDING)))
-            }
-        }
-    }
-
     fun getExchanges(): Flow<PagingData<Exchanges.ExchangesItem>> {
         return Pager(
             PagingConfig(pageSize = 25)
@@ -89,7 +100,7 @@ class MarketCapVM @Inject constructor(
     }
 
     fun unFav(coin: CoinMarket.CoinMarketItem?) {
-        if(coin == null) return
+        if (coin == null) return
         viewModelScope.launch(Dispatchers.IO) {
             repo.removeFavCoin(coin.id)
         }

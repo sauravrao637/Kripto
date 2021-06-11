@@ -30,7 +30,6 @@ class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel by viewModels<MarketCapVM>()
     private var actionBar: ActionBar? = null
-    private var trendingAdapter: TrendingAdapter? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,32 +45,6 @@ class MainActivity : BaseActivity() {
 
         setupVM()
         setupUI()
-        setupObservers()
-    }
-
-    private fun setupObservers() {
-        viewModel.trending.observe(this, {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    binding.rvTrending.visibility = View.VISIBLE
-                    binding.pbTrending.visibility = View.GONE
-                    binding.btnRefreshTrending.visibility = View.GONE
-                    if (it.data != null) {
-//                TODO get marketCap data for trending
-                        trendingAdapter?.list = it.data.coins
-                    }
-                }
-                Status.LOADING -> {
-                    binding.rvTrending.visibility = View.INVISIBLE
-                    binding.pbTrending.visibility = View.INVISIBLE
-                }
-                Status.ERROR -> {
-                    binding.rvTrending.visibility = View.INVISIBLE
-                    binding.pbTrending.visibility = View.INVISIBLE
-                    binding.btnRefreshTrending.visibility = View.VISIBLE
-                }
-            }
-        })
     }
 
     private fun setupVM() {
@@ -121,30 +94,6 @@ class MainActivity : BaseActivity() {
         navController.addOnDestinationChangedListener(destinationListener)
         //        set view to default//curr fragment
 
-/*
-//        setting up trending coins rv
-        trendingAdapter = TrendingAdapter()
-
-        binding?.rvTrending?.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding?.rvTrending?.adapter = trendingAdapter
-        trendingAdapter?.curr = viewModel.prefCurrency.value ?: "inr"
-        getTrending()
-
-        binding?.btnRefreshTrending?.setOnClickListener {
-            getTrending()
-        }
-*/
-    }
-
-    private var getTrendingJob: Job? = null
-    private fun getTrending() {
-        getTrendingJob?.cancel()
-        getTrendingJob = lifecycleScope.launch {
-            viewModel.getTrending().collect {
-                viewModel.trending.postValue(it)
-            }
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

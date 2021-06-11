@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import com.camo.kripto.databinding.ActivityGlobalBinding
+import com.camo.kripto.ktx.enforceSingleScrollDirection
+import com.camo.kripto.ktx.recyclerView
 import com.camo.kripto.ui.adapter.GlobalActivityTabAdapter
 import com.camo.kripto.ui.presentation.BaseActivity
 import com.google.android.material.tabs.TabLayoutMediator
@@ -25,6 +27,7 @@ class GlobalActivity : BaseActivity() {
     private fun setupUI() {
         val adapter = GlobalActivityTabAdapter(this@GlobalActivity)
         binding.viewPagerGlobalActivity.adapter = adapter
+        binding.viewPagerGlobalActivity.recyclerView.enforceSingleScrollDirection()
         TabLayoutMediator(
             binding.tabLayoutGlobalActivity,
             binding.viewPagerGlobalActivity

@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.camo.kripto.databinding.FragMarketsBinding
+import com.camo.kripto.ktx.enforceSingleScrollDirection
+import com.camo.kripto.ktx.recyclerView
 import com.camo.kripto.ui.adapter.MarketsTabAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -34,5 +36,7 @@ class FragMarkets : Fragment() {
                 }
             }.attach()
         }
+        binding.vpFragMarkets1.recyclerView.enforceSingleScrollDirection()
     }
+
 }

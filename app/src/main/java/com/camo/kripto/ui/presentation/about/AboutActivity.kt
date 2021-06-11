@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import com.camo.kripto.databinding.ActivityAboutBinding
+import com.camo.kripto.ktx.enforceSingleScrollDirection
+import com.camo.kripto.ktx.recyclerView
 import com.camo.kripto.remote.api.GHApiHelper
 import com.camo.kripto.ui.presentation.BaseActivity
 import com.camo.kripto.utils.Extras
@@ -34,7 +36,7 @@ class AboutActivity : BaseActivity() {
             this
         )
         binding.viewPager.adapter = adapter
-
+        binding.viewPager.recyclerView.enforceSingleScrollDirection()
         TabLayoutMediator(binding.tabLayoutActivityAbout, binding.viewPager) { tab, position ->
             when (position) {
                 0 -> tab.text = "About"

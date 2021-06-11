@@ -1,5 +1,6 @@
 package com.camo.kripto.repos
 
+import com.camo.kripto.remote.model.Trending
 import com.camo.kripto.error.ErrorInfo
 import com.camo.kripto.error.ErrorCause
 import com.camo.kripto.local.AppDb
@@ -9,10 +10,13 @@ import com.camo.kripto.local.model.Currency
 import com.camo.kripto.local.model.FavCoin
 import com.camo.kripto.remote.api.CGApiHelper
 import com.camo.kripto.remote.model.CoinMarket
+import com.camo.kripto.remote.model.ExchangeRates
 import com.camo.kripto.remote.model.MarketChart
 import com.camo.kripto.utils.Resource
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 import timber.log.Timber
 import javax.inject.Inject
@@ -80,8 +84,8 @@ class Repository @Inject constructor(private val db: AppDb, private val cgApiHel
     suspend fun getCoinFilterByName(name: String): List<CoinWithFavStatus> {
         val list = ArrayList<CoinWithFavStatus>()
         for (coin in db.coinDao().getCoinFilterByName("%$name%")) {
-            if(coinCountByID(coin.id)>0)list.add(CoinWithFavStatus(coin,true))
-            else list.add(CoinWithFavStatus(coin,false))
+            if (coinCountByID(coin.id) > 0) list.add(CoinWithFavStatus(coin, true))
+            else list.add(CoinWithFavStatus(coin, false))
         }
         return list
     }
@@ -125,7 +129,21 @@ class Repository @Inject constructor(private val db: AppDb, private val cgApiHel
 
     suspend fun getCurrCount() = db.currencyDao().count()
 
-    suspend fun getTrending() = cgApiHelper.getTrending()
+    suspend fun getTrending(): Flow<Resource<Response<Trending>>> {
+        return flow {
+            emit(Resource.loading(null))
+            try {
+                val res = cgApiHelper.getTrending()
+                if (res.isSuccessful && res.code() == 200) emit(Resource.success(res))
+                else {
+                    emit(Resource.error(null, ErrorInfo(null, ErrorCause.GET_TRENDING)))
+                }
+            } catch (e: Exception) {
+                emit(Resource.error(null, ErrorInfo(e, ErrorCause.GET_TRENDING)))
+            }
+        }
+    }
+
 
     suspend fun getGlobal() = cgApiHelper.getGlobal()
 
@@ -139,11 +157,40 @@ class Repository @Inject constructor(private val db: AppDb, private val cgApiHel
             try {
                 val res = cgApiHelper.ping()
                 if (res.isSuccessful && res.code() == 200) emit(Resource.success(res))
-                else emit(Resource.error(res, ErrorInfo(null, ErrorCause.PING_CG)))
+                else {
+                    Timber.d(res.toString())
+                    emit(Resource.error(res, ErrorInfo(null, ErrorCause.PING_CG)))
+                }
             } catch (e: Exception) {
                 Timber.d(e)
                 emit(Resource.error(null, ErrorInfo(e, ErrorCause.PING_CG)))
             }
         }
     }
+
+    suspend fun close() {
+        withContext(Dispatchers.IO) {
+            db.close()
+        }
+    }
+
+    suspend fun getExchangeRates(): Flow<Resource<Response<ExchangeRates>>> {
+        return flow {
+            emit(Resource.loading(null))
+            try {
+                val res = cgApiHelper.getExchangeRates()
+                if (res.isSuccessful && res.code() == 200) {
+                    emit(Resource.success(res))
+                } else {
+                    Timber.d(res.toString())
+                    emit(Resource.error(res, ErrorInfo(res.errorBody())))
+                }
+            } catch (e: Exception) {
+                Timber.d(e)
+                emit(Resource.error(null, ErrorInfo(e, ErrorCause.EXCHANGE_RATE)))
+            }
+        }
+    }
 }
+
+

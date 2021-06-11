@@ -6,17 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.presentation.coin.CoinActivity">
 
-    <include
-        android:id="@+id/error_panel"
-        layout="@layout/error_panel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ProgressBar
         android:id="@+id/pb"
         style="?android:attr/progressBarStyle"
@@ -58,5 +47,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
+
+    <include
+        android:id="@+id/error_panel"
+        layout="@layout/error_panel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

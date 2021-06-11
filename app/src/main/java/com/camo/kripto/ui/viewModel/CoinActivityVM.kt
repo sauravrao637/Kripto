@@ -110,6 +110,7 @@ class CoinActivityVM @Inject constructor(
     private var crytpoCapDataJob: Job? = null
     fun getCryptoCapData() {
         crytpoCapDataJob?.cancel()
+        _coinDataState.value = Resource.loading(null)
         if (id != null) {
             crytpoCapDataJob = viewModelScope.launch(Dispatchers.IO) {
                 try {

@@ -5,9 +5,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.core.app.TaskStackBuilder
-import androidx.lifecycle.Observer
 import androidx.work.*
 import com.camo.kripto.Constants
 import com.camo.kripto.R
@@ -15,6 +13,7 @@ import com.camo.kripto.databinding.ActivitySettingsBinding
 import com.camo.kripto.ui.presentation.BaseActivity
 import com.camo.kripto.ui.presentation.home.MainActivity
 import com.camo.kripto.works.SyncLocalWorker
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,21 +21,23 @@ class SettingsActivity : BaseActivity() {
 
     private lateinit var binding: ActivitySettingsBinding
     private lateinit var listener: SharedPreferences.OnSharedPreferenceChangeListener
-
+    private lateinit var workManager: WorkManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(LayoutInflater.from(this))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         //TODO tab adapter for different settings
-
+        workManager = WorkManager.getInstance(applicationContext)
         supportActionBar?.title = "Kripto Settings"
+
         supportFragmentManager.beginTransaction()
             .replace(R.id.fl_setting_container, FragMarketSettings()).commit()
         setContentView(binding.root)
+        setupUI()
+        setupObservers()
+    }
 
-        binding.btnSync.setOnClickListener {
-            setupForFirstTime()
-        }
+    private fun setupObservers() {
         listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             when (key) {
                 "pref_theme", "pref_currency", "pref_per_change_dur", "pref_order" -> {
@@ -48,6 +49,39 @@ class SettingsActivity : BaseActivity() {
             }
         }
         sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+
+        workManager.getWorkInfosForUniqueWorkLiveData(Constants.SYNC_ALL_DATA_UNIQUE_WORK_NAME)
+            .observe(this, {
+                if (it != null && it.isNotEmpty()) {
+                    when (it[0]?.state) {
+                        WorkInfo.State.ENQUEUED -> {
+                            binding.btnSync.isEnabled = false
+                        }
+                        WorkInfo.State.CANCELLED -> {
+                            Snackbar.make(
+                                binding.root,
+                                this@SettingsActivity.getString(R.string.cancelled_sync_curse),
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                            binding.btnSync.isEnabled = true
+                        }
+                        WorkInfo.State.SUCCEEDED -> binding.btnSync.isEnabled = true
+                        WorkInfo.State.FAILED -> {
+                            binding.btnSync.isEnabled = true
+                        }
+                        WorkInfo.State.RUNNING -> binding.btnSync.isEnabled = false
+                        else -> {
+
+                        }
+                    }
+                }
+            })
+    }
+
+    private fun setupUI() {
+        binding.btnSync.setOnClickListener {
+            setupForFirstTime()
+        }
     }
 
     override fun onPause() {
@@ -57,43 +91,13 @@ class SettingsActivity : BaseActivity() {
 
     private fun setupForFirstTime() {
         val syncWorkRequest: OneTimeWorkRequest =
-            OneTimeWorkRequestBuilder<SyncLocalWorker>()
-                .setConstraints(
-                    Constraints.Builder()
-                        .setRequiredNetworkType(NetworkType.CONNECTED).build()
-                )
-                .build()
-
-        val workManager = WorkManager
-            .getInstance(this@SettingsActivity)
+            OneTimeWorkRequestBuilder<SyncLocalWorker>().build()
 
         workManager.enqueueUniqueWork(
             Constants.SYNC_ALL_DATA_UNIQUE_WORK_NAME,
-            ExistingWorkPolicy.KEEP,
+            ExistingWorkPolicy.REPLACE,
             syncWorkRequest
         )
-
-        workManager.getWorkInfoByIdLiveData(syncWorkRequest.id)
-            .observeForever(object : Observer<WorkInfo> {
-                override fun onChanged(workInfo: WorkInfo?) {
-                    var text = ""
-                    if (workInfo == null) text = "Sync Failed"
-                    else {
-                        when (workInfo.state) {
-                            WorkInfo.State.ENQUEUED -> text = "SyncScheduled"
-                            WorkInfo.State.SUCCEEDED -> text = "Sync Successful"
-                            WorkInfo.State.RUNNING -> text = "Sync in progress"
-                            WorkInfo.State.FAILED -> text = "Sync Failed"
-                            WorkInfo.State.CANCELLED -> text = "Sync Cancelled"
-                            else -> {
-                            }
-                        }
-                    }
-                    Toast.makeText(this@SettingsActivity, text, Toast.LENGTH_SHORT).show()
-                    workManager.getWorkInfoByIdLiveData(syncWorkRequest.id)
-                        .removeObserver(this)
-                }
-            })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

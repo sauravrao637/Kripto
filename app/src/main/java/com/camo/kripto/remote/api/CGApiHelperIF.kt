@@ -23,7 +23,7 @@ interface CGApiHelperIF {
 
     suspend fun getMarketChart(id: String, curr: String, days: String): Response<MarketChart>
 
-    suspend fun getTrending(): Trending
+    suspend fun getTrending(): Response<Trending>
 
     suspend fun getGlobal(): Global
 
@@ -32,4 +32,6 @@ interface CGApiHelperIF {
     suspend fun getGlobalDefi(): GlobalDefi
 
     suspend fun ping(): Response<Any>
+
+    suspend fun getExchangeRates(): Response<ExchangeRates>
 }

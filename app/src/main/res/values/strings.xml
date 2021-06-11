@@ -89,6 +89,15 @@
     <string name="error_snackbar_message">Sorry, something went wrong.</string>
     <string name="remove_favourite">Remove favourite</string>
     <string name="first_time_setup_text">Hold on setting up Kripto !</string>
-
+    <string name="notification_channel_id">Kripto sync service notification</string>
+    <string name="sync_notification_title">Crunching latest data!</string>
+    <string name="cancel_sync">Cancel</string>
+    <string name="sync_notification_channel">Sync</string>
+    <string name="sync_notification_channel_desc">Get notified when getting latest data!</string>
+    <string name="cancelled_sync_curse">Cancel hi krna tha toh sync kra hi kyu #apshabd</string>
+    <string name="cancelled_sync_ftsa_curse">\"Why would u do that!? Fuk u :/\"</string>
+    <string name="enter_value">Enter Value</string>
+    <string name="empty_favourites_msg">\"Found None, Add Some?\"</string>
+    <string name="exchangeplatformlogo">ExchangePlatformLogo</string>
 
 </resources>

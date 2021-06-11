@@ -3,17 +3,23 @@ package com.camo.kripto.ui.presentation.search
 import android.os.Bundle
 import android.view.*
 import android.view.ContextMenu.ContextMenuInfo
+import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.camo.kripto.R
 import com.camo.kripto.databinding.ActivitySearchBinding
+import com.camo.kripto.error.ErrorPanelHelper
 import com.camo.kripto.local.model.FavCoin
 import com.camo.kripto.repos.Repository
 import com.camo.kripto.ui.adapter.SearchAdapter
+import com.camo.kripto.ui.adapter.TrendingAdapter
 import com.camo.kripto.ui.presentation.BaseActivity
+import com.camo.kripto.ui.viewModel.SearchActivityVM
+import com.camo.kripto.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.properties.Delegates
@@ -24,6 +30,8 @@ class SearchActivity : BaseActivity() {
 
     private lateinit var binding: ActivitySearchBinding
     private lateinit var adapter: SearchAdapter
+    private val viewModel: SearchActivityVM by viewModels()
+    private lateinit var trendingAdapter: TrendingAdapter
 
     @Inject
     lateinit var repository: Repository
@@ -37,7 +45,41 @@ class SearchActivity : BaseActivity() {
         supportActionBar?.hide()
         adapter = SearchAdapter()
         setupUI()
-
+        setupObservers()
+    }
+    private fun refreshTrending(){
+        viewModel.getTrending()
+        Timber.d("refreshing")
+    }
+    private fun setupObservers() {
+        lifecycleScope.launchWhenStarted {
+            val errorPanelHelper = ErrorPanelHelper(binding.root,::refreshTrending)
+            viewModel.trending.collect {
+                when(it.status){
+                    Status.SUCCESS ->{
+                        trendingAdapter.setData(it.data?.body()?.coins)
+                        binding.pbTrending.visibility = View.GONE
+                        binding.rvSearchResult.visibility = View.VISIBLE
+                        binding.errorPanel.root.visibility = View.GONE
+                        errorPanelHelper.dispose()
+                        errorPanelHelper.hide()
+                    }
+                    Status.ERROR ->{
+                        binding.rvSearchResult.visibility = View.GONE
+                        binding.pbTrending.visibility = View.GONE
+                        binding.errorPanel.root.visibility = View.VISIBLE
+                        errorPanelHelper.showError(it.errorInfo)
+                    }
+                    Status.LOADING ->{
+                        binding.errorPanel.root.visibility = View.GONE
+                        binding.pbTrending.visibility = View.VISIBLE
+                        binding.rvSearchResult.visibility = View.GONE
+                        errorPanelHelper.dispose()
+                        errorPanelHelper.hide()
+                    }
+                }
+            }
+        }
     }
 
     private fun setupUI() {
@@ -68,6 +110,10 @@ class SearchActivity : BaseActivity() {
                 }
             }
         })
+        trendingAdapter = TrendingAdapter()
+        binding.rvTrending.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.rvTrending.adapter = trendingAdapter
     }
 
     var filterJob: Job? = null
@@ -84,6 +130,8 @@ class SearchActivity : BaseActivity() {
             }
         }
     }
+
+
 
     var menu: ContextMenu? = null
     override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenuInfo?) {
@@ -113,7 +161,6 @@ class SearchActivity : BaseActivity() {
                 }
             }
         }
-
         return true
     }
 

@@ -44,7 +44,7 @@ interface CGService {
     ): Response<MarketChart>
 
     @GET("search/trending")
-    suspend fun getTrending(): Trending
+    suspend fun getTrending(): Response<Trending>
 
     @GET("global")
     suspend fun getGlobal() :Global
@@ -60,4 +60,7 @@ interface CGService {
 
     @GET("ping")
     suspend fun ping(): Response<Any>
+
+    @GET("exchange_rates")
+    suspend fun getExchangeRates(): Response<ExchangeRates>
 }

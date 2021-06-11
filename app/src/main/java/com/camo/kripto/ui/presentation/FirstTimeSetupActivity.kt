@@ -5,19 +5,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.lifecycle.lifecycleScope
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.WorkRequest
+import androidx.work.*
+import com.camo.kripto.R
+import com.camo.kripto.Constants
 import com.camo.kripto.databinding.ActivityFirstTimeSetupBinding
+import com.camo.kripto.error.ErrorCause
+import com.camo.kripto.error.ErrorInfo
 import com.camo.kripto.error.ErrorPanelHelper
 import com.camo.kripto.repos.Repository
 import com.camo.kripto.ui.presentation.home.MainActivity
 import com.camo.kripto.utils.Status
 import com.camo.kripto.utils.ThemeUtil.THEME_RED
 import com.camo.kripto.works.SyncLocalWorker
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -25,6 +31,7 @@ class FirstTimeSetupActivity : BaseActivity() {
 
     private lateinit var binding: ActivityFirstTimeSetupBinding
     private lateinit var errorPanel: ErrorPanelHelper
+
     @Inject
     lateinit var repository: Repository
 
@@ -46,18 +53,19 @@ class FirstTimeSetupActivity : BaseActivity() {
     private fun shouldSync() {
         lifecycleScope.launchWhenStarted {
             var count: Int
-            delay(500)
+            //minimum wait before changing activity
+            val temp = async { delay(500) }
             withContext(Dispatchers.IO) {
                 count = repository.getCurrCount()
             }
             if (count == 0) {
                 val editor = sharedPreferences.edit()
-                editor.apply{
-                    putString("pref_currency","inr")
-                    putString("pref_order","market_cap_desc")
-                    putString("pref_def_frag","0")
-                    putString("pref_per_change_dur","1h")
-                    putString("pref_theme",THEME_RED)
+                editor.apply {
+                    putString("pref_currency", "inr")
+                    putString("pref_order", "market_cap_desc")
+                    putString("pref_def_frag", "0")
+                    putString("pref_per_change_dur", "1h")
+                    putString("pref_theme", THEME_RED)
                 }
                 editor.apply()
                 repository.pingCG().collect {
@@ -76,16 +84,12 @@ class FirstTimeSetupActivity : BaseActivity() {
                             binding.pbFtsa.visibility = View.INVISIBLE
                         }
                         Status.SUCCESS -> {
-                            binding.errorPanel.root.visibility = View.INVISIBLE
-                            binding.tvFirstTimeSetup.visibility = View.INVISIBLE
-                            errorPanel.hide()
-                            errorPanel.dispose()
                             setupForFirstTime()
-                            goToMainActivity()
                         }
                     }
                 }
             } else {
+                temp.await()
                 goToMainActivity()
             }
         }
@@ -97,17 +101,51 @@ class FirstTimeSetupActivity : BaseActivity() {
         this.finish()
     }
 
-    private var firstTimeJob: Job? = null
     private fun setupForFirstTime() {
-        firstTimeJob?.cancel()
-        firstTimeJob = GlobalScope.launch(Dispatchers.IO) {
-            val syncWorkRequest: WorkRequest =
-                OneTimeWorkRequestBuilder<SyncLocalWorker>()
-                    .build()
-            WorkManager
-                .getInstance(this@FirstTimeSetupActivity)
-                .enqueue(syncWorkRequest)
-        }
+        val syncWorkRequest: OneTimeWorkRequest =
+            OneTimeWorkRequestBuilder<SyncLocalWorker>().build()
+
+        val workManager = WorkManager
+            .getInstance(applicationContext)
+
+        workManager.enqueueUniqueWork(
+            Constants.SYNC_ALL_DATA_UNIQUE_WORK_NAME,
+            ExistingWorkPolicy.REPLACE,
+            syncWorkRequest
+        )
+
+        workManager.getWorkInfoByIdLiveData(syncWorkRequest.id).observe(this, {
+            when (it.state) {
+                WorkInfo.State.SUCCEEDED -> {
+                    binding.errorPanel.root.visibility = View.INVISIBLE
+                    binding.tvFirstTimeSetup.visibility = View.INVISIBLE
+                    errorPanel.hide()
+                    errorPanel.dispose()
+                    goToMainActivity()
+                }
+                WorkInfo.State.FAILED -> {
+                    binding.tvFirstTimeSetup.visibility = View.INVISIBLE
+                    binding.errorPanel.root.visibility = View.VISIBLE
+                    errorPanel.showError(ErrorInfo(null, ErrorCause.SYNC_FAILED))
+                    binding.pbFtsa.visibility = View.INVISIBLE
+                }
+                WorkInfo.State.CANCELLED -> {
+                    Snackbar.make(
+                        binding.root,
+                        this.getString(R.string.cancelled_sync_ftsa_curse),
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                    lifecycleScope.launchWhenStarted {
+                        withContext(Dispatchers.Default) {
+                            delay(2000)
+                            finish()
+                        }
+                    }
+                }
+                else -> {
+                }
+            }
+        })
     }
 
     private fun incLaunchCount() {

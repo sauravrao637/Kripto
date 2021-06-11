@@ -21,18 +21,17 @@ class ErrorPanelHelper(
     private val errorButtonRetry: Button = errorPanelRoot.findViewById(R.id.error_button_retry)
 
     fun showError(errorInfo: ErrorInfo?) {
-        if(errorInfo == null){
+        if (errorInfo == null) {
             showTextError("Error")
             return
         }
         if (errorInfo.throwable != null && errorInfo.throwable!!.isInterruptedCaused) {
-            if (DEBUG) {
-                Timber.d(errorInfo.throwable)
-            }
+            Timber.d(errorInfo.throwable)
             return
         }
         errorButtonRetry.setOnClickListener {
             onRetry()
+            Timber.d("clicked retry")
         }
         //TODO user can report error
         errorButtonAction.isVisible = false
@@ -46,7 +45,7 @@ class ErrorPanelHelper(
         errorTextView.setText(
             when (errorInfo.throwable) {
                 else -> {
-                    // show retry button only for content which is not unavailable or unsupported
+                    // show retry button only when it should be (currently always)
                     errorButtonRetry.isVisible = true
                     if (errorInfo.throwable != null && errorInfo.throwable!!.isNetworkRelated) {
                         R.string.key_internet_error
@@ -79,7 +78,6 @@ class ErrorPanelHelper(
 
     companion object {
         val TAG: String = ErrorPanelHelper::class.simpleName!!
-        const val DEBUG: Boolean = false
     }
 
 }
