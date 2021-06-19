@@ -6,6 +6,7 @@ import com.camo.kripto.error.ErrorInfo
 import com.camo.kripto.error.ErrorCause
 import com.camo.kripto.local.model.Currency
 import com.camo.kripto.local.model.FavCoin
+import com.camo.kripto.local.model.PriceAlert
 import com.camo.kripto.remote.model.CoinCD
 import com.camo.kripto.remote.model.MarketChart
 import com.camo.kripto.repos.Repository
@@ -27,6 +28,7 @@ class CoinActivityVM @Inject constructor(
     sharedPreferences: SharedPreferences
 ) : ViewModel() {
     private var id: String? = null
+    private var name: String? = null
 
     private val _coinDataState = MutableStateFlow<Resource<CoinCD>>(Resource.loading(null))
     val coinData = _coinDataState.asStateFlow()
@@ -38,8 +40,9 @@ class CoinActivityVM @Inject constructor(
         MutableStateFlow(sharedPreferences.getString("pref_currency", "inr") ?: "inr")
     val currency = _currency.asStateFlow()
 
-    private val _supportedCurrencies = MutableLiveData<Resource<List<String>>>()
-    val supportedCurrencies: LiveData<Resource<List<String>>> get() = _supportedCurrencies
+    private val _supportedCurrencies =
+        MutableStateFlow<Resource<List<String>>>(Resource.loading(null))
+    val supportedCurrencies = _supportedCurrencies.asStateFlow()
 
     private val _isFav = MutableStateFlow<Boolean?>(null)
     val isFav = _isFav.asStateFlow()
@@ -47,6 +50,18 @@ class CoinActivityVM @Inject constructor(
     private val _marketChart = MutableStateFlow<Resource<MarketChart>>(Resource.loading(null))
     val marketChart = _marketChart.asStateFlow()
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+//  Price Alerts
+///////////////////////////////////////////////////////////////////////////////////////////////////
+    private val _priceAlerts = MutableStateFlow<List<PriceAlert>?>(null)
+    val priceAlerts = _priceAlerts.asStateFlow()
+    private val _showAllAlerts = MutableStateFlow(true)
+    val showAllAlerts = _showAllAlerts.asStateFlow()
+    private val _showEnabledAlerts = MutableStateFlow(false)
+    val showEnabledOnly = _showEnabledAlerts.asStateFlow()
+    val alertFilterState = combine(_showAllAlerts,_showEnabledAlerts){
+        a,b -> AlertFilterState(a,b)
+    }
     private val _coinDurCurrState = combine(_duration, _currency) { b, c ->
         CurrentState(b, c)
     }
@@ -57,6 +72,7 @@ class CoinActivityVM @Inject constructor(
 
     init {
         getSupportedCurr()
+        getPriceAlerts()
     }
 
     private var updateChartJob: Job? = null
@@ -80,7 +96,7 @@ class CoinActivityVM @Inject constructor(
 
     private var getSupportedCurrJob: Job? = null
     private fun getSupportedCurr() {
-        _supportedCurrencies.postValue(Resource.loading(data = null))
+        _supportedCurrencies.value = Resource.loading(data = null)
         getSupportedCurrJob = viewModelScope.launch(Dispatchers.IO) {
             val curr = ArrayList<Currency>()
             var addList = ArrayList<String>()
@@ -89,21 +105,15 @@ class CoinActivityVM @Inject constructor(
                 try {
                     addList = cgRepo.getSupportedCurr()
                 } catch (e: Exception) {
-                    _supportedCurrencies.postValue(
-                        Resource.error(
-                            null,
-                            ErrorInfo(e,ErrorCause.GET_SUPPORTED_CURRENCIES)
-                        )
-                    )
+                    _supportedCurrencies.value =
+                        Resource.error(null, ErrorInfo(e, ErrorCause.GET_SUPPORTED_CURRENCIES))
                 }
             } else {
                 for (s in curr) {
                     addList.add(s.id)
                 }
             }
-            _supportedCurrencies.postValue(
-                Resource.success(data = addList)
-            )
+            _supportedCurrencies.value = Resource.success(data = addList)
         }
     }
 
@@ -119,30 +129,34 @@ class CoinActivityVM @Inject constructor(
                     Timber.d(e)
                     _coinDataState.value = Resource.error(
                         data = null,
-                        ErrorInfo(e, ErrorCause.GET_CRPTO_MARKETCAP_DATA)
+                        ErrorInfo(e, ErrorCause.GET_CRYPTO_MARKETA_DATA)
                     )
                 }
             }
         } else {
             _coinDataState.value = Resource.error(
                 data = null,
-                ErrorInfo(null,ErrorCause.GET_CRPTO_MARKETCAP_DATA)
+                ErrorInfo(null, ErrorCause.GET_CRYPTO_MARKETA_DATA)
             )
         }
     }
 
     private var toggleFavJob: Job? = null
-    fun toggleFav(id: String, name: String) {
+    fun toggleFav() {
         toggleFavJob?.cancel()
-        var count: Int
-        toggleFavJob = viewModelScope.launch(Dispatchers.IO) {
-            count = cgRepo.coinCountByID(id)
-            if (count == 0) {
-                cgRepo.addFavCoin(FavCoin(id, name))
-                _isFav.value = true
-            } else {
-                cgRepo.removeFavCoin(id)
-                _isFav.value = false
+        val idTemp = this.id
+        val nameTemp = this.name
+        if (id != null && name != null) {
+            var count: Int
+            toggleFavJob = viewModelScope.launch(Dispatchers.IO) {
+                count = cgRepo.coinCountByID(idTemp!!)
+                if (count == 0) {
+                    cgRepo.addFavCoin(FavCoin(idTemp, nameTemp!!))
+                    _isFav.value = true
+                } else {
+                    cgRepo.removeFavCoin(nameTemp!!)
+                    _isFav.value = false
+                }
             }
         }
     }
@@ -155,13 +169,52 @@ class CoinActivityVM @Inject constructor(
         _currency.value = s
     }
 
-    fun setID(id: String?) {
+    fun setIdName(id: String, name: String) {
+        if (this.id != null && this.name != null) return
         this.id = id
-        if (id != null) {
-            viewModelScope.launch {
-                val count = cgRepo.coinCountByID(id)
-                _isFav.value = (count > 0)
+        this.name = name
+        getCryptoCapData()
+        viewModelScope.launch {
+            val count = cgRepo.coinCountByID(id)
+            _isFav.value = (count > 0)
+        }
+    }
+
+    fun getId(): String {
+        return this.id ?: "Kripto"
+    }
+
+    fun togglePriceAlert(l: Long, boolean: Boolean) {
+        viewModelScope.launch {
+            cgRepo.setPriceAlertEnabled(l, boolean)
+        }
+    }
+
+    fun deletePriceAlert(l: Long) {
+        viewModelScope.launch {
+            cgRepo.removePriceAlert(l)
+        }
+    }
+
+    fun getPriceAlerts() {
+        viewModelScope.launch {
+            cgRepo.getPriceAlerts().collect {
+                _priceAlerts.value = it
             }
         }
     }
+
+    fun getName(): String? {
+        return this.name
+    }
+
+    fun setChecked(checked: Boolean) {
+        _showAllAlerts.value = checked
+    }
+
+    fun setShowEnabledAlertsOnly(checked: Boolean) {
+        _showEnabledAlerts.value = checked
+    }
 }
+
+class AlertFilterState(val showAll: Boolean, val showEnabledOnly: Boolean)

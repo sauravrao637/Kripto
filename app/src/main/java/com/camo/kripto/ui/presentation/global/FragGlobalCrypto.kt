@@ -7,7 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.camo.kripto.databinding.FragGlobalCryptoBinding
+import com.camo.kripto.error.ErrorInfo
+import com.camo.kripto.error.ErrorPanelHelper
 import com.camo.kripto.remote.model.Global
 import com.camo.kripto.ui.viewModel.GlobalVM
 import com.camo.kripto.utils.Extras
@@ -21,7 +24,9 @@ import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.github.mikephil.charting.utils.MPPointF
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
+import java.math.BigDecimal
 
 @AndroidEntryPoint
 //Fragment for global data for cryptocurrency
@@ -29,7 +34,7 @@ class FragGlobalCrypto : Fragment() {
 
     private lateinit var binding: FragGlobalCryptoBinding
     private val viewModel by activityViewModels<GlobalVM>()
-
+    private lateinit var errorPanelHelper: ErrorPanelHelper
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,6 +42,7 @@ class FragGlobalCrypto : Fragment() {
     ): View {
         binding = FragGlobalCryptoBinding.inflate(LayoutInflater.from(context), container, false)
         updateChart()
+        errorPanelHelper = ErrorPanelHelper(binding.root,::refresh)
         return binding.root
     }
 
@@ -46,23 +52,34 @@ class FragGlobalCrypto : Fragment() {
     }
 
     private fun setupObservers() {
-        viewModel.globalCrypto.observe(viewLifecycleOwner, {
-            when (it.status) {
-                Status.ERROR -> {
-                    showErrorUI()
-                    Timber.d(it.errorInfo?.messageStringId.toString())
+        lifecycleScope.launchWhenResumed {
+                viewModel.globalCrypto.collectLatest {
+                    when (it.status) {
+                        Status.ERROR -> {
+                            showErrorUI(it.errorInfo)
+                            Timber.d(it.errorInfo?.messageStringId.toString())
+                        }
+                        Status.LOADING -> {
+                            showLoadingUI()
+                            errorPanelHelper.hide()
+                            errorPanelHelper.dispose()
+                        }
+                        Status.SUCCESS -> {
+                            if (it.data != null) {
+                                updateView(it.data)
+                                binding.pbFragGlobal.visibility = View.GONE
+                                binding.groupFragGlobalCrypto.visibility = View.VISIBLE
+                                binding.errorPanel.root.visibility = View.GONE
+                                errorPanelHelper.hide()
+                                errorPanelHelper.dispose()
+                            }else{
+                                showErrorUI(null)
+                            }
+
+                        }
+                    }
                 }
-                Status.LOADING -> {
-                    showLoadingUI()
-                }
-                Status.SUCCESS -> {
-                    binding.pbFragGlobal.visibility = View.GONE
-                    binding.groupFragGlobalCrypto.visibility = View.VISIBLE
-                    binding.errorPanel.root.visibility = View.GONE
-                    if (it.data != null) updateView(it.data)
-                }
-            }
-        })
+        }
 
         binding.root.setOnRefreshListener {
             refresh()
@@ -76,15 +93,15 @@ class FragGlobalCrypto : Fragment() {
         binding.errorPanel.root.visibility = View.GONE
     }
 
-    private fun showErrorUI() {
-        //TODO show error using errorPanelHelper
+    private fun showErrorUI(errorInfo: ErrorInfo?) {
+        errorPanelHelper.showError(errorInfo)
         binding.errorPanel.root.visibility = View.VISIBLE
         binding.groupFragGlobalCrypto.visibility = View.GONE
         binding.pbFragGlobal.visibility = View.GONE
     }
 
     private fun updateView(global: Global) {
-        val curr = viewModel.prefCurrency.value ?: "inr"
+        val curr = viewModel.prefCurrency.value
         binding.tvFragGloablActiveCryptocurrencies.text =
             global.data.active_cryptocurrencies.toString()
         binding.tvFragGlobalEndedIcos.text = global.data.ended_icos.toString()
@@ -157,7 +174,7 @@ class FragGlobalCrypto : Fragment() {
         viewModel.getGlobal()
     }
 
-    private fun setData(graphData: Map<String, Double>) {
+    private fun setData(graphData: Map<String, BigDecimal>) {
         val chart = binding.pieChart
         val entries: ArrayList<PieEntry> = ArrayList()
 

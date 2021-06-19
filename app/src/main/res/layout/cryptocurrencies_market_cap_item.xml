@@ -35,14 +35,12 @@
 
                 <TextView
                     android:id="@+id/tv_coin_name"
-                    style="@style/Text.Small"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:singleLine="true"
                     android:textAlignment="center"
                     android:textAllCaps="true"
-                    android:textColor="@color/black"
                     tools:text="btc" />
 
                 <ImageView
@@ -56,7 +54,6 @@
 
             <TextView
                 android:id="@+id/tv_current_price"
-                style="@style/Text.Small"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -64,12 +61,10 @@
                 android:fontFamily="sans-serif-condensed-light"
                 android:padding="8dp"
                 android:textAlignment="center"
-                android:textColor="@color/black"
                 tools:text='"$2486732482648"' />
 
             <TextView
                 android:id="@+id/tv_cryprocurrencies_market_cap_item_per_change"
-                style="@style/Text.Small"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -77,11 +72,10 @@
                 android:fontFamily="sans-serif-condensed-medium"
                 android:padding="8dp"
                 android:textAlignment="center"
-                tools:text='"1.2%"' />
+                tools:text="1.2%" />
 
             <TextView
                 android:id="@+id/tv_market_cap"
-                style="@style/Text.Small"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -89,7 +83,6 @@
                 android:fontFamily="sans-serif-condensed-light"
                 android:padding="8dp"
                 android:textAlignment="center"
-                android:textColor="@color/black"
                 tools:text="$383278462" />
 
         </LinearLayout>

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.work.*
+import com.camo.kripto.BuildConfig
 import com.camo.kripto.R
 import com.camo.kripto.Constants
 import com.camo.kripto.databinding.ActivityFirstTimeSetupBinding
@@ -16,6 +17,7 @@ import com.camo.kripto.repos.Repository
 import com.camo.kripto.ui.presentation.home.MainActivity
 import com.camo.kripto.utils.Status
 import com.camo.kripto.utils.ThemeUtil.THEME_RED
+import com.camo.kripto.works.PriceAlertWorker
 import com.camo.kripto.works.SyncLocalWorker
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,6 +26,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.withContext
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -31,6 +34,9 @@ class FirstTimeSetupActivity : BaseActivity() {
 
     private lateinit var binding: ActivityFirstTimeSetupBinding
     private lateinit var errorPanel: ErrorPanelHelper
+    private val workManager by lazy {
+        WorkManager.getInstance(applicationContext)
+    }
 
     @Inject
     lateinit var repository: Repository
@@ -42,6 +48,7 @@ class FirstTimeSetupActivity : BaseActivity() {
         setContentView(binding.root)
         errorPanel = ErrorPanelHelper(binding.root, ::shouldSync)
         incLaunchCount()
+        createOneTimeWorkRequest()
         shouldSync()
     }
 
@@ -159,6 +166,36 @@ class FirstTimeSetupActivity : BaseActivity() {
             var c = sharedPreferences.getInt("numRun", 0)
             c--
             sharedPreferences.edit().putInt("numRun", c).apply()
+        }
+    }
+
+    private val constraints = Constraints.Builder()
+        .setRequiredNetworkType(NetworkType.CONNECTED)
+        .build()
+
+    private fun createOneTimeWorkRequest() {
+        val periodicWorkRequest =
+            PeriodicWorkRequest.Builder(
+                PriceAlertWorker::class.java,
+                PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS,
+                TimeUnit.MILLISECONDS
+            ).setConstraints(constraints)
+                .addTag(PriceAlertWorker.TAG)
+                .setInputData(Data.Builder().putBoolean("isStart", true).build())
+                .setInitialDelay(6000, TimeUnit.MILLISECONDS)
+                .build()
+        if (BuildConfig.DEBUG) {
+            workManager.enqueueUniquePeriodicWork(
+                PriceAlertWorker.NAME,
+                ExistingPeriodicWorkPolicy.REPLACE,
+                periodicWorkRequest
+            )
+        } else {
+            workManager.enqueueUniquePeriodicWork(
+                PriceAlertWorker.NAME,
+                ExistingPeriodicWorkPolicy.KEEP,
+                periodicWorkRequest
+            )
         }
     }
 }

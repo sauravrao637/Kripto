@@ -13,6 +13,8 @@ import com.camo.kripto.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -23,12 +25,12 @@ class GlobalVM @Inject constructor(
     sharedPreferences: SharedPreferences
 ) : ViewModel() {
     var initialized = false
-    private var _globalCrypto: MutableLiveData<Resource<Global>> = MutableLiveData()
-    val globalCrypto = _globalCrypto
-    private var _globalDefi: MutableLiveData<Resource<GlobalDefi>> = MutableLiveData()
-    val globalDefi = _globalDefi
-    private var _prefCurrency: MutableLiveData<String> = MutableLiveData<String>()
-    val prefCurrency = _prefCurrency
+    private val _globalCrypto = MutableStateFlow<Resource<Global>>(Resource.loading(null))
+    val globalCrypto = _globalCrypto.asStateFlow()
+    private val _globalDefi = MutableStateFlow<Resource<GlobalDefi>>(Resource.loading(null))
+    val globalDefi = _globalDefi.asStateFlow()
+    private val _prefCurrency = MutableStateFlow("inr")
+    val prefCurrency = _prefCurrency.asStateFlow()
 
     init {
         setValues(sharedPreferences.getString("pref_currency", "inr") ?: "inr")
@@ -36,47 +38,44 @@ class GlobalVM @Inject constructor(
         getGlobalDefi()
     }
 
-    //    var globalDefi: MutableLiveData<Resource<GlobalDefi>> = MutableLiveData()
     private fun setValues(curr: String) {
-        _prefCurrency.postValue(curr)
+        Timber.d("setting curr $curr")
+        _prefCurrency.value = curr
     }
 
     private var getGlobalJob: Job? = null
     fun getGlobal() {
-        _globalCrypto.postValue(Resource.loading(data = null))
-        try {
-            getGlobalJob?.cancel()
-            getGlobalJob = viewModelScope.launch(Dispatchers.IO) {
-                Timber.d("called")
-                _globalCrypto.postValue(Resource.success(data = cgRepo.getGlobal()))
+        Timber.d("getting global")
+        getGlobalJob?.cancel()
+        _globalCrypto.value = Resource.loading(data = null)
+        getGlobalJob = viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val res = cgRepo.getGlobal()
+                Timber.d(res.toString())
+                _globalCrypto.value = Resource.success(data = res)
+            } catch (e: Exception) {
+                Timber.d(e)
+                _globalCrypto.value =
+                    Resource.error(data = null, ErrorInfo(e, ErrorCause.GET_GLOBAL_DATA))
             }
-        } catch (e: Exception) {
-            Timber.d(e)
-            _globalCrypto.postValue(
-                Resource.error(
-                    data = null,
-                    ErrorInfo(e,ErrorCause.GET_GLOBAL_DATA)
-                )
-            )
         }
     }
 
     private var getGlobalDefiJob: Job? = null
     fun getGlobalDefi() {
-        _globalDefi.postValue(Resource.loading(data = null))
-        try {
-            getGlobalDefiJob?.cancel()
-            getGlobalDefiJob = viewModelScope.launch(Dispatchers.IO) {
-                _globalDefi.postValue(Resource.success(data = cgRepo.getGlobalDefi()))
+        Timber.d("getting global defi")
+        _globalDefi.value = Resource.loading(data = null)
+        getGlobalDefiJob?.cancel()
+        getGlobalDefiJob = viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val res = cgRepo.getGlobalDefi()
+                Timber.d(res.toString())
+                _globalDefi.value = Resource.success(data = res)
+            } catch (e: Exception) {
+                Timber.d(e)
+                _globalDefi.value =
+                    Resource.error(data = null, ErrorInfo(e, ErrorCause.GET_GLOBAL_DEFI_DATA))
             }
-        } catch (e: Exception) {
-            Timber.d(e)
-            _globalDefi.postValue(
-                Resource.error(
-                    data = null,
-                    ErrorInfo(e,ErrorCause.GET_GLOBAL_DEFI_DATA)
-                )
-            )
         }
     }
 }

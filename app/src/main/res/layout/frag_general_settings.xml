@@ -6,7 +6,6 @@
 
     <Button
         android:id="@+id/btn_sync"
-        style="@style/Buton.Colored"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/sync_with_server"

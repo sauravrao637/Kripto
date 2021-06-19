@@ -3,10 +3,12 @@
     <string-array name="start_screens_array" >
         <item>@string/favourites</item>
         <item>@string/markets</item>
+        <item>@string/news</item>
     </string-array>
     <string-array name="start_screens_values">
         <item>0</item>
         <item>1</item>
+        <item>2</item>
     </string-array>
 
     <string-array name="order_by_array">

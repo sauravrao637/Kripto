@@ -13,16 +13,13 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.camo.kripto.R
 import com.camo.kripto.databinding.ActivityMainBinding
-import com.camo.kripto.ui.adapter.TrendingAdapter
 import com.camo.kripto.ui.presentation.BaseActivity
 import com.camo.kripto.ui.presentation.search.SearchActivity
 import com.camo.kripto.ui.presentation.settings.SettingsActivity
 import com.camo.kripto.ui.viewModel.MarketCapVM
 import com.camo.kripto.utils.Extras
-import com.camo.kripto.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
@@ -70,7 +67,8 @@ class MainActivity : BaseActivity() {
             topLevelDestinationIds = setOf(
                 R.id.fragMarketFav,
                 R.id.fragMarkets,
-                R.id.fragMore
+                R.id.fragMore,
+                R.id.fragNews
             )
         )
         binding.bottomNav.setupWithNavController(navController)
@@ -79,8 +77,22 @@ class MainActivity : BaseActivity() {
             when (sharedPreferences.getString("pref_def_frag", "1")) {
                 "0" -> {
                     navController.navigate(R.id.fragMarketFav)
+//                    automatically navigate to markets if no fav coins,  no one wants to see blank
+//                    screen
+                    lifecycleScope.launchWhenStarted {
+                        withContext(Dispatchers.IO) {
+                            if (viewModel.isFavCoinsEmpty()) {
+                                withContext(Dispatchers.Main) {
+                                    navController.navigate(R.id.fragMarkets)
+                                }
+                            }
+                        }
+                    }
                 }
-                "1" -> {
+                "2" -> {
+                    navController.navigate(R.id.fragNews)
+                }
+                else -> {
                     navController.navigate(R.id.fragMarkets)
                 }
             }
@@ -92,8 +104,6 @@ class MainActivity : BaseActivity() {
                 viewModel.currentFrag = destination.id
             }
         navController.addOnDestinationChangedListener(destinationListener)
-        //        set view to default//curr fragment
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

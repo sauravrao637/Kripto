@@ -1,58 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorPrimary"
+    android:background="?attr/colorPrimaryVariant"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/bGlobal"
-        style="@style/Text.Headline"
+        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:background="#00FFFFFF"
-        android:drawableStart="@drawable/ic_global"
-        android:drawablePadding="16dp"
-        android:drawableTint="?attr/colorSecondaryVariant"
         android:text="@string/global"
         android:textAlignment="viewStart"
-        android:textColor="?attr/colorOnPrimary"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        app:icon="@drawable/ic_global" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/bSettings"
-        style="@style/Text.Headline"
+        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="#00FFFFFF"
-        android:drawableStart="@drawable/ic_settings"
-        android:drawablePadding="16dp"
-        android:drawableTint="?attr/colorSecondaryVariant"
         android:text="@string/action_settings"
         android:textAlignment="viewStart"
-        android:textColor="?attr/colorOnPrimary"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        app:icon="@drawable/ic_settings" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/bAbout"
-        style="@style/Text.Headline"
+        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="#00FFFFFF"
-        android:drawableStart="@drawable/ic_info"
-        android:drawablePadding="16dp"
-        android:drawableTint="?attr/colorSecondaryVariant"
         android:text="@string/about"
         android:textAlignment="viewStart"
-        android:textColor="?attr/colorOnPrimary"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        app:icon="@drawable/ic_info" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bCalcER"
+        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="#00FFFFFF"
+        android:text="@string/exchange_rates"
+        android:textAlignment="viewStart"
+        android:textSize="24sp"
+        app:icon="@drawable/ic_baseline_calculate_24" />
 
     <RelativeLayout
+        android:id="@+id/rl_calculator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="8dp">
@@ -71,29 +76,43 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true" />
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tv_valueToCalc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints=""
             android:ems="10"
             android:hint="@string/enter_value"
-            android:inputType="numberDecimal"
-            android:textColor="?attr/colorOnPrimary" />
+            android:inputType="numberDecimal" />
 
-        <Spinner
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/dd_currencySelector"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_valueToCalc"
-            android:layout_marginTop="16dp" />
+            android:hint="@string/currency"
+            app:hintTextAppearance="@style/TextAppearance.App.Caption">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/tv_currency"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:inputType="none"
+                android:textAllCaps="true"
+                tools:ignore="KeyboardInaccessibleWidget" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_exchangeRates"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/dd_currencySelector"
-            android:layout_marginTop="32dp" />
+            android:layout_marginTop="16dp" />
     </RelativeLayout>
 
 </LinearLayout>

@@ -7,14 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.camo.kripto.databinding.CoinItemBinding
+import com.camo.kripto.local.model.Coin
 import com.camo.kripto.repos.Repository
+import com.camo.kripto.ui.presentation.PriceAlertActivity
 import com.camo.kripto.ui.presentation.coin.CoinActivity
+import com.camo.kripto.ui.presentation.coin.CoinIdNameKeys.COIN_ID_KEY
+import com.camo.kripto.ui.presentation.coin.CoinIdNameKeys.COIN_NAME_KEY
 import com.camo.kripto.ui.presentation.search.SearchActivity
 import javax.inject.Inject
 
 class SearchAdapter : RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
 
-    var list: List<Repository.CoinWithFavStatus>? = null
+    var list: List<Coin>? = null
 
     /**
      * Custom on long click item listener.
@@ -43,10 +47,10 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (list == null) return
         val coin = list!![position]
-        holder.binding.tvCoinSymbol.text = coin.coin.symbol
-        holder.binding.tvCoinName.text = coin.coin.name
+        holder.binding.tvCoinSymbol.text = coin.symbol
+        holder.binding.tvCoinName.text = coin.name
         holder.binding.root.setOnClickListener {
-            launchActivity(coin.coin.id, coin.coin.name)
+            launchActivity(coin.id, coin.name)
         }
         holder.itemView.setOnLongClickListener { v ->
             if (mOnLongItemClickListener != null) {
@@ -58,19 +62,19 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
 
     private fun launchActivity(id: String?, name: String) {
         val intent = Intent(context, CoinActivity::class.java)
-        intent.putExtra(CoinActivity.COIN_ID_KEY, id)
-        intent.putExtra(CoinActivity.COIN_NAME_KEY, name)
+        intent.putExtra(COIN_ID_KEY, id)
+        intent.putExtra(COIN_NAME_KEY, name)
         context.startActivity(intent)
         (context as SearchActivity).finish()
     }
 
     override fun getItemCount() = list?.size ?: 0
-    fun setData(coins: List<Repository.CoinWithFavStatus>) {
+    fun setData(coins: List<Coin>?) {
         this.list = coins
         notifyDataSetChanged()
     }
 
-    fun getItem(mCurrentItemPosition: Int): Repository.CoinWithFavStatus? {
+    fun getItem(mCurrentItemPosition: Int): Coin? {
         if(list==null) return null
         return list!![mCurrentItemPosition]
     }

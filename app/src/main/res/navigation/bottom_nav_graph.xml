@@ -19,5 +19,9 @@
     <fragment
         android:id="@+id/fragMarkets"
         android:name="com.camo.kripto.ui.presentation.home.FragMarkets"
-        android:label="FragMarkets" />
+        android:label="@string/markets" />
+    <fragment
+        android:id="@+id/fragNews"
+        android:name="com.camo.kripto.ui.presentation.home.FragNews"
+        android:label="@string/news" />
 </navigation>

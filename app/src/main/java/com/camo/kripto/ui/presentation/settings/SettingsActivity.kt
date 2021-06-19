@@ -12,6 +12,10 @@ import com.camo.kripto.R
 import com.camo.kripto.databinding.ActivitySettingsBinding
 import com.camo.kripto.ui.presentation.BaseActivity
 import com.camo.kripto.ui.presentation.home.MainActivity
+import com.camo.kripto.utils.PreferenceKeys.CURRENCY
+import com.camo.kripto.utils.PreferenceKeys.ORDERING
+import com.camo.kripto.utils.PreferenceKeys.PERCENTAGE_CHANGE
+import com.camo.kripto.utils.PreferenceKeys.THEME
 import com.camo.kripto.works.SyncLocalWorker
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,7 +32,7 @@ class SettingsActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         //TODO tab adapter for different settings
         workManager = WorkManager.getInstance(applicationContext)
-        supportActionBar?.title = "Kripto Settings"
+        supportActionBar?.title = this.getString(R.string.kripto_settings)
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.fl_setting_container, FragMarketSettings()).commit()
@@ -37,10 +41,11 @@ class SettingsActivity : BaseActivity() {
         setupObservers()
     }
 
-    private fun setupObservers() {
+    override fun onResume() {
+        super.onResume()
         listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             when (key) {
-                "pref_theme", "pref_currency", "pref_per_change_dur", "pref_order" -> {
+                THEME, CURRENCY, PERCENTAGE_CHANGE, ORDERING -> {
                     TaskStackBuilder.create(this)
                         .addNextIntent(Intent(this, MainActivity::class.java))
                         .addNextIntent(this.intent)
@@ -49,7 +54,9 @@ class SettingsActivity : BaseActivity() {
             }
         }
         sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+    }
 
+    private fun setupObservers() {
         workManager.getWorkInfosForUniqueWorkLiveData(Constants.SYNC_ALL_DATA_UNIQUE_WORK_NAME)
             .observe(this, {
                 if (it != null && it.isNotEmpty()) {

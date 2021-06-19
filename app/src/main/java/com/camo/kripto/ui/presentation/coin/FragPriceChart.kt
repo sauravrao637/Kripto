@@ -1,5 +1,6 @@
 package com.camo.kripto.ui.presentation.coin
 
+import android.app.ActionBar
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.SpinnerAdapter
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -25,13 +27,15 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.LineDataSet
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import java.math.BigDecimal
 
 @AndroidEntryPoint
 class FragPriceChart : Fragment() {
 
     private val viewModel by activityViewModels<CoinActivityVM>()
     private lateinit var binding: FragPriceChartBinding
-
+    private lateinit var actionBar: ActionBar
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -66,7 +70,7 @@ class FragPriceChart : Fragment() {
             "60d" -> binding.radioGroupChartDuration.check(R.id.rb_2m)
             "200d" -> binding.radioGroupChartDuration.check(R.id.rb_200d)
         }
-        viewModel.supportedCurrencies.value?.data?.toTypedArray()?.let { setCurr(it) }
+
     }
 
     private fun setupObservers() {
@@ -74,19 +78,31 @@ class FragPriceChart : Fragment() {
             updateCurrencyDurationDependentUI()
         })
         lifecycleScope.launchWhenStarted {
-            viewModel.coinData.collect {
+            viewModel.coinData.collectLatest {
                 when (it.status) {
                     Status.SUCCESS -> {
                         populateStaticUI()
                     }
                     else -> {
+                        //handled by activity
                     }
                 }
             }
         }
         lifecycleScope.launchWhenStarted {
-            viewModel.marketChart.collect {
-                val errorPanel = ErrorPanelHelper(binding.root,::refreshChart)
+            viewModel.supportedCurrencies.collectLatest { res ->
+                when (res.status) {
+                    Status.SUCCESS -> {
+                        res.data?.toTypedArray()?.let { setCurr(it) }
+                        binding.ddCurrency.visibility = View.VISIBLE
+                    }
+                    else -> binding.ddCurrency.visibility = View.INVISIBLE
+                }
+            }
+        }
+        lifecycleScope.launchWhenStarted {
+            viewModel.marketChart.collectLatest {
+                val errorPanel = ErrorPanelHelper(binding.root, ::refreshChart)
                 when (it.status) {
                     Status.LOADING -> {
                         binding.pbChart.visibility = View.VISIBLE
@@ -184,7 +200,7 @@ class FragPriceChart : Fragment() {
         val it = viewModel.duration.value
         val coinCD = viewModel.coinData.value.data
         val curr = viewModel.currency.value
-        var change: Double? = null
+        var change: BigDecimal? = null
         refreshChart()
         if (coinCD != null) {
             when (it) {
@@ -214,7 +230,7 @@ class FragPriceChart : Fragment() {
                 }
             }
             if (change != null) {
-                if (change >= 0) {
+                if (change >= BigDecimal(0)) {
                     binding.tvPerChange.setTextColor(Color.GREEN)
                 } else {
                     binding.tvPerChange.setTextColor(Color.RED)

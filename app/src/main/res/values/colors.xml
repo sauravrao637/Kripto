@@ -78,7 +78,7 @@
 
     <!-- LIGHTBLUE Theme -->
     <color name="primaryColorLightBlue">#039be5</color>
-    <color name="primaryLightColorLightBlue">#63ccff</color>
+    <color name="primaryLightColorLightBlue">#FF81D4FA</color>
     <color name="primaryDarkColorLightBlue">#006db3</color>
     <color name="secondaryColorLightBlue">#CDDC39</color>
     <color name="secondaryLightColorLightBlue">#F0F4C3</color>

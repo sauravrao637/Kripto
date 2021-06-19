@@ -1,4 +1,4 @@
-package com.camo.kripto.ui.adapter
+package com.camo.kripto.ui.adapter.tab
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -8,7 +8,7 @@ import com.camo.kripto.ui.presentation.global.FragGlobalDefi
 
 class GlobalActivityTabAdapter(fragmentActivity: FragmentActivity) :
     FragmentStateAdapter(fragmentActivity) {
-    companion object{
+    companion object {
         private const val TOTAL_TABS = 2
     }
 
@@ -16,12 +16,15 @@ class GlobalActivityTabAdapter(fragmentActivity: FragmentActivity) :
         return TOTAL_TABS
     }
 
+    private var list: ArrayList<Fragment> = ArrayList()
+
+    init {
+        list.add(0, FragGlobalCrypto())
+        list.add(1, FragGlobalDefi())
+    }
+
     override fun createFragment(position: Int): Fragment {
-        return when(position){
-            0 -> FragGlobalCrypto()
-            1-> FragGlobalDefi()
-            else -> FragGlobalCrypto()
-        }
+        return list[position]
     }
 
 }

@@ -3,7 +3,6 @@ package com.camo.kripto.ui.adapter
 import android.content.Context
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
-import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +15,7 @@ import com.camo.kripto.R
 import com.camo.kripto.databinding.ExchangesItemBinding
 import com.camo.kripto.remote.model.Exchanges
 import com.camo.kripto.utils.Extras
+import java.math.BigDecimal
 import java.util.*
 
 

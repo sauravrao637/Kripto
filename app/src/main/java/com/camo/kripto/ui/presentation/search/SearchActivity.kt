@@ -24,7 +24,6 @@ import timber.log.Timber
 import javax.inject.Inject
 import kotlin.properties.Delegates
 
-
 @AndroidEntryPoint
 class SearchActivity : BaseActivity() {
 
@@ -37,26 +36,26 @@ class SearchActivity : BaseActivity() {
     lateinit var repository: Repository
     var mCurrentItemPosition by Delegates.notNull<Int>()
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
-
         supportActionBar?.hide()
         adapter = SearchAdapter()
         setupUI()
         setupObservers()
     }
-    private fun refreshTrending(){
+
+    private fun refreshTrending() {
         viewModel.getTrending()
         Timber.d("refreshing")
     }
+
     private fun setupObservers() {
         lifecycleScope.launchWhenStarted {
-            val errorPanelHelper = ErrorPanelHelper(binding.root,::refreshTrending)
+            val errorPanelHelper = ErrorPanelHelper(binding.root, ::refreshTrending)
             viewModel.trending.collect {
-                when(it.status){
-                    Status.SUCCESS ->{
+                when (it.status) {
+                    Status.SUCCESS -> {
                         trendingAdapter.setData(it.data?.body()?.coins)
                         binding.pbTrending.visibility = View.GONE
                         binding.rvSearchResult.visibility = View.VISIBLE
@@ -64,13 +63,13 @@ class SearchActivity : BaseActivity() {
                         errorPanelHelper.dispose()
                         errorPanelHelper.hide()
                     }
-                    Status.ERROR ->{
+                    Status.ERROR -> {
                         binding.rvSearchResult.visibility = View.GONE
                         binding.pbTrending.visibility = View.GONE
                         binding.errorPanel.root.visibility = View.VISIBLE
                         errorPanelHelper.showError(it.errorInfo)
                     }
-                    Status.LOADING ->{
+                    Status.LOADING -> {
                         binding.errorPanel.root.visibility = View.GONE
                         binding.pbTrending.visibility = View.VISIBLE
                         binding.rvSearchResult.visibility = View.GONE
@@ -80,22 +79,49 @@ class SearchActivity : BaseActivity() {
                 }
             }
         }
+        lifecycleScope.launchWhenStarted {
+            viewModel.searchCoinList.collect {
+                when (it.status) {
+                    Status.SUCCESS -> {
+                        binding.pbSearch.visibility = View.GONE
+                        if (it.data?.isNotEmpty() == true) {
+                            binding.rvSearchResult.visibility = View.VISIBLE
+                            binding.tvNoneFound.visibility = View.GONE
+                            adapter.setData(it.data)
+                        } else {
+                            binding.rvSearchResult.visibility = View.INVISIBLE
+                            binding.tvNoneFound.visibility = View.VISIBLE
+                        }
+                    }
+                    Status.ERROR -> {
+                        //will never be the case
+                    }
+                    Status.LOADING -> {
+                        binding.rvSearchResult.visibility = View.INVISIBLE
+                        binding.pbSearch.visibility = View.VISIBLE
+                        binding.tvNoneFound.visibility = View.GONE
+                    }
+                }
+            }
+        }
     }
 
     private fun setupUI() {
         binding.rvSearchResult.layoutManager = LinearLayoutManager(this)
         binding.rvSearchResult.adapter = adapter
-        binding.coinSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        val queryListener = object: SearchView.OnQueryTextListener,
+            android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                searchStringChanged(newText)
+                viewModel.searchStringChanged(newText)
                 Timber.d(newText)
                 return false
             }
-        })
+        }
+        binding.coinSearch.setOnQueryTextListener(queryListener)
         registerForContextMenu(binding.rvSearchResult)
         adapter.setOnLongItemClickListener(object : SearchAdapter.OnLongItemClickListener {
             override fun itemLongClicked(v: View?, position: Int) {
@@ -103,9 +129,16 @@ class SearchActivity : BaseActivity() {
                 val coin = adapter.getItem(mCurrentItemPosition)
                 if (coin != null) {
                     v?.showContextMenu()
-                    //TODO set menu header
-                    if (coin.isFav) {
-                        menu?.findItem(R.id.action_fav)?.title = getString(R.string.remove_favourite)
+                    lifecycleScope.launchWhenStarted {
+                        withContext(Dispatchers.IO){
+                            val c = viewModel.getCount(coin.id)
+                            if(c!=0){
+                                withContext(Dispatchers.Main){
+                                    menu?.findItem(R.id.action_fav)?.title =
+                                        getString(R.string.remove_favourite)
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -115,23 +148,6 @@ class SearchActivity : BaseActivity() {
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.rvTrending.adapter = trendingAdapter
     }
-
-    var filterJob: Job? = null
-    private fun searchStringChanged(newText: String?) {
-        filterJob?.cancel()
-        filterJob = lifecycleScope.launchWhenStarted {
-            delay(100)
-            withContext(Dispatchers.IO) {
-                val list = repository.getCoinFilterByName(newText ?: "")
-//                list.sortedBy { it.isFav }
-                withContext(Dispatchers.Main) {
-                    adapter.setData(list)
-                }
-            }
-        }
-    }
-
-
 
     var menu: ContextMenu? = null
     override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenuInfo?) {
@@ -145,23 +161,20 @@ class SearchActivity : BaseActivity() {
         when (item.itemId) {
             R.id.action_fav -> {
                 lifecycleScope.launch(Dispatchers.IO) {
-                    if (coin.isFav) {
-                        repository.removeFavCoin(coin.coin.id)
+                    if (viewModel.getCount(coin.id)!=0) {
+                        repository.removeFavCoin(coin.id)
                         withContext(Dispatchers.Main) {
-                            coin.isFav = false
                             adapter.notifyItemChanged(mCurrentItemPosition)
                         }
                     } else {
                         withContext(Dispatchers.Main) {
-                            coin.isFav = true
                             adapter.notifyItemChanged(mCurrentItemPosition)
                         }
-                        repository.addFavCoin(FavCoin(coin.coin.id, coin.coin.name))
+                        repository.addFavCoin(FavCoin(coin.id, coin.name))
                     }
                 }
             }
         }
         return true
     }
-
 }

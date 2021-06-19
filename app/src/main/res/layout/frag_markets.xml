@@ -15,7 +15,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tabTextColor="?attr/colorOnPrimary" />
+        app:tabIndicatorColor="?attr/colorSecondary"
+        app:tabSelectedTextColor="?attr/colorSecondaryVariant"
+        app:tabTextColor="?attr/colorOnPrimary"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vp_frag_markets_1"

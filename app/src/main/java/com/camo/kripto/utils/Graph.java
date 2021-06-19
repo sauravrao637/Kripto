@@ -7,6 +7,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class Graph {
@@ -29,7 +30,7 @@ public class Graph {
         return new LineData(set1);
     }
 
-    public static float dtf(Double d) {
+    public static float dtf(BigDecimal d) {
         return Float.parseFloat(String.valueOf(d));
     }
 

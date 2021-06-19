@@ -1,7 +1,9 @@
 package com.camo.kripto.error
 
+import java.lang.Exception
+
 enum class ErrorCause(val message: String) {
-    GET_CRPTO_MARKETCAP_DATA("get crypto market cap data"),
+    GET_CRYPTO_MARKETA_DATA("get crypto market cap data"),
     USER_REPORT("user report"),
     UI_ERROR("ui error"),
     GET_MARKET_CHART("chart error"),
@@ -14,5 +16,9 @@ enum class ErrorCause(val message: String) {
     GET_TRENDING("get trending"),
     SYNC_FAILED("sync failed"),
     EXCHANGE_RATE("couldn't get exchange rates"),
-    GENERAL_ERROR("testing error");
+    GENERAL_ERROR("testing error"),
+    ROOM_ERROR("room database error"),
+    GET_SIMPLE_PRICE("get simple price error"),
+    EMPTY_COIN_ID_NAME("null coin id or/and name");
 }
+class InvalidResponse: Exception()

@@ -12,6 +12,8 @@ import com.bumptech.glide.Glide
 import com.camo.kripto.R
 import com.camo.kripto.remote.model.Trending
 import com.camo.kripto.ui.presentation.coin.CoinActivity
+import com.camo.kripto.ui.presentation.coin.CoinIdNameKeys.COIN_ID_KEY
+import com.camo.kripto.ui.presentation.coin.CoinIdNameKeys.COIN_NAME_KEY
 
 class TrendingAdapter :
     RecyclerView.Adapter<TrendingAdapter.ViewHolder>() {
@@ -50,8 +52,8 @@ class TrendingAdapter :
 
     private fun launchActivity(id: String?, name: String) {
         val intent = Intent(context, CoinActivity::class.java)
-        intent.putExtra(CoinActivity.COIN_ID_KEY, id)
-        intent.putExtra(CoinActivity.COIN_NAME_KEY, name)
+        intent.putExtra(COIN_ID_KEY, id)
+        intent.putExtra(COIN_NAME_KEY, name)
         context.startActivity(intent)
     }
 

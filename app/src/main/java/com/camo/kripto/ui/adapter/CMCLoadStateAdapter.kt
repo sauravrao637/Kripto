@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.camo.kripto.R
 import com.camo.kripto.databinding.LoadFooterViewItemBinding
 import timber.log.Timber
-
+//CoinMarketCapLoadStateAdapter
 class CMCLoadStateAdapter(private val retry: () -> Unit) :
     LoadStateAdapter<CMCLoadStateAdapter.MCLoadStateViewHolder>() {
 
@@ -35,7 +35,8 @@ class CMCLoadStateAdapter(private val retry: () -> Unit) :
 
         fun bind(loadState: LoadState) {
             if (loadState is LoadState.Error) {
-                binding.errorMsg.text = "Some Error :("
+                //TODO better error displaying
+                binding.errorMsg.text = binding.root.context.getString(R.string.error)
                 Timber.d(loadState.error.localizedMessage?:"error")
             }
             binding.progressBar.isVisible = loadState is LoadState.Loading

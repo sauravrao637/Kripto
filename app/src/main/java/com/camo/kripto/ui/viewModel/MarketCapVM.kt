@@ -7,15 +7,15 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.bumptech.glide.load.engine.Resource
 import com.camo.kripto.local.model.CoinIdName
 import com.camo.kripto.remote.model.CoinMarket
 import com.camo.kripto.remote.model.ExchangeRates
 import com.camo.kripto.remote.model.Exchanges
+import com.camo.kripto.remote.model.News
 import com.camo.kripto.repos.Repository
 import com.camo.kripto.ui.pager.CryptocurrenciesMarketCapPS
 import com.camo.kripto.ui.pager.ExchangesPS
-import com.camo.kripto.utils.Status
+import com.camo.kripto.ui.pager.NewsPS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -104,5 +104,17 @@ class MarketCapVM @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             repo.removeFavCoin(coin.id)
         }
+    }
+
+    fun getNews(category: String): Flow<PagingData<News.StatusUpdate>> {
+        return Pager(
+            PagingConfig(pageSize = 25)
+        ) {
+            NewsPS(repo.cgApiHelper,category)
+        }.flow.cachedIn(viewModelScope)
+    }
+
+    suspend fun isFavCoinsEmpty(): Boolean {
+        return repo.getFavCoins().isEmpty()
     }
 }

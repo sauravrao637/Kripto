@@ -4,8 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorPrimaryDark"
     tools:context=".ui.presentation.search.SearchActivity">
+
+    <TextView
+        android:id="@+id/tv_none_found"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_search_results_msg"
+        app:layout_constraintBottom_toTopOf="@+id/cl_trending"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/coin_search" />
+
+    <ProgressBar
+        android:id="@+id/pb_search"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/cl_trending"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/coin_search" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_trending"
@@ -17,13 +36,11 @@
 
         <TextView
             android:id="@+id/textView3"
-            style="@style/Text.Headline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="@string/trending_today"
-            android:textColor="?attr/colorOnPrimary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -59,17 +76,15 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.appcompat.widget.SearchView
+    <SearchView
         android:id="@+id/coin_search"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_48dp"
         android:background="?attr/colorPrimary"
-        android:textCursorDrawable="@null"
-        app:iconifiedByDefault="false"
+        app:iconifiedByDefault="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:queryBackground="@null"
         app:searchIcon="@drawable/ic_baseline_search_24" />
 
     <androidx.recyclerview.widget.RecyclerView

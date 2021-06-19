@@ -25,19 +25,20 @@
                 android:layout_height="@dimen/size_48dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:contentDescription="@string/exchangeplatformlogo"
+                card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintStart_toStartOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent"
+                card_view:layout_constraintVertical_bias="0.0"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <TextView
                 android:id="@+id/tv_exchanges_name"
-                style="@style/Text.Medium"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/text_margin"
                 android:layout_marginEnd="@dimen/text_margin"
-                android:textColor="@color/black"
                 card_view:layout_constraintEnd_toStartOf="@+id/iv_exchanges_link"
                 card_view:layout_constraintStart_toEndOf="@+id/iv_exchanges_1"
                 card_view:layout_constraintTop_toTopOf="@+id/iv_exchanges_1"
@@ -45,24 +46,20 @@
 
             <TextView
                 android:id="@+id/tv_exchanges_trust"
-                style="@style/Text.Medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:drawableTint="@color/primaryColorGreen"
-                android:textColor="@color/black"
                 card_view:drawableStartCompat="@drawable/ic_trust"
                 card_view:layout_constraintBottom_toBottomOf="@+id/tv_exchanges_trade_vol"
                 card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintTop_toBottomOf="@+id/iv_exchanges_link"
-                tools:text="9" />
+                tools:text="9"
+                card_view:drawableTint="@color/primaryColorGreen" />
 
             <TextView
                 android:id="@+id/tv_exchanges_trade_vol"
-                style="@style/Text.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
                 android:textSize="@dimen/small_text_size"
                 card_view:layout_constraintBottom_toBottomOf="@+id/iv_exchanges_1"
                 card_view:layout_constraintEnd_toStartOf="@+id/tv_exchanges_trust"
@@ -78,6 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:background="@color/transparent"
+                android:contentDescription="@string/visit_website"
                 android:tint="?attr/colorAccent"
                 card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintTop_toTopOf="@+id/tv_exchanges_name"
@@ -87,6 +85,7 @@
                 android:id="@+id/details"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:orientation="vertical"
                 android:padding="8dp"
                 card_view:layout_constraintEnd_toEndOf="parent"

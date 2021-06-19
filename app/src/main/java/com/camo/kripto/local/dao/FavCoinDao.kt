@@ -17,7 +17,6 @@ interface FavCoinDao {
     @Query("SELECT * FROM FavCoin")
     suspend fun getFavCoins(): List<FavCoin>
 
-    //TODO make suspend
     @Query("SELECT COUNT() FROM FavCoin WHERE id = :id")
     suspend fun count(id: String): Int
 }

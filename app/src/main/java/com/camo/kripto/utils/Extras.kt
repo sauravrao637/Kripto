@@ -8,6 +8,7 @@ import android.net.Uri
 import android.widget.Toast
 import com.camo.kripto.Constants
 import timber.log.Timber
+import java.math.BigDecimal
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -26,20 +27,20 @@ object Extras {
         return version
     }
 
-    fun getFormattedDouble(double: Double?): String {
+    fun getFormattedDouble(double: BigDecimal?): String {
         if (double == null) return "NA"
-        return if (kotlin.math.abs(double) < 1) String.format("%, .3f", double)
+        return if (double.abs() < BigDecimal(1)) String.format("%, .3f", double)
         else String.format("%,.0f", double)
     }
 
-    fun getFormattedPerChange(double: Double): String {
+    fun getFormattedPerChange(double: BigDecimal): String {
         var prefix = ""
-        if (double > 0) prefix = "+"
+        if (double > BigDecimal(0)) prefix = "+"
         return prefix + getFormattedDouble(double) + "%"
     }
 
     fun getFormattedDoubleCurr(
-        double: Double?,
+        double: BigDecimal?,
         curr: String,
         prefix: String = "",
         suffix: String = ""

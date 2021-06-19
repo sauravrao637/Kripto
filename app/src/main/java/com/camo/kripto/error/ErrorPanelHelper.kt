@@ -43,9 +43,12 @@ class ErrorPanelHelper(
         // hide retry button by default, then show only if necessary
         errorButtonRetry.isVisible = false
         errorTextView.setText(
-            when (errorInfo.throwable) {
+            when (errorInfo.errorCause) {
+                ErrorCause.EMPTY_COIN_ID_NAME ->{
+                    errorButtonRetry.isVisible = false
+                    R.string.empty_coin_id_name
+                }
                 else -> {
-                    // show retry button only when it should be (currently always)
                     errorButtonRetry.isVisible = true
                     if (errorInfo.throwable != null && errorInfo.throwable!!.isNetworkRelated) {
                         R.string.key_internet_error

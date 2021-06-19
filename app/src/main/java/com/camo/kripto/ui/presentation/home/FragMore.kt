@@ -7,33 +7,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.SpinnerAdapter
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.camo.kripto.R
 import com.camo.kripto.databinding.FragMoreBinding
 import com.camo.kripto.error.ErrorInfo
 import com.camo.kripto.error.ErrorPanelHelper
 import com.camo.kripto.ktx.afterTextChanged
 import com.camo.kripto.ui.adapter.ExchangeRatesAdapter
+import com.camo.kripto.ui.presentation.about.AboutActivity
 import com.camo.kripto.ui.presentation.global.GlobalActivity
 import com.camo.kripto.ui.presentation.settings.SettingsActivity
-import com.camo.kripto.ui.presentation.about.AboutActivity
 import com.camo.kripto.ui.viewModel.MarketCapVM
 import com.camo.kripto.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.withContext
-import timber.log.Timber
-import java.lang.Exception
-import java.math.BigInteger
+import java.math.BigDecimal
 
 @AndroidEntryPoint
 class FragMore : Fragment() {
@@ -46,9 +38,7 @@ class FragMore : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragMoreBinding.inflate(LayoutInflater.from(context))
-        (activity as MainActivity).supportActionBar?.title =
-            context?.resources?.getString(R.string.more)
+        binding = FragMoreBinding.inflate(inflater, container, false)
         setupUI()
 
         return binding.root
@@ -58,14 +48,20 @@ class FragMore : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupObservers()
     }
-    private fun refreshExchangeRates(){
+
+    private fun refreshExchangeRates() {
         viewModel.getExchangeRates()
     }
+
     private fun setupObservers() {
+        binding.bCalcER.setOnClickListener {
+            binding.rlCalculator.visibility =
+                if (binding.rlCalculator.visibility == View.GONE) View.VISIBLE else View.GONE
+        }
         binding.tvValueToCalc.afterTextChanged { s: String -> valueToCalcChanged(s) }
         lifecycleScope.launchWhenStarted {
             viewModel.exchangeRates.collectLatest {
-                val errorPanelHelper = ErrorPanelHelper(binding.root,::refreshExchangeRates)
+                val errorPanelHelper = ErrorPanelHelper(binding.root, ::refreshExchangeRates)
                 when (it.status) {
                     Status.SUCCESS -> {
                         withContext(Dispatchers.IO) {
@@ -76,11 +72,13 @@ class FragMore : Fragment() {
                                     currencies.add(i.key)
                                 }
                                 withContext(Dispatchers.Main) {
-                                    binding.ddCurrencySelector.adapter = context?.let { it1 ->
-                                        ArrayAdapter(
-                                            it1,
-                                            android.R.layout.simple_spinner_item,
-                                            currencies
+                                    context?.let { it1 ->
+                                        binding.tvCurrency.setAdapter(
+                                            ArrayAdapter(
+                                                it1,
+                                                android.R.layout.simple_spinner_item,
+                                                currencies
+                                            )
                                         )
                                     }
                                 }
@@ -95,7 +93,7 @@ class FragMore : Fragment() {
                         errorPanelHelper.dispose()
                         errorPanelHelper.hide()
                     }
-                    Status.LOADING ->{
+                    Status.LOADING -> {
                         binding.ddCurrencySelector.visibility = View.GONE
                         binding.rvExchangeRates.visibility = View.GONE
                         binding.tvValueToCalc.visibility = View.GONE
@@ -104,7 +102,7 @@ class FragMore : Fragment() {
                         errorPanelHelper.dispose()
                         errorPanelHelper.hide()
                     }
-                    Status.ERROR->{
+                    Status.ERROR -> {
                         binding.ddCurrencySelector.visibility = View.GONE
                         binding.rvExchangeRates.visibility = View.GONE
                         binding.tvValueToCalc.visibility = View.GONE
@@ -118,9 +116,9 @@ class FragMore : Fragment() {
     }
 
     private fun valueToCalcChanged(s: String) {
-        var d = 1.0
+        var d = BigDecimal(1)
         try {
-            d = s.toDouble()
+            d = BigDecimal(s)
         } catch (e: Exception) {
             //ignored huehuehue
         }
@@ -142,20 +140,24 @@ class FragMore : Fragment() {
         }
         exchangeRatesAdapter = ExchangeRatesAdapter()
         binding.rvExchangeRates.layoutManager = LinearLayoutManager(context)
-        binding.ddCurrencySelector.onItemSelectedListener =
+        binding.tvCurrency.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
+                    binding.tvCurrency.setText(viewModel.prefCurrency.value?:"btc",false)
                 }
+
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
                     view: View?,
                     position: Int,
                     id: Long
                 ) {
-                    exchangeRatesAdapter.currencyChanged(parent?.getItemAtPosition(position).toString())
+                    exchangeRatesAdapter.currencyChanged(
+                        parent?.getItemAtPosition(position).toString()
+                    )
                 }
             }
+        binding.tvCurrency.setText(viewModel.prefCurrency.value?:"btc",false)
         binding.rvExchangeRates.adapter = exchangeRatesAdapter
-
     }
 }

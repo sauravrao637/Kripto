@@ -2,20 +2,17 @@ package com.camo.kripto.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.navigation.Navigator
 import androidx.recyclerview.widget.RecyclerView
 import com.camo.kripto.databinding.ExchangeRatesItemBinding
 import com.camo.kripto.remote.model.ExchangeRates
 import com.camo.kripto.utils.Extras
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import retrofit2.Response
+import java.math.BigDecimal
 
 class ExchangeRatesAdapter : RecyclerView.Adapter<ExchangeRatesAdapter.ViewHolder>() {
     var list: List<ExchangeRates.NVUT>? = null
-    private var multiplier: Double = 1.0
-    private var currencyFactor: Double = 1.0
+    private var multiplier:BigDecimal = BigDecimal(1)
+    private var currencyFactor: BigDecimal = BigDecimal(1)
     private var rates: Map<String, ExchangeRates.NVUT>? = null
 
     class ViewHolder(val binding: ExchangeRatesItemBinding) : RecyclerView.ViewHolder(binding.root)
@@ -31,11 +28,11 @@ class ExchangeRatesAdapter : RecyclerView.Adapter<ExchangeRatesAdapter.ViewHolde
         if (item != null) {
             holder.binding.tvCurrency.text = item.unit
             holder.binding.tvExchangeValue.text =
-                Extras.getFormattedDouble((multiplier * item.value / currencyFactor))
+                Extras.getFormattedDouble(multiplier * item.value / currencyFactor)
         }
     }
 
-    fun setMultiplierValue(d: Double) {
+    fun setMultiplierValue(d: BigDecimal) {
         multiplier = d
         notifyDataSetChanged()
     }
@@ -61,9 +58,9 @@ class ExchangeRatesAdapter : RecyclerView.Adapter<ExchangeRatesAdapter.ViewHolde
 
     fun currencyChanged(toString: String) {
         if (rates?.containsKey(toString) == true) {
-            this.currencyFactor = rates!![toString]?.value ?: 1.0
+            this.currencyFactor = (rates!![toString]?.value ?: BigDecimal(1.0))
         } else {
-            this.currencyFactor = 1.0
+            this.currencyFactor = BigDecimal(1)
         }
         notifyDataSetChanged()
     }

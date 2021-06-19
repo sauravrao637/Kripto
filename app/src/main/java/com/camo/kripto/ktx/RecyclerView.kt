@@ -19,7 +19,6 @@ private class SingleScrollDirectionEnforcer : RecyclerView.OnScrollListener(), O
     private var initialTouchY = 0
     private var dx = 0
     private var dy = 0
-
     override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
         when (e.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
@@ -48,7 +47,8 @@ private class SingleScrollDirectionEnforcer : RecyclerView.OnScrollListener(), O
 
     override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
 
-    override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+    override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
+    }
 
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         val oldState = scrollState
