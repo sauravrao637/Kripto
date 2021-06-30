@@ -1,19 +1,12 @@
-<h2 align="center"><img src="assets/kripto.svg"></h2>
+﻿<h2 align="center"><img src="assets/kripto.svg"></h2>
 <h2 align="center"><b>Kripto</b></h2>
 <h4 align="center">A Cryptocurrency app for Android.</h4>
 <p align="center"><a href="#Demonstration">Demonstration</a> &bull; <a href="#description">Description</a> &bull; <a href="#features">Features</a> &bull; <a href="#contribution">Contribution</a> &bull;<a href="#license">License</a></p>
 
 <b>WARNING: THIS IS STILL IN DEVELOPMENT, THEREFORE YOU MAY ENCOUNTER BUGS. IF YOU DO, OPEN AN ISSUE VIA OUR GITHUB REPOSITORY.</b>
 
-## Screenshots
-[<img src="assets/screenshots/ss_1.jpg" width=160>](assets/screenshots/ss_1.jpg)
-[<img src="assets/screenshots/ss_2.jpg" width=160>](assets/screenshots/ss_2.jpg)
-[<img src="assets/screenshots/ss_3.jpg" width=160>](assets/screenshots/ss_3.jpg)
-[<img src="assets/screenshots/ss_4.jpg" width=160>](assets/screenshots/ss_4.jpg)
-[<img src="assets/screenshots/ss_5.jpg" width=160>](assets/screenshots/ss_5.jpg)
-[<img src="assets/screenshots/ss_6.jpg" width=160>](assets/screenshots/ss_6.jpg)
-[<img src="assets/screenshots/ss_7.jpg" width=160>](assets/screenshots/ss_7.jpg)
-[<img src="assets/screenshots/ss_8.jpg" width=160>](assets/screenshots/ss_8.jpg)
+## Demonstration
+![Demo](https://drive.google.com/file/d/1BkjizhdbdTkmFn1qLyYkrG9UJeunqDkd/view?usp=sharing)
 
 
 ## Description
