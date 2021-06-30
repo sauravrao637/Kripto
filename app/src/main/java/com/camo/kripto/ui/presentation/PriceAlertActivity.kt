@@ -117,19 +117,8 @@ class PriceAlertActivity : BaseActivity() {
             array
         )
         binding.tvCurrency.setAdapter(adapter)
-        binding.tvCurrency.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parentView: AdapterView<*>?,
-                selectedItemView: View?,
-                position: Int,
-                id: Long
-            ) {
-                viewModel.currencyChanged(adapter.getItem(position).toString())
-            }
-
-            override fun onNothingSelected(parentView: AdapterView<*>?) {
-                binding.tvCurrency.setText(viewModel.currency.value, false)
-            }
+        binding.tvCurrency.setOnItemClickListener { _, _, position, _ ->
+            viewModel.currencyChanged(adapter.getItem(position).toString())
         }
         binding.tvCurrency.setText(viewModel.currency.value, false)
     }

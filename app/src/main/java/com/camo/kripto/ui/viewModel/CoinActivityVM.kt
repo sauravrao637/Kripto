@@ -2,6 +2,9 @@ package com.camo.kripto.ui.viewModel
 
 import android.content.SharedPreferences
 import androidx.lifecycle.*
+import com.camo.kripto.Constants.MARKET_CAP_CHART_KEY
+import com.camo.kripto.Constants.PRICE_CHART_KEY
+import com.camo.kripto.Constants.TRADING_VOL_CHART_KEY
 import com.camo.kripto.error.ErrorInfo
 import com.camo.kripto.error.ErrorCause
 import com.camo.kripto.local.model.Currency
@@ -33,6 +36,9 @@ class CoinActivityVM @Inject constructor(
     private val _coinDataState = MutableStateFlow<Resource<CoinCD>>(Resource.loading(null))
     val coinData = _coinDataState.asStateFlow()
 
+    private val _selectedChart = MutableStateFlow(PRICE_CHART_KEY)
+    val selectedChart = _selectedChart.asStateFlow()
+
     private val _duration = MutableStateFlow("24h")
     val duration = _duration.asStateFlow()
 
@@ -59,8 +65,8 @@ class CoinActivityVM @Inject constructor(
     val showAllAlerts = _showAllAlerts.asStateFlow()
     private val _showEnabledAlerts = MutableStateFlow(false)
     val showEnabledOnly = _showEnabledAlerts.asStateFlow()
-    val alertFilterState = combine(_showAllAlerts,_showEnabledAlerts){
-        a,b -> AlertFilterState(a,b)
+    val alertFilterState = combine(_showAllAlerts, _showEnabledAlerts) { a, b ->
+        AlertFilterState(a, b)
     }
     private val _coinDurCurrState = combine(_duration, _currency) { b, c ->
         CurrentState(b, c)
@@ -214,6 +220,14 @@ class CoinActivityVM @Inject constructor(
 
     fun setShowEnabledAlertsOnly(checked: Boolean) {
         _showEnabledAlerts.value = checked
+    }
+
+    fun setSelectedChart(i: Int) {
+        when (i) {
+            0 -> _selectedChart.value = PRICE_CHART_KEY
+            1 -> _selectedChart.value = MARKET_CAP_CHART_KEY
+            else -> _selectedChart.value = TRADING_VOL_CHART_KEY
+        }
     }
 }
 

@@ -41,15 +41,10 @@
         android:id="@+id/tabLayout_activity_about"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="?attr/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_about_version"
-        app:tabIndicatorColor="?attr/colorSecondary"
-        app:tabSelectedTextColor="?attr/colorSecondaryVariant"
-        app:tabTextColor="?attr/colorOnPrimary"
-        tools:ignore="SpeakableTextPresentCheck" />
+        android:layout_marginTop="8dp"/>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView21"

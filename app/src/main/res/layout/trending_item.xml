@@ -18,7 +18,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?attr/colorSecondary"
+            android:background="?attr/colorSecondaryVariant"
             android:orientation="horizontal">
 
             <ImageView
@@ -26,6 +26,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginTop="8dp"
+                android:contentDescription="@string/coinimage"
                 android:tag="image_tag"
                 card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintStart_toStartOf="parent"

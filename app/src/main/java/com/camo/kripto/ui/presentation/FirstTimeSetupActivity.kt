@@ -16,6 +16,7 @@ import com.camo.kripto.error.ErrorPanelHelper
 import com.camo.kripto.repos.Repository
 import com.camo.kripto.ui.presentation.home.MainActivity
 import com.camo.kripto.utils.Status
+import com.camo.kripto.utils.ThemeUtil.THEME_BLUEGRAY
 import com.camo.kripto.utils.ThemeUtil.THEME_RED
 import com.camo.kripto.works.PriceAlertWorker
 import com.camo.kripto.works.SyncLocalWorker
@@ -70,9 +71,9 @@ class FirstTimeSetupActivity : BaseActivity() {
                 editor.apply {
                     putString("pref_currency", "inr")
                     putString("pref_order", "market_cap_desc")
-                    putString("pref_def_frag", "0")
+                    putString("pref_def_frag", "1")
                     putString("pref_per_change_dur", "1h")
-                    putString("pref_theme", THEME_RED)
+                    putString("pref_theme", THEME_BLUEGRAY)
                 }
                 editor.apply()
                 repository.pingCG().collect {

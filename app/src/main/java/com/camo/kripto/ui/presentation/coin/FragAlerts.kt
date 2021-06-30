@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.camo.kripto.databinding.FragAlertsBinding
 import com.camo.kripto.local.model.PriceAlert
 import com.camo.kripto.ui.adapter.AlertAdapter
@@ -19,6 +20,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+
 
 class FragAlerts : Fragment(), AlertAdapter.OnAlertItemListener {
     private lateinit var binding: FragAlertsBinding
@@ -64,6 +66,7 @@ class FragAlerts : Fragment(), AlertAdapter.OnAlertItemListener {
             }
         }
     }
+
     private var filterJob: Job? = null
     private fun resetAlertData() {
         val list = viewModel.priceAlerts.value
@@ -78,12 +81,12 @@ class FragAlerts : Fragment(), AlertAdapter.OnAlertItemListener {
             val listToReturn = mutableListOf<PriceAlert>()
             for (each in list) {
                 if (showAll || each.id == viewModel.getId()) {
-                    if(!showEnabled || each.enabled){
+                    if (!showEnabled || each.enabled) {
                         listToReturn.add(each)
                     }
                 }
             }
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 alertAdapter.setData(listToReturn)
             }
         }
@@ -100,10 +103,14 @@ class FragAlerts : Fragment(), AlertAdapter.OnAlertItemListener {
         binding.chipAll.setOnCheckedChangeListener { _, isChecked ->
             viewModel.setChecked(isChecked)
         }
-        binding.chipEnabled.setOnCheckedChangeListener{
-            _, isChecked ->
+        binding.chipEnabled.setOnCheckedChangeListener { _, isChecked ->
             viewModel.setShowEnabledAlertsOnly(isChecked)
         }
+        binding.rvAlerts.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 0) binding.btAddPriceAlert.hide() else if (dy < 0) binding.btAddPriceAlert.show()
+            }
+        })
     }
 
     private fun refresh() {

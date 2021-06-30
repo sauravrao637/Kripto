@@ -42,7 +42,7 @@ class FragGlobalDefi : Fragment() {
     }
 
     private fun setupObservers() {
-        lifecycleScope.launchWhenResumed {
+        lifecycleScope.launchWhenStarted {
             viewModel.globalDefi.collectLatest {
                 when (it.status) {
                     Status.ERROR -> {

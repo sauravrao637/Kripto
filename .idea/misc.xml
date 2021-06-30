@@ -13,7 +13,7 @@
         <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/activity_first_time_setup.xml" value="0.1671195652173913" />
         <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/activity_global.xml" value="0.1671195652173913" />
         <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/activity_main.xml" value="0.1671195652173913" />
-        <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/activity_price_alert.xml" value="0.1671195652173913" />
+        <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/activity_price_alert.xml" value="0.1" />
         <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/activity_search.xml" value="0.1671195652173913" />
         <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/activity_settings.xml" value="0.1671195652173913" />
         <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/alert_item.xml" value="0.1671195652173913" />
@@ -21,6 +21,7 @@
         <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/contributor.xml" value="0.1671195652173913" />
         <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/cryptocurrencies_market_cap_item.xml" value="0.19010416666666666" />
         <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/custom_action_bar.xml" value="0.1671195652173913" />
+        <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/error_panel.xml" value="0.12360688956433637" />
         <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/exchange_rates_item.xml" value="0.1671195652173913" />
         <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/exchanges_item.xml" value="0.1671195652173913" />
         <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/frag_about_kripto.xml" value="0.1671195652173913" />
@@ -28,8 +29,13 @@
         <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/frag_coin_info.xml" value="0.1671195652173913" />
         <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/frag_contirbutors.xml" value="0.1671195652173913" />
         <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/frag_general_settings.xml" value="0.1671195652173913" />
+        <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/frag_global_crypto.xml" value="0.12360688956433637" />
+        <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/frag_markets.xml" value="0.12360688956433637" />
         <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/frag_more.xml" value="0.16799999999999998" />
         <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/frag_news.xml" value="0.1671195652173913" />
+        <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/frag_news_category.xml" value="0.12360688956433637" />
+        <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/frag_price_chart.xml" value="0.13020833333333334" />
+        <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/load_footer_view_item.xml" value="0.12360688956433637" />
         <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/marker_view.xml" value="0.1671195652173913" />
         <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/news_item.xml" value="0.1671195652173913" />
         <entry key="..\:/Users/asus/AndroidStudioProjects/Kripto/app/src/main/res/layout/trending_item.xml" value="0.1671195652173913" />

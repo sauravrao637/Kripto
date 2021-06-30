@@ -11,20 +11,15 @@
         android:id="@+id/tabLayout_global_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimaryVariant"
-        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tabGravity="fill"
-        app:tabIndicatorColor="#FFFFFF"
-        app:tabIndicatorHeight="4dp" />
+        app:tabGravity="fill" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager_global_activity"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

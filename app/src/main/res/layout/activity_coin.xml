@@ -27,16 +27,10 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tabGravity="fill"
-        app:tabIndicatorColor="?attr/colorSecondary"
-        app:tabSelectedTextColor="?attr/colorSecondaryVariant"
-        app:tabTextColor="?attr/colorOnPrimary"
-        app:tabIndicatorHeight="4dp" />
+        app:tabGravity="fill" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"

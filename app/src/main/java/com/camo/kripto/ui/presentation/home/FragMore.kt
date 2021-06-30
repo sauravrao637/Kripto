@@ -54,10 +54,6 @@ class FragMore : Fragment() {
     }
 
     private fun setupObservers() {
-        binding.bCalcER.setOnClickListener {
-            binding.rlCalculator.visibility =
-                if (binding.rlCalculator.visibility == View.GONE) View.VISIBLE else View.GONE
-        }
         binding.tvValueToCalc.afterTextChanged { s: String -> valueToCalcChanged(s) }
         lifecycleScope.launchWhenStarted {
             viewModel.exchangeRates.collectLatest {
@@ -138,26 +134,18 @@ class FragMore : Fragment() {
             val intent = Intent(requireActivity(), GlobalActivity::class.java)
             requireActivity().startActivity(intent)
         }
+        binding.bCalcER.setOnClickListener {
+            binding.rlCalculator.visibility =
+                if (binding.rlCalculator.visibility == View.GONE) View.VISIBLE else View.GONE
+        }
         exchangeRatesAdapter = ExchangeRatesAdapter()
         binding.rvExchangeRates.layoutManager = LinearLayoutManager(context)
-        binding.tvCurrency.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    binding.tvCurrency.setText(viewModel.prefCurrency.value?:"btc",false)
-                }
-
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    exchangeRatesAdapter.currencyChanged(
-                        parent?.getItemAtPosition(position).toString()
-                    )
-                }
-            }
-        binding.tvCurrency.setText(viewModel.prefCurrency.value?:"btc",false)
+        binding.tvCurrency.setOnItemClickListener { _, _, position, _ ->
+            exchangeRatesAdapter.currencyChanged(
+                binding.tvCurrency.adapter.getItem(position).toString()
+            )
+        }
+        binding.tvCurrency.setText(viewModel.prefCurrency.value ?: "btc", false)
         binding.rvExchangeRates.adapter = exchangeRatesAdapter
     }
 }

@@ -155,10 +155,12 @@
         android:checkedButton="@id/rb_once"
         android:orientation="horizontal"
         android:padding="8dp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/textView29"
-        app:layout_constraintTop_toBottomOf="@+id/editTextLessThan">
+        app:layout_constraintTop_toBottomOf="@+id/editTextLessThan"
+        tools:visibility="gone">
 
         <RadioButton
             android:id="@+id/rb_once"

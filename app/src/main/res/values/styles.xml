@@ -15,9 +15,27 @@
         <item name="textAppearanceSmallPopupMenu">@style/TextAppearance.App.Subtitle1</item>
         <item name="popupMenuBackground">@drawable/custom_popup_background</item>
         <item name="textInputStyle">@style/Widget.App.ExposedDropdownMenu</item>
+        <item name="tabStyle">@style/AppTabLayout</item>
         <item name="autoCompleteTextViewStyle">
             @style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu
         </item>
+    </style>
+    <!--TabLayout Style-->
+    <style name="AppTabLayout" parent="Widget.MaterialComponents.TabLayout.Colored">
+        <item name="tabIndicatorColor">?attr/colorAccent</item>
+        <item name="tabIndicatorHeight">4dp</item>
+        <item name="tabPaddingStart">6dp</item>
+        <item name="tabPaddingEnd">6dp</item>
+        <item name="tabBackground">?attr/selectableItemBackground</item>
+        <item name="tabTextAppearance">@style/AppTabTextAppearance</item>
+        <item name="tabSelectedTextColor">?attr/colorSecondaryVariant</item>
+    </style>
+
+    <!-- for text -->
+    <style name="AppTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="textAllCaps">false</item>
     </style>
 
     <style name="AppTheme.ActionBar">
