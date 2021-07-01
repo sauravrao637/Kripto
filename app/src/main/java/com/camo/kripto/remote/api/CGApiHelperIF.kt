@@ -2,8 +2,10 @@ package com.camo.kripto.remote.api
 
 import com.camo.kripto.local.model.Coin
 import com.camo.kripto.local.model.CoinIdName
+import com.camo.kripto.local.model.PriceAlert
 import com.camo.kripto.remote.model.*
 import retrofit2.Response
+import java.math.BigDecimal
 
 interface CGApiHelperIF {
     //    id_asc, id_desc
@@ -23,7 +25,7 @@ interface CGApiHelperIF {
 
     suspend fun getMarketChart(id: String, curr: String, days: String): Response<MarketChart>
 
-    suspend fun getTrending(): Trending
+    suspend fun getTrending(): Response<Trending>
 
     suspend fun getGlobal(): Global
 
@@ -32,4 +34,10 @@ interface CGApiHelperIF {
     suspend fun getGlobalDefi(): GlobalDefi
 
     suspend fun ping(): Response<Any>
+
+    suspend fun getExchangeRates(): Response<ExchangeRates>
+
+    suspend fun getNews(category: String, projectType: String, page: Int): Response<News>
+
+    suspend fun getSimplePrice(coinIds: List<String>, currencies: List<String>): Response<Map<String, Map<String, BigDecimal>>>
 }

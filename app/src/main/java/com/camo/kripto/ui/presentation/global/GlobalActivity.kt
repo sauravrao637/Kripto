@@ -3,8 +3,11 @@ package com.camo.kripto.ui.presentation.global
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
+import com.camo.kripto.R
 import com.camo.kripto.databinding.ActivityGlobalBinding
-import com.camo.kripto.ui.adapter.GlobalActivityTabAdapter
+import com.camo.kripto.ktx.enforceSingleScrollDirection
+import com.camo.kripto.ktx.recyclerView
+import com.camo.kripto.ui.adapter.tab.GlobalActivityTabAdapter
 import com.camo.kripto.ui.presentation.BaseActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,15 +26,16 @@ class GlobalActivity : BaseActivity() {
     }
 
     private fun setupUI() {
-        val adapter = GlobalActivityTabAdapter(this@GlobalActivity)
+        val adapter = GlobalActivityTabAdapter(this)
         binding.viewPagerGlobalActivity.adapter = adapter
+        binding.viewPagerGlobalActivity.recyclerView.enforceSingleScrollDirection()
         TabLayoutMediator(
             binding.tabLayoutGlobalActivity,
             binding.viewPagerGlobalActivity
         ) { tab, position ->
             when (position) {
-                0 -> tab.text = "Crypto"
-                1 -> tab.text = "Defi"
+                0 -> tab.text = this.getString(R.string.Cryptocurrencies)
+                1 -> tab.text = this.getString(R.string.defi)
             }
         }.attach()
     }

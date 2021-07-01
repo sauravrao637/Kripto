@@ -4,13 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import com.camo.kripto.databinding.ActivityAboutBinding
+import com.camo.kripto.ktx.enforceSingleScrollDirection
+import com.camo.kripto.ktx.recyclerView
 import com.camo.kripto.remote.api.GHApiHelper
 import com.camo.kripto.ui.presentation.BaseActivity
 import com.camo.kripto.utils.Extras
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-
+import com.camo.kripto.R
 @AndroidEntryPoint
 class AboutActivity : BaseActivity() {
 
@@ -21,7 +23,7 @@ class AboutActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAboutBinding.inflate(LayoutInflater.from(this))
-        supportActionBar?.title = "About Kripto"
+        supportActionBar?.title = this.getString(R.string.about_kripto)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.tvAboutVersion.text = Extras.getAppVersion(this)
 
@@ -34,11 +36,11 @@ class AboutActivity : BaseActivity() {
             this
         )
         binding.viewPager.adapter = adapter
-
+        binding.viewPager.recyclerView.enforceSingleScrollDirection()
         TabLayoutMediator(binding.tabLayoutActivityAbout, binding.viewPager) { tab, position ->
             when (position) {
-                0 -> tab.text = "About"
-                1 -> tab.text = "Contributors"
+                0 -> tab.text = this.getString(R.string.about)
+                1 -> tab.text = this.getString(R.string.contributors)
             }
         }.attach()
     }

@@ -16,6 +16,7 @@ import com.camo.kripto.ui.viewModel.CoinActivityVM
 import com.camo.kripto.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
 class FragCoinInfo : Fragment() {
@@ -37,12 +38,13 @@ class FragCoinInfo : Fragment() {
 
     private fun setupObservers() {
         lifecycleScope.launchWhenStarted {
-            viewModel.coinData.collect {
+            viewModel.coinData.collectLatest {
                 when (it.status) {
                     Status.SUCCESS -> {
                         populateStaticUI()
                     }
                     else -> {
+                        //handled by activity
                     }
                 }
             }

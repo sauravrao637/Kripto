@@ -1,37 +1,44 @@
 package com.camo.kripto.ui.presentation.coin
 
+import android.app.ActionBar
 import android.graphics.Color
-import android.os.Build
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Html
 import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.SpinnerAdapter
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import com.camo.kripto.Constants.MARKET_CAP_CHART_KEY
+import com.camo.kripto.Constants.PRICE_CHART_KEY
 import com.camo.kripto.R
 import com.camo.kripto.databinding.FragPriceChartBinding
 import com.camo.kripto.error.ErrorPanelHelper
 import com.camo.kripto.remote.model.MarketChart
 import com.camo.kripto.ui.viewModel.CoinActivityVM
 import com.camo.kripto.utils.*
+import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import java.math.BigDecimal
+
 
 @AndroidEntryPoint
 class FragPriceChart : Fragment() {
 
     private val viewModel by activityViewModels<CoinActivityVM>()
     private lateinit var binding: FragPriceChartBinding
-
+    private lateinit var actionBar: ActionBar
+    var drawable: Drawable? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -66,7 +73,21 @@ class FragPriceChart : Fragment() {
             "60d" -> binding.radioGroupChartDuration.check(R.id.rb_2m)
             "200d" -> binding.radioGroupChartDuration.check(R.id.rb_200d)
         }
-        viewModel.supportedCurrencies.value?.data?.toTypedArray()?.let { setCurr(it) }
+        drawable = ResourcesCompat.getDrawable(
+            requireContext().resources,
+            R.drawable.price_chart_gradient,
+            requireContext().theme
+        )
+        binding.chipGroupSelectedGraph.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.chip_price_chart -> {
+                    viewModel.setSelectedChart(0)
+                }
+                R.id.chip_marketcap_chart -> viewModel.setSelectedChart(1)
+                else -> viewModel.setSelectedChart(2)
+            }
+        }
+
     }
 
     private fun setupObservers() {
@@ -74,19 +95,31 @@ class FragPriceChart : Fragment() {
             updateCurrencyDurationDependentUI()
         })
         lifecycleScope.launchWhenStarted {
-            viewModel.coinData.collect {
+            viewModel.coinData.collectLatest {
                 when (it.status) {
                     Status.SUCCESS -> {
                         populateStaticUI()
                     }
                     else -> {
+                        //handled by activity
                     }
                 }
             }
         }
         lifecycleScope.launchWhenStarted {
-            viewModel.marketChart.collect {
-                val errorPanel = ErrorPanelHelper(binding.root,::refreshChart)
+            viewModel.supportedCurrencies.collectLatest { res ->
+                when (res.status) {
+                    Status.SUCCESS -> {
+                        res.data?.toTypedArray()?.let { setCurr(it) }
+                        binding.ddCurrency.visibility = View.VISIBLE
+                    }
+                    else -> binding.ddCurrency.visibility = View.INVISIBLE
+                }
+            }
+        }
+        lifecycleScope.launchWhenStarted {
+            viewModel.marketChart.collectLatest {
+                val errorPanel = ErrorPanelHelper(binding.root, ::refreshChart)
                 when (it.status) {
                     Status.LOADING -> {
                         binding.pbChart.visibility = View.VISIBLE
@@ -102,14 +135,28 @@ class FragPriceChart : Fragment() {
                         errorPanel.showError(it.errorInfo)
                     }
                     Status.SUCCESS -> {
-                        createGraph(it.data)
-                        binding.chart.visibility = View.VISIBLE
-                        binding.pbChart.visibility = View.GONE
-                        binding.errorPanel.root.visibility = View.INVISIBLE
-                        errorPanel.hide()
-                        errorPanel.dispose()
+                        if (it.data == null) {
+                            binding.pbChart.visibility = View.GONE
+                            binding.chart.visibility = View.INVISIBLE
+                            binding.errorPanel.root.visibility = View.VISIBLE
+                            errorPanel.showError(it.errorInfo)
+                        } else {
+                            createGraph(it.data)
+                            binding.chart.visibility = View.VISIBLE
+                            binding.pbChart.visibility = View.GONE
+                            binding.errorPanel.root.visibility = View.INVISIBLE
+                            errorPanel.hide()
+                            errorPanel.dispose()
+                        }
                     }
                 }
+            }
+        }
+        lifecycleScope.launchWhenStarted {
+            viewModel.selectedChart.collectLatest {
+                val marketChart = viewModel.marketChart.value
+                if (marketChart.status == Status.SUCCESS && marketChart.data != null)
+                    createGraph(marketChart.data)
             }
         }
     }
@@ -123,29 +170,23 @@ class FragPriceChart : Fragment() {
             requireContext(),
             R.layout.support_simple_spinner_dropdown_item,
             array
-        ) as SpinnerAdapter
-        binding.ddCurrency.adapter = adapter
-        binding.ddCurrency.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parentView: AdapterView<*>?,
-                selectedItemView: View?,
-                position: Int,
-                id: Long
-            ) {
-                viewModel.currencyChanged(adapter.getItem(position).toString())
-            }
-
-            override fun onNothingSelected(parentView: AdapterView<*>?) {
-            }
+        )
+        binding.tvCurrency.setAdapter(adapter)
+        binding.tvCurrency.setOnItemClickListener { _, _, position, _ ->
+            viewModel.currencyChanged(adapter.getItem(position).toString())
         }
-        binding.ddCurrency.setSelection(array.indexOf(viewModel.currency.value))
+        binding.tvCurrency.setText(viewModel.currency.value, false)
     }
 
-    private fun createGraph(marketChart: MarketChart?) {
-        val data = Graph.getData(marketChart)
-        val color = Color.WHITE
-        (data.getDataSetByIndex(0) as LineDataSet).circleHoleColor = color
-
+    private fun createGraph(marketChart: MarketChart) {
+        val lineData: LineData = when (viewModel.selectedChart.value) {
+            PRICE_CHART_KEY -> Graph.getData(marketChart.prices, getString(R.string.price_chart))
+            MARKET_CAP_CHART_KEY -> Graph.getData(
+                marketChart.market_caps,
+                getString(R.string.market_cap)
+            )
+            else -> Graph.getData(marketChart.total_volumes, getString(R.string.trading_volume))
+        }
         binding.chart.description.isEnabled = false
         binding.chart.setTouchEnabled(true)
         binding.chart.isDragEnabled = true
@@ -153,7 +194,7 @@ class FragPriceChart : Fragment() {
         binding.chart.setPinchZoom(false)
         binding.chart.isDoubleTapToZoomEnabled = false
         binding.chart.setBackgroundColor(Color.BLACK)
-        binding.chart.data = data
+        binding.chart.data = lineData
 
         val l: Legend = binding.chart.legend
         l.isEnabled = false
@@ -176,7 +217,7 @@ class FragPriceChart : Fragment() {
         binding.chart.animateX(500)
         binding.chart.xAxis.valueFormatter = Formatter()
         binding.chart.marker = ChartMarker(context, R.layout.marker_view)
-
+        setChartFillDrawable(drawable, binding.chart)
     }
 
     private fun updateCurrencyDurationDependentUI() {
@@ -184,7 +225,7 @@ class FragPriceChart : Fragment() {
         val it = viewModel.duration.value
         val coinCD = viewModel.coinData.value.data
         val curr = viewModel.currency.value
-        var change: Double? = null
+        var change: BigDecimal? = null
         refreshChart()
         if (coinCD != null) {
             when (it) {
@@ -214,7 +255,7 @@ class FragPriceChart : Fragment() {
                 }
             }
             if (change != null) {
-                if (change >= 0) {
+                if (change >= BigDecimal(0)) {
                     binding.tvPerChange.setTextColor(Color.GREEN)
                 } else {
                     binding.tvPerChange.setTextColor(Color.RED)
@@ -271,16 +312,22 @@ class FragPriceChart : Fragment() {
             binding.tvMarketCapRank.text = coinCD.market_cap_rank.toString()
             binding.tvTotalSupply.text = Extras.getFormattedDouble(coinCD.market_data.total_supply)
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                binding.tvAboutCoin.text = Html.fromHtml(
-                    coinCD.description["en"],
-                    Html.FROM_HTML_MODE_COMPACT
-                )
-            } else {
-                binding.tvAboutCoin.text = Html.fromHtml(coinCD.description["en"])
-            }
+            binding.tvAboutCoin.text = Html.fromHtml(
+                coinCD.description["en"],
+                Html.FROM_HTML_MODE_COMPACT
+            )
             Linkify.addLinks(binding.tvAboutCoin, Linkify.PHONE_NUMBERS or Linkify.WEB_URLS)
             updateCurrencyDurationDependentUI()
+        }
+    }
+
+    private fun setChartFillDrawable(drawable: Drawable?, lineChart: LineChart) {
+        if (lineChart.data != null && lineChart.data.dataSetCount > 0) {
+            val lineDataSet = lineChart.data.getDataSetByIndex(0) as LineDataSet
+            //Avoid setting lineDataSet.setDrawFilled(false); in the initLineDataSet() method, and the effect cannot be achieved
+            lineDataSet.setDrawFilled(true)
+            lineDataSet.fillDrawable = drawable
+            lineChart.invalidate()
         }
     }
 }

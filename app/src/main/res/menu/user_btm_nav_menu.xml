@@ -9,6 +9,10 @@
         android:icon="@drawable/ic_trending_up"
         android:title="@string/markets" />
     <item
+        android:id="@+id/fragNews"
+        android:icon="@drawable/ic_newspaper"
+        android:title="@string/news" />
+    <item
         android:id="@+id/fragMore"
         android:icon="@drawable/ic_dots_hor"
         android:title="@string/more" />

@@ -16,6 +16,6 @@ interface CoinDao {
     @Query("Select * FROM Coin")
     suspend fun getCoin(): List<Coin>
 
-    @Query("Select * From Coin Where name like :name")
+    @Query("Select * From Coin Where name like :name ORDER BY id")
     suspend fun getCoinFilterByName(name: String): List<Coin>
 }

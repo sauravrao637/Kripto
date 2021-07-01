@@ -9,7 +9,6 @@
 
     <TextView
         android:id="@+id/error_message_view"
-        style="@style/Text.Large"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -19,7 +18,7 @@
 
     <Button
         android:id="@+id/error_button_action"
-        style="@style/Buton.Borderless.Colored"
+        style="@style/Button.Outlined"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -29,7 +28,7 @@
 
     <Button
         android:id="@+id/error_button_retry"
-        style="@style/Buton.Borderless.Colored"
+        style="@style/Button.Outlined"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"

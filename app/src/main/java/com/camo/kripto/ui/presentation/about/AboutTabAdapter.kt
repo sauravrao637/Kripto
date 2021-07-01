@@ -10,15 +10,18 @@ class AboutTabAdapter(fragmentActivity: FragmentActivity) :
         private const val TOTAL_TABS = 2
     }
 
+    private val list = ArrayList<Fragment>()
+
+    init {
+        list.add(0, FragAboutKripto())
+        list.add(1, FragContributors())
+    }
+
     override fun getItemCount(): Int {
         return TOTAL_TABS
     }
 
     override fun createFragment(position: Int): Fragment {
-        return when (position) {
-            0 -> FragAboutKripto()
-            1 -> FragContributors()
-            else -> FragContributors()
-        }
+        return list[position]
     }
 }

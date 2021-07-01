@@ -3,24 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
-    tools:background="?attr/colorPrimaryDark">
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/tvCoinSymbol"
-        style="@style/Text.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAllCaps="true"
-        android:textColor="?attr/colorOnPrimary"
         tools:text="fdfdsf" />
 
     <TextView
         android:id="@+id/tvCoinName"
-        style="@style/Text.Medium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="viewEnd"
-        android:textColor="?attr/colorOnPrimary"
         tools:text="adadsadad" />
 </LinearLayout>

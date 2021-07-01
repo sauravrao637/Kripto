@@ -12,12 +12,13 @@ import com.bumptech.glide.Glide
 import com.camo.kripto.R
 import com.camo.kripto.remote.model.Trending
 import com.camo.kripto.ui.presentation.coin.CoinActivity
+import com.camo.kripto.ui.presentation.coin.CoinIdNameKeys.COIN_ID_KEY
+import com.camo.kripto.ui.presentation.coin.CoinIdNameKeys.COIN_NAME_KEY
 
 class TrendingAdapter :
     RecyclerView.Adapter<TrendingAdapter.ViewHolder>() {
 
     var list: List<Trending.Coin>? = null
-    var curr: String? = null
     lateinit var context: Context
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -37,25 +38,29 @@ class TrendingAdapter :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         val coin = list?.get(position)?.item
-        //TODO diable view binding for url_item
+        //TODO disable view binding for url_item
         if (coin != null) {
             holder.textView.text = coin.name
             Glide.with(holder.imageView.context)
                 .load(coin.large)
                 .into(holder.imageView)
             holder.root.setOnClickListener {
-                launchActivity(coin.id, this.curr ?: "inr")
+                launchActivity(coin.id, coin.name)
             }
-        } else holder.textView.text = "NA"
+        } else holder.textView.text = context.getString(R.string.na)
     }
 
-    private fun launchActivity(id: String?, curr: String) {
+    private fun launchActivity(id: String?, name: String) {
         val intent = Intent(context, CoinActivity::class.java)
-        intent.putExtra("coinId", id)
-        intent.putExtra("curr", curr)
+        intent.putExtra(COIN_ID_KEY, id)
+        intent.putExtra(COIN_NAME_KEY, name)
         context.startActivity(intent)
     }
 
     override fun getItemCount() = list?.size ?: 0
+    fun setData(coins: List<Trending.Coin>?) {
+        list = coins
+        notifyDataSetChanged()
+    }
 
 }

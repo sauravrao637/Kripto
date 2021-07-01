@@ -17,11 +17,10 @@ class FragAboutKripto : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragAboutKriptoBinding.inflate(LayoutInflater.from(context))
+        binding = FragAboutKriptoBinding.inflate(inflater,container,false)
         binding.button2.setOnClickListener {
             Extras.browse(Constants.GH_URL, context)
         }
         return binding.root
     }
-
 }

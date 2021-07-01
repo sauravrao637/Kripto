@@ -1,5 +1,6 @@
 package com.camo.kripto.ui.presentation.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,12 +15,15 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.camo.kripto.BuildConfig
 import com.camo.kripto.R
-import com.camo.kripto.local.model.CoinIdName
 import com.camo.kripto.databinding.FragCryptocurrenciesBinding
+import com.camo.kripto.local.model.CoinIdName
 import com.camo.kripto.repos.Repository
 import com.camo.kripto.ui.adapter.CMCLoadStateAdapter
 import com.camo.kripto.ui.adapter.CryptocurrenciesMarketCapAdapter
+import com.camo.kripto.ui.presentation.coin.CoinActivity
+import com.camo.kripto.ui.presentation.coin.CoinIdNameKeys
 import com.camo.kripto.ui.viewModel.MarketCapVM
 import com.camo.kripto.utils.SwipeToDeleteCallback
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,7 +38,7 @@ import javax.inject.Inject
 private const val FRAG_KEY = "key"
 
 @AndroidEntryPoint
-class FragCryptocurrencies : Fragment() {
+class FragCryptocurrencies : Fragment(), CryptocurrenciesMarketCapAdapter.OnCryptocurrencyListener {
 
     private lateinit var adapterCryptocurrencies: CryptocurrenciesMarketCapAdapter
     private lateinit var binding: FragCryptocurrenciesBinding
@@ -50,7 +54,7 @@ class FragCryptocurrencies : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         key = arguments?.getString(FRAG_KEY) ?: KEY_ALL
-        binding = FragCryptocurrenciesBinding.inflate(LayoutInflater.from(context))
+        binding = FragCryptocurrenciesBinding.inflate(inflater, container, false)
         setupUI()
         return binding.root
     }
@@ -78,15 +82,16 @@ class FragCryptocurrencies : Fragment() {
         binding.rvMarketCap.layoutManager = LinearLayoutManager(context)
         adapterCryptocurrencies =
             CryptocurrenciesMarketCapAdapter(
+                this,
                 viewModel.prefCurrency.value ?: "inr",
                 CryptocurrenciesMarketCapAdapter.Comparator
             )
-        if (key == KEY_FAV) {
+        if (BuildConfig.DEBUG && key == KEY_FAV) {
             val swipeHandler = object : SwipeToDeleteCallback(requireContext()) {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    viewModel.unFav(adapterCryptocurrencies.getCoin(viewHolder.bindingAdapterPosition))
+                    viewModel.unFav(adapterCryptocurrencies.getCoin(viewHolder.absoluteAdapterPosition))
+                    //TODO optimize this
                     refresh()
-//                    adapterCryptocurrencies.notifyDataSetChanged()
                 }
             }
             val itemTouchHelper = ItemTouchHelper(swipeHandler)
@@ -103,7 +108,7 @@ class FragCryptocurrencies : Fragment() {
             viewModel.toggleDuration()
         }
         if (key == KEY_FAV) {
-            binding.emptyList.text = "Found None, Add Some?"
+            binding.emptyList.text = this.getString(R.string.empty_favourites_msg)
             binding.emptyList.setOnClickListener {
                 findNavController().navigate(R.id.fragMarkets)
             }
@@ -177,5 +182,13 @@ class FragCryptocurrencies : Fragment() {
                     putString(FRAG_KEY, key)
                 }
             }
+    }
+
+    override fun onCryptocurrencyClicked(position: Int) {
+        val cryptocurrency = adapterCryptocurrencies.getCoin(position) ?: return
+        val intent = Intent(requireContext(),CoinActivity::class.java)
+        intent.putExtra(CoinIdNameKeys.COIN_ID_KEY, cryptocurrency.id)
+        intent.putExtra(CoinIdNameKeys.COIN_NAME_KEY, cryptocurrency.name)
+        requireContext().startActivity(intent)
     }
 }

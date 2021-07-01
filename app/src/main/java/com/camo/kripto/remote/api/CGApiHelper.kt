@@ -1,10 +1,10 @@
 package com.camo.kripto.remote.api
 
-import com.camo.kripto.remote.model.CoinCD
-import com.camo.kripto.remote.model.CoinMarket
-import com.camo.kripto.remote.model.MarketChart
 import com.camo.kripto.local.model.CoinIdName
+import com.camo.kripto.local.model.PriceAlert
+import com.camo.kripto.remote.model.*
 import retrofit2.Response
+import java.math.BigDecimal
 import javax.inject.Inject
 
 class CGApiHelper @Inject constructor(private val cgService: CGService) : CGApiHelperIF {
@@ -23,7 +23,7 @@ class CGApiHelper @Inject constructor(private val cgService: CGService) : CGApiH
     ): List<CoinMarket.CoinMarketItem> {
         var s = ""
         if (ids != null) {
-            if(ids.isEmpty()) return listOf()
+            if (ids.isEmpty()) return listOf()
             for (i in ids) {
                 s += i.id + ","
             }
@@ -45,7 +45,11 @@ class CGApiHelper @Inject constructor(private val cgService: CGService) : CGApiH
         )
     }
 
-    override suspend fun getMarketChart(id: String, curr: String, days: String): Response<MarketChart> {
+    override suspend fun getMarketChart(
+        id: String,
+        curr: String,
+        days: String
+    ): Response<MarketChart> {
         return cgService.getCoinMarketChart(id, curr, days)
     }
 
@@ -58,4 +62,37 @@ class CGApiHelper @Inject constructor(private val cgService: CGService) : CGApiH
     override suspend fun getGlobalDefi() = cgService.getGlobalDefi()
 
     override suspend fun ping() = cgService.ping()
+
+    override suspend fun getExchangeRates(): Response<ExchangeRates> = cgService.getExchangeRates()
+
+    override suspend fun getNews(category: String, projectType: String, page: Int): Response<News> =
+        cgService.getNews(category, projectType, 25, page)
+
+    //TODO add params
+    override suspend fun getSimplePrice(
+        coinIds: List<String>,
+        currencies: List<String>
+    ): Response<Map<String, Map<String, BigDecimal>>> {
+//      we need atleast one coin and one curr to make a call so let's a coin,curr that doesn't exist
+        val coinString = StringBuilder()
+        val currString = StringBuilder()
+        coinString.append("chutiya,")
+        currString.append("chutiya,")
+        for (s in coinIds) {
+            coinString.append(s)
+            coinString.append(",")
+        }
+        for (s in currencies) {
+            currString.append(s)
+            currString.append(",")
+        }
+        return cgService.getSimplePrice(
+            coinString.toString(),
+            currString.toString(),
+            "true",
+            "true",
+            "true",
+            "true"
+        )
+    }
 }

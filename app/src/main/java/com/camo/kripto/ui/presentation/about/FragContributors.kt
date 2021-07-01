@@ -26,8 +26,7 @@ class FragContributors : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragContirbutorsBinding.inflate(LayoutInflater.from(context))
-
+        binding = FragContirbutorsBinding.inflate(inflater,container,false)
         adapter = ContributorAdapter()
         adapter.setData(null)
         setupUI()

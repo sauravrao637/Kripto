@@ -1,5 +1,7 @@
 package com.camo.kripto.remote.model
 
+import java.math.BigDecimal
+
 data class GlobalDefi(
     val `data`: Data
 ) {
@@ -10,6 +12,6 @@ data class GlobalDefi(
         val trading_volume_24h: String,
         val defi_dominance: String,
         val top_coin_name: String,
-        val top_coin_defi_dominance: Double
+        val top_coin_defi_dominance: BigDecimal
     )
 }

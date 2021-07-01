@@ -35,8 +35,6 @@ class FragExchanges : Fragment() {
     ): View {
 
         binding = FragExchangesBinding.inflate(LayoutInflater.from(context))
-        (activity as MainActivity).supportActionBar?.title =
-            context?.resources?.getString(R.string.exchanges)
         setupUI()
         getExchanges()
         return binding.root
