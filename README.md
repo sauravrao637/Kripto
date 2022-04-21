@@ -6,8 +6,7 @@
 <b>WARNING: THIS IS STILL IN DEVELOPMENT, THEREFORE YOU MAY ENCOUNTER BUGS. IF YOU DO, OPEN AN ISSUE VIA OUR GITHUB REPOSITORY.</b>
 
 ## Demonstration
-[Demo](https://drive.google.com/file/d/1BkjizhdbdTkmFn1qLyYkrG9UJeunqDkd/view?usp=sharing)
-
+[Demo](https://appetize.io/app/dvuauwvf26e2ha2k3av84d3axc)
 
 ## Description
 
